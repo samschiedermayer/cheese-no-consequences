@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -29,6 +30,16 @@ public class Main extends Application {
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 400;
 	private static final String APP_TITLE = "Milk No Consequences";
+	private static String filePath;
+	private static TextField yearTextField;
+	private static TextField farmIdTextField;
+	private static TextField monthTextField;
+	private static TextField startMonthTextField;
+	private static TextField startDayTextField;
+	private static TextField startYearTextField;
+	private static TextField endMonthTextField;
+	private static TextField endDayTextField;
+	private static TextField endYearTextField;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -41,8 +52,8 @@ public class Main extends Application {
     		
         	BorderPane root = new BorderPane();
 
-        	VBox vbox = new VBox();
-        	root.setCenter(vbox);
+        	VBox mainvbox = new VBox();
+        	root.setCenter(mainvbox);
         	Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		           
             //Title and Header
@@ -65,22 +76,147 @@ public class Main extends Application {
             EventHandler<ActionEvent> confirmReport =  new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 { 
+                	VBox selectedReportvBox = new VBox();
+                	Scene selectedReportScene = new Scene(selectedReportvBox, WINDOW_WIDTH, WINDOW_HEIGHT);
+                	selectedReportvBox.getChildren().add(titleLabel);
+                	Label selectedReportLabel; 
+                	Label  yearLabel;
+                	Label  monthLabel;
+                	Label dayLabel;
+                	
                 	switch(combo_box.getValue()) 
                     { 
                         case "Farm": 
-                            System.out.println("one"); 
+                        	selectedReportLabel = new Label("Farm Report");
+                        	Label  farmIDLabel= new Label("Farm Id Number:");
+                        	farmIdTextField = new TextField ();
+                        	yearLabel= new Label("Enter Year:");
+                        	yearTextField = new TextField ();
+                        	Button generateFarmButton = new Button("Generate Farm Report");
+                        	yearTextField.getText();
+                        	selectedReportvBox.getChildren().add(selectedReportLabel);
+                        	selectedReportvBox.getChildren().add(farmIDLabel);
+                        	selectedReportvBox.getChildren().add(farmIdTextField);
+                        	selectedReportvBox.getChildren().add(yearLabel);
+                        	selectedReportvBox.getChildren().add(yearTextField);
+                        	selectedReportvBox.getChildren().add(generateFarmButton);
+                        	
+                        	// Event Handler for file Selections
+                            EventHandler<ActionEvent> callFarm =  new EventHandler<ActionEvent>() { 
+                                public void handle(ActionEvent e) 
+                                {	
+                                	System.out.println("CallFarm("+ filePath +", " + farmIdTextField.getText() + ", " + yearTextField.getText() + ")");
+                                	//farmReportScreen(Stage stage, String this.filePath, String farmIdField.getText(),String yearTextField.getText());
+                                } 
+                            }; 
+                            generateFarmButton.setOnAction(callFarm);
+                        	
+                        	
                             break; 
                         case "Annual": 
-                            System.out.println("two"); 
+                        	selectedReportLabel = new Label("Annual Report"); 
+                        	yearLabel= new Label("Enter Year:");
+                        	yearTextField = new TextField ();
+                        	Button generateAnnualButton = new Button("Generate Farm Report");
+                        	selectedReportvBox.getChildren().add(selectedReportLabel);
+                        	selectedReportvBox.getChildren().add(yearLabel);
+                        	selectedReportvBox.getChildren().add(yearTextField);
+                        	selectedReportvBox.getChildren().add(generateAnnualButton);
+                        	
+                        	// Event Handler for file Selections
+                            EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
+                                public void handle(ActionEvent e) 
+                                {	
+                                	System.out.println("CallAnnual("+ filePath +", " + yearTextField.getText() + ")");
+                                	//annualReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
+                                } 
+                            }; 
+                            generateAnnualButton.setOnAction(callAnnual);
                             break; 
                         case "Monthly": 
-                            System.out.println("three"); 
+                        	selectedReportLabel = new Label("Monthly Report");
+                        	yearLabel= new Label("Enter Year:");
+                        	yearTextField = new TextField ();
+                        	monthLabel= new Label("Enter Month:");
+                        	monthTextField = new TextField();
+                        	Button generateMonthlyButton = new Button("Generate Farm Report");
+                        	selectedReportvBox.getChildren().add(selectedReportLabel);
+                        	selectedReportvBox.getChildren().add(yearLabel);
+                        	selectedReportvBox.getChildren().add(yearTextField);
+                        	selectedReportvBox.getChildren().add(monthLabel);
+                        	selectedReportvBox.getChildren().add(monthTextField);
+                        	selectedReportvBox.getChildren().add(generateMonthlyButton);
+                        	
+                        	// Event Handler for file Selections
+                            EventHandler<ActionEvent> callMonthly =  new EventHandler<ActionEvent>() { 
+                                public void handle(ActionEvent e) 
+                                {	
+                                	System.out.println("CallMonthly("+ filePath +", " + yearTextField.getText() + " " + monthTextField.getText() + ")");
+                                	//monthlyReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
+                                } 
+                            }; 
+                            generateMonthlyButton.setOnAction(callMonthly);
                             break; 
                         case "Date Range": 
-                            System.out.println("three"); 
+                        	selectedReportLabel = new Label("Date Range Report");
+                        	Label startLabel= new Label("Enter Starting Date:");
+                        	Label endLabel= new Label("Enter Ending Date:");
+                        	Label monthLabel1= new Label("Enter Month:");
+                        	Label dayLabel1= new Label("Enter Day:");
+                        	Label yearLabel1= new Label("Enter Year:");
+                        	endLabel= new Label("Enter Ending Date:");
+                        	yearLabel= new Label("Enter Year:");
+                        	dayLabel = new Label("Enter Day:");
+                        	monthLabel = new Label ("Enter Month:");
+                        	
+                        	//Starting Date
+                        	startDayTextField = new TextField(); 
+                        	startYearTextField = new TextField();
+                        	startMonthTextField = new TextField ();
+                        	
+                        	//Ending Date
+                        	endMonthTextField = new TextField();
+                        	endDayTextField = new TextField();
+                        	endYearTextField = new TextField();
+                        	
+                        	Button generateDateRangeButton = new Button("Generate Farm Report");
+                        	selectedReportvBox.getChildren().add(selectedReportLabel);
+                        	
+                        	//adding starting elements
+                        	selectedReportvBox.getChildren().add(startLabel);
+                        	selectedReportvBox.getChildren().add(monthLabel);
+                        	selectedReportvBox.getChildren().add(startMonthTextField);
+                        	selectedReportvBox.getChildren().add(dayLabel);
+                        	selectedReportvBox.getChildren().add(startDayTextField);
+                        	selectedReportvBox.getChildren().add(yearLabel);
+                        	selectedReportvBox.getChildren().add(startYearTextField);
+                        	
+                        	//adding ending elements
+                        	selectedReportvBox.getChildren().add(endLabel);
+                        	selectedReportvBox.getChildren().add(monthLabel1);
+                        	selectedReportvBox.getChildren().add(endMonthTextField);
+                        	selectedReportvBox.getChildren().add(dayLabel1);
+                        	selectedReportvBox.getChildren().add(endDayTextField);
+                        	selectedReportvBox.getChildren().add(yearLabel1);
+                        	selectedReportvBox.getChildren().add(endYearTextField);
+                        	
+                        	//generate button
+                        	selectedReportvBox.getChildren().add(generateDateRangeButton);
+                        	
+                        	// Event Handler for file Selections
+                            EventHandler<ActionEvent> callDateRange =  new EventHandler<ActionEvent>() { 
+                                public void handle(ActionEvent e) 
+                                {	
+                                	System.out.println("CallDateRange("+ filePath +", Start Month: " + startMonthTextField.getText() + " Start Day: " + startDayTextField.getText() + " Start Year: " + startYearTextField.getText() + " End Month: " + endMonthTextField.getText() +  " End Day: " + endDayTextField.getText()+ " End Year: " + endYearTextField.getText() + ")");
+                                	//DateRangeReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
+                                } 
+                            }; 
+                            generateDateRangeButton.setOnAction(callDateRange);
                             break; 
  
-                    } 
+                    }
+                	stage.setScene(selectedReportScene);
+                	stage.show();
                 } 
             }; 
             selectReportButton.setOnAction(confirmReport);
@@ -92,6 +228,8 @@ public class Main extends Application {
                     File file = file_chooser.showOpenDialog(stage); 
                     if (file != null) { 
                         selectFilesLabel.setText(file.getAbsolutePath()); 
+                        filePath = file.getAbsolutePath();
+                        
                     } 
                 } 
             }; 
@@ -100,12 +238,13 @@ public class Main extends Application {
             selectFileButton.setOnAction(selectFile); 
             
             //add children to vbox
-            vbox.getChildren().add(titleLabel);
-            vbox.getChildren().add(reportSelectLabel);
-            vbox.getChildren().add(combo_box);
-            vbox.getChildren().add(selectReportButton);
-            vbox.getChildren().add(selectFilesLabel);
-            vbox.getChildren().add(selectFileButton);
+            mainvbox.getChildren().add(titleLabel);
+            mainvbox.getChildren().add(selectFilesLabel);
+            mainvbox.getChildren().add(selectFileButton);
+            mainvbox.getChildren().add(reportSelectLabel);
+            mainvbox.getChildren().add(combo_box);
+            mainvbox.getChildren().add(selectReportButton);
+            
             
             //set the scene and start the show
         	stage.setScene(mainScene);
