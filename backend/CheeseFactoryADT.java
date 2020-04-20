@@ -1,5 +1,6 @@
 package backend;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,8 +59,9 @@ public interface CheeseFactoryADT {
    * Will load in data from a specified CSV file
    * 
    * @param fileName - the name of the file to be imported
+   * @throws IOException - if file cannot be reached
    */
-  void importFarmData(String fileName);
+  void importFarmData(String fileName) throws IOException;
 
   /**
    * Will export all farm data to a CSV file
