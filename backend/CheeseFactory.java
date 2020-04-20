@@ -1,11 +1,12 @@
 package backend;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CheeseFactory implements CheeseFactoryADT {
 	
-	private HashMap<String, FarmADT> farms;
+	private HashMap<String, Farm> farms;
 	
 	public CheeseFactory() {
 		farms = new HashMap<>();
@@ -14,14 +15,16 @@ public class CheeseFactory implements CheeseFactoryADT {
 	//maya
 	@Override
 	public List<String> getAllFarmNames() {
-		// TODO Auto-generated method stub
-		return null;
+		// idk how else to get rid of this warning.. lmk if u have any ideas
+		@SuppressWarnings("unchecked")
+		// assuming that the hashmap keys are the farm names
+		List<String> farmNames = (List<String>) farms.keySet();
+		return farmNames;
 	}
 
 	//maya
 	@Override
 	public double[][] getFarmReport(String farmName, int year) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
