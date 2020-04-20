@@ -40,7 +40,7 @@ public class CheeseFactory implements CheeseFactoryADT {
   public HashMap<String, double[]> getAnnualReport(int year) {
     HashMap<String, double[]> annualReport = new HashMap<>();
     List<String> farmIDs = getAllFarmNames();
-    double totalMilkWeightOfFactory = 0;
+    int totalMilkWeightOfFactory = 0;
     
     //get total milk weight of factory to use for percentage
     for (int i = 0; i < farmIDs.size(); i++) {
@@ -51,13 +51,19 @@ public class CheeseFactory implements CheeseFactoryADT {
     for (int i = 0; i < farmIDs.size(); i++) {
       String key = farmIDs.get(i);
       double[] value = new double[2];
-      value[0] = farms.get(farmIDs.get(i)).getMilkWeight(year);
-      value[1] = (value[0]/totalMilkWeightOfFactory) * 100;
+      value[0] = (double) farms.get(farmIDs.get(i)).getMilkWeight(year);
+      value[1] = (double) (value[0]/totalMilkWeightOfFactory) * 100;
       
       annualReport.put(key, value);
     }
     
     return annualReport;
+  }
+  
+  //zach
+  @Override
+  public HashMap<String, double[]> getMonthlyReport(int year, int month){
+    return null;
   }
 
   // zach
