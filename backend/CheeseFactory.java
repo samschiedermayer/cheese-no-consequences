@@ -52,7 +52,7 @@ public class CheeseFactory implements CheeseFactoryADT {
       String key = farmIDs.get(i);
       double[] value = new double[2];
       value[0] = farms.get(farmIDs.get(i)).getMilkWeight(year);
-      value[1] = value[0]/totalMilkWeightOfFactory;
+      value[1] = (value[0]/totalMilkWeightOfFactory) * 100;
       
       annualReport.put(key, value);
     }
