@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 /**
  * Filename: Main.java 
  * Project: Cheese-No-Consequences 
- * Authors: Michael Sexton
  * 
  * Main controls the GUI created with Java FX
  */
@@ -24,6 +23,8 @@ public class Main extends Application {
     }
     
     void homeScreen(Stage primaryStage) {
+    	//Changes, ahsdklfsa;dklfj
+    	/*
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -42,6 +43,8 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
+    	*/
+    	
     	
     }
     
