@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import backend.CheeseFactory;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -30,7 +31,6 @@ public class Main extends Application {
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 400;
 	private static final String APP_TITLE = "Milk No Consequences";
-	private static String filePath;
 	private static TextField yearTextField;
 	private static TextField farmIdTextField;
 	private static TextField monthTextField;
@@ -40,10 +40,10 @@ public class Main extends Application {
 	private static TextField endMonthTextField;
 	private static TextField endDayTextField;
 	private static TextField endYearTextField;
+	private static CheeseFactory factory;
 	
 	@Override
 	public void start(Stage primaryStage) {
-
 		homeScreen(primaryStage);
 	}
 
@@ -70,7 +70,7 @@ public class Main extends Application {
             //Select Files label, button, and file chooser
             FileChooser file_chooser = new FileChooser(); 
             Label selectFilesLabel = new Label("no files selected"); 
-            Button selectFileButton = new Button("Select File"); 
+            Button selectFileButton = new Button("Load .CSV"); 
       
             // Event Handler for Report Selections Selections
             EventHandler<ActionEvent> confirmReport =  new EventHandler<ActionEvent>() { 
@@ -105,7 +105,7 @@ public class Main extends Application {
                             EventHandler<ActionEvent> callFarm =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
                                 {	
-                                	System.out.println("CallFarm("+ filePath +", " + farmIdTextField.getText() + ", " + yearTextField.getText() + ")");
+                                	System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " + yearTextField.getText() + ")");
                                 	//farmReportScreen(Stage stage, String this.filePath, String farmIdField.getText(),String yearTextField.getText());
                                 } 
                             }; 
@@ -127,7 +127,7 @@ public class Main extends Application {
                             EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
                                 {	
-                                	System.out.println("CallAnnual("+ filePath +", " + yearTextField.getText() + ")");
+                                	System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
                                 	//annualReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
                                 } 
                             }; 
@@ -151,7 +151,7 @@ public class Main extends Application {
                             EventHandler<ActionEvent> callMonthly =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
                                 {	
-                                	System.out.println("CallMonthly("+ filePath +", " + yearTextField.getText() + " " + monthTextField.getText() + ")");
+                                	System.out.println("CallMonthly("+" " + yearTextField.getText() + " " + monthTextField.getText() + ")");
                                 	//monthlyReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
                                 } 
                             }; 
@@ -207,7 +207,7 @@ public class Main extends Application {
                             EventHandler<ActionEvent> callDateRange =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
                                 {	
-                                	System.out.println("CallDateRange("+ filePath +", Start Month: " + startMonthTextField.getText() + " Start Day: " + startDayTextField.getText() + " Start Year: " + startYearTextField.getText() + " End Month: " + endMonthTextField.getText() +  " End Day: " + endDayTextField.getText()+ " End Year: " + endYearTextField.getText() + ")");
+                                	System.out.println("CallDateRange("+ " Start Month: " + startMonthTextField.getText() + " Start Day: " + startDayTextField.getText() + " Start Year: " + startYearTextField.getText() + " End Month: " + endMonthTextField.getText() +  " End Day: " + endDayTextField.getText()+ " End Year: " + endYearTextField.getText() + ")");
                                 	//DateRangeReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
                                 } 
                             }; 
@@ -227,8 +227,12 @@ public class Main extends Application {
                 { 
                     File file = file_chooser.showOpenDialog(stage); 
                     if (file != null) { 
-                        selectFilesLabel.setText(file.getAbsolutePath()); 
-                        filePath = file.getAbsolutePath();
+                        
+                    	try {
+                    		factory.importFarmData(file.getAbsolutePath());
+                    	}catch (Exception a) {
+                    		selectFilesLabel.setText("Loading File Failed Select a New File"); 
+                    	}
                         
                     } 
                 } 
@@ -264,6 +268,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		factory = new CheeseFactory();
 		launch(args);
 	}
 }
