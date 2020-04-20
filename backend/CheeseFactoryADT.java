@@ -41,4 +41,18 @@ public interface CheeseFactoryADT {
 	 * 			 stores [0] -> total milk weight, [1] -> percent milk weight
 	 */
 	HashMap<String, double[]> getDateRangeReport(Date start, Date end);
+	
+	/**
+	 * Will load in data from a specified CSV file
+	 * 
+	 * @param fileName - the name of the file to be imported
+	 */
+	void importFarmData(String fileName);
+	
+	/**
+	 * Will export all farm data to a CSV file
+	 * 
+	 * @param fileName - the name of the file the data should be exported to
+	 */
+	void exportFarmData(String fileName);
 }
