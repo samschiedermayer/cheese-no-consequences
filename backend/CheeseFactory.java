@@ -1,8 +1,13 @@
 package backend;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import exceptions.DuplicateAdditionException;
 
 public class CheeseFactory implements CheeseFactoryADT {
 
@@ -73,12 +78,44 @@ public class CheeseFactory implements CheeseFactoryADT {
     return null;
   }
 
-  // sam
-  @Override
-  public void importFarmData(String fileName) {
-    // TODO Auto-generated method stub
-
-  }
+//sam
+ @Override
+ public void importFarmData(String fileName) throws IOException {
+   // TODO Auto-generated method stub
+	  BufferedReader reader = new BufferedReader(new FileReader(fileName));
+	  
+	  int weight;
+	  Farm farm;
+	  String line = null, farmId;
+	  String[] split, dateSplit;
+	  while ((line = reader.readLine()) != null) {
+		  split = line.split(",");
+		  
+		  dateSplit = split[0].split("-");
+		  Date date = new Date(
+				  Integer.parseInt(dateSplit[2]),
+				  Integer.parseInt(dateSplit[1]),
+				  Integer.parseInt(dateSplit[0]));
+		  
+		  farmId = split[1];
+		  
+		  weight = Integer.parseInt(split[2]);
+		  
+		  if (!farms.containsKey(farmId)) {
+			  farm = new Farm(farmId);
+			  farms.put(farmId, farm);
+		  } else {
+			  farm = farms.get(farmId);
+		  }
+		  try {
+			  farm.addMilkWeightForDay(date, weight);
+		  } catch (DuplicateAdditionException e) {
+			  farm.modifyMilkWeightForDay(date, weight);
+		  }
+	  }
+	  
+	  reader.close();
+ }
 
   // sam
   @Override
