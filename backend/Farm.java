@@ -8,7 +8,8 @@ public class Farm extends FarmADT {
 
 	private HashMap<Date,Integer> milkWeights;
 	
-	public Farm() {
+	public Farm(String farmID) {
+		this.farmID = farmID;
 		milkWeights = new HashMap<>();
 	}
 	
