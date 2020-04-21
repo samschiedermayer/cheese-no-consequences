@@ -102,6 +102,15 @@ public class Main extends Application {
                 	Label  yearLabel;
                 	Label  monthLabel;
                 	Label dayLabel;
+                	Button backButton;
+                	
+                	// Event Handler for Back Button
+                    EventHandler<ActionEvent> back =  new EventHandler<ActionEvent>() { 
+                        public void handle(ActionEvent e) 
+                        {	
+                        	homeScreen(stage);
+                        } 
+                    };
                 	
                 	switch(combo_box.getValue()) 
                     { 
@@ -113,19 +122,25 @@ public class Main extends Application {
                         	yearTextField = new TextField ();
                         	Button generateFarmButton = new Button("Generate Farm Report");
                         	yearTextField.getText();
+                        	backButton = new Button("Back");
+                        	
                         	selectedReportvBox.getChildren().add(selectedReportLabel);
                         	selectedReportvBox.getChildren().add(farmIDLabel);
                         	selectedReportvBox.getChildren().add(farmIdTextField);
                         	selectedReportvBox.getChildren().add(yearLabel);
                         	selectedReportvBox.getChildren().add(yearTextField);
                         	selectedReportvBox.getChildren().add(generateFarmButton);
+                        	selectedReportvBox.getChildren().add(backButton);
+                        	
+                        	
+                            backButton.setOnAction(back);
                         	
                         	// Event Handler for file Selections
                             EventHandler<ActionEvent> callFarm =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
-                                {	
-                                	System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " + yearTextField.getText() + ")");
-                                	//farmReportScreen(Stage stage, String this.filePath, String farmIdField.getText(),String yearTextField.getText());
+                                {	                 
+                                	//System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " + yearTextField.getText() + ")");
+                                	farmReportScreen(stage, farmIdTextField.getText(), yearTextField.getText()); //String farmIdTextField.getText(),String yearTextField.getText()
                                 } 
                             }; 
                             generateFarmButton.setOnAction(callFarm);
@@ -137,17 +152,22 @@ public class Main extends Application {
                         	yearLabel= new Label("Enter Year:");
                         	yearTextField = new TextField ();
                         	Button generateAnnualButton = new Button("Generate Farm Report");
+                        	backButton = new Button("Back");
                         	selectedReportvBox.getChildren().add(selectedReportLabel);
                         	selectedReportvBox.getChildren().add(yearLabel);
                         	selectedReportvBox.getChildren().add(yearTextField);
                         	selectedReportvBox.getChildren().add(generateAnnualButton);
                         	
+                        	selectedReportvBox.getChildren().add(backButton);
+                        	 
+                            backButton.setOnAction(back);
+                            
                         	// Event Handler for file Selections
                             EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
-                                {	
-                                	System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
-                                	//annualReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
+                                {
+                                	//System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
+                                	annualReportScreen(stage, yearTextField.getText());
                                 } 
                             }; 
                             generateAnnualButton.setOnAction(callAnnual);
@@ -159,19 +179,25 @@ public class Main extends Application {
                         	monthLabel= new Label("Enter Month:");
                         	monthTextField = new TextField();
                         	Button generateMonthlyButton = new Button("Generate Farm Report");
+                        	backButton = new Button("Back");
+                        	
                         	selectedReportvBox.getChildren().add(selectedReportLabel);
                         	selectedReportvBox.getChildren().add(yearLabel);
                         	selectedReportvBox.getChildren().add(yearTextField);
                         	selectedReportvBox.getChildren().add(monthLabel);
                         	selectedReportvBox.getChildren().add(monthTextField);
                         	selectedReportvBox.getChildren().add(generateMonthlyButton);
+                     
+                        	selectedReportvBox.getChildren().add(backButton);
                         	
+                            backButton.setOnAction(back);
+                            
                         	// Event Handler for file Selections
                             EventHandler<ActionEvent> callMonthly =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
                                 {	
-                                	System.out.println("CallMonthly("+" " + yearTextField.getText() + " " + monthTextField.getText() + ")");
-                                	//monthlyReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
+                                	//System.out.println("CallMonthly("+" " + yearTextField.getText() + " " + monthTextField.getText() + ")");
+                                	monthlyReportScreen(stage, yearTextField.getText(), monthTextField.getText());
                                 } 
                             }; 
                             generateMonthlyButton.setOnAction(callMonthly);
@@ -187,6 +213,7 @@ public class Main extends Application {
                         	yearLabel= new Label("Enter Year:");
                         	dayLabel = new Label("Enter Day:");
                         	monthLabel = new Label ("Enter Month:");
+                        	backButton = new Button("Back");
                         	
                         	//Starting Date
                         	startDayTextField = new TextField(); 
@@ -221,13 +248,17 @@ public class Main extends Application {
                         	
                         	//generate button
                         	selectedReportvBox.getChildren().add(generateDateRangeButton);
+                        	selectedReportvBox.getChildren().add(backButton);
+                        	
+                        	
+                            backButton.setOnAction(back);
                         	
                         	// Event Handler for file Selections
                             EventHandler<ActionEvent> callDateRange =  new EventHandler<ActionEvent>() { 
                                 public void handle(ActionEvent e) 
                                 {	
-                                	System.out.println("CallDateRange("+ " Start Month: " + startMonthTextField.getText() + " Start Day: " + startDayTextField.getText() + " Start Year: " + startYearTextField.getText() + " End Month: " + endMonthTextField.getText() +  " End Day: " + endDayTextField.getText()+ " End Year: " + endYearTextField.getText() + ")");
-                                	//DateRangeReportScreen(Stage stage, String this.filePath,String yearTextField.getText());
+                                	//System.out.println("CallDateRange("+ " Start Month: " + startMonthTextField.getText() + " Start Day: " + startDayTextField.getText() + " Start Year: " + startYearTextField.getText() + " End Month: " + endMonthTextField.getText() +  " End Day: " + endDayTextField.getText()+ " End Year: " + endYearTextField.getText() + ")");
+                                	dateRangeReportScreen(stage, startMonthTextField.getText(),startDayTextField.getText(),startYearTextField.getText(),endMonthTextField.getText(),endDayTextField.getText(), endYearTextField.getText());
                                 } 
                             }; 
                             generateDateRangeButton.setOnAction(callDateRange);
