@@ -59,15 +59,14 @@ public class CheeseFactory implements CheeseFactoryADT {
 		int totalMilkWeightOfFactory = 0;
 
 		// get total milk weight of factory to use for percentage
-		for (int i = 0; i < farmIDs.size(); i++) {
-			totalMilkWeightOfFactory += farms.get(farmIDs.get(i)).getMilkWeight(year);
+		for (String key : farmIDs) {
+			totalMilkWeightOfFactory += farms.get(key).getMilkWeight(year);
 		}
 
 		// add to hash map for each farmID
-		for (int i = 0; i < farmIDs.size(); i++) {
-			String key = farmIDs.get(i);
+		for (String key : farmIDs) {
 			double[] value = new double[2];
-			value[0] = (double) farms.get(farmIDs.get(i)).getMilkWeight(year);
+			value[0] = (double) farms.get(key).getMilkWeight(year);
 			value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
 
 			annualReport.put(key, value);
@@ -79,7 +78,24 @@ public class CheeseFactory implements CheeseFactoryADT {
 	// zach
 	@Override
 	public HashMap<String, double[]> getMonthlyReport(int year, int month) {
-		return null;
+	  HashMap<String, double[]> monthlyReport = new HashMap<>();
+      List<String> farmIDs = getAllFarmNames();
+      int totalMilkWeightOfFactory = 0;
+      
+	// get total milk weight of factory to use for percentage
+      for (String key : farmIDs) {
+          totalMilkWeightOfFactory += farms.get(key).getMilkWeight(year, month);
+      }
+
+      // add to hash map for each farmID
+      for (String key : farmIDs) {
+          double[] value = new double[2];
+          value[0] = (double) farms.get(key).getMilkWeight(year);
+          value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
+
+          monthlyReport.put(key, value);
+      }
+		return monthlyReport;
 	}
 
 	// zach
