@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -61,6 +62,10 @@ public class Main extends Application {
 	private static TextField endYearTextField;
 	private static CheeseFactory factory;
 	
+	private static Font buttonFont = new Font(14);
+	private static Font titleFont = new Font(24);
+	private static Font labelFont = new Font(18);
+	
 	@Override
 	public void start(Stage primaryStage) {
 		homeScreen(primaryStage);
@@ -71,33 +76,58 @@ public class Main extends Application {
     		
         	BorderPane root = new BorderPane();
 
-        	VBox mainvbox = new VBox();
-        	root.setCenter(mainvbox);
+        	
+        	
         	Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+        	mainScene.getStylesheets().add("cheese-factory.css");
 		           
             //Title and Header
-            stage.setTitle(APP_TITLE); 
-            Label titleLabel = new Label(APP_TITLE);
-            titleLabel.setFont(new Font("Arial", 24));
+            stage.setTitle(APP_TITLE);
             
             //Choose what type of report to make
-            Label reportSelectLabel = new Label("Select What Type of Report to Generate:");
+            Label reportLabel = new Label("Generate Report");
+            reportLabel.setFont(titleFont);
+            
+            Label reportSelectLabel = new Label("Report Type:");
         	ComboBox<String> combo_box = new ComboBox<String>();
         	combo_box.getItems().addAll("Farm","Annual","Monthly","Date Range");
-        	 Button selectReportButton = new Button("Select");
+        	Button selectReportButton = new Button("Generate");
+        	selectReportButton.setFont(buttonFont);
             
             //Select Files label, button, and file chooser
+        	Label importLabel = new Label("Import Data");
+        	importLabel.setFont(new Font(24));
+        	
             FileChooser file_chooser = new FileChooser(); 
-            Label selectFilesLabel = new Label("no files selected"); 
-            Button selectFileButton = new Button("Load .CSV"); 
+            Label selectFilesLabel = new Label("no files selected");
+            Button selectFileButton = new Button("Load .csv");
+            selectFileButton.setFont(buttonFont);
+            
+            //Title, fields, and button for manually inserting data
+            Label insertLabel = new Label("Insert Data");
+        	insertLabel.setFont(titleFont);
+
+            Label farmNameLabel = new Label("Farm ID: ");
+            farmNameLabel.setFont(labelFont);
+            TextField farmNameField = new TextField();
+            HBox farmInfoHBox = new HBox();
+            farmInfoHBox.getChildren().add(farmNameLabel);
+            farmInfoHBox.getChildren().add(farmNameField);
+            
+            Label dateLabel = new Label("Date: ");
+            dateLabel.setFont(labelFont);
+            DatePicker datePicker = new DatePicker();
+            HBox dateInfoHBox = new HBox();
+            dateInfoHBox.getChildren().add(dateLabel);
+            dateInfoHBox.getChildren().add(datePicker);
+            
       
-            // Event Handler for Report Selections Selections
+            //Event Handler for Report Selections Selections
             EventHandler<ActionEvent> confirmReport =  new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 { 
                 	VBox selectedReportvBox = new VBox();
                 	Scene selectedReportScene = new Scene(selectedReportvBox, WINDOW_WIDTH, WINDOW_HEIGHT);
-                	selectedReportvBox.getChildren().add(titleLabel);
                 	Label selectedReportLabel; 
                 	Label  yearLabel;
                 	Label  monthLabel;
@@ -280,6 +310,7 @@ public class Main extends Application {
                         
                     	try {
                     		factory.importFarmData(file.getAbsolutePath());
+                    		selectFilesLabel.setText(file.getName() + " imported");
                     	}catch (Exception a) {
                     		a.printStackTrace();
                     		selectFilesLabel.setText("Loading File Failed Select a New File"); 
@@ -292,14 +323,38 @@ public class Main extends Application {
             //set the action of the button
             selectFileButton.setOnAction(selectFile); 
             
-            //add children to vbox
-            mainvbox.getChildren().add(titleLabel);
-            mainvbox.getChildren().add(selectFilesLabel);
-            mainvbox.getChildren().add(selectFileButton);
-            mainvbox.getChildren().add(reportSelectLabel);
-            mainvbox.getChildren().add(combo_box);
-            mainvbox.getChildren().add(selectReportButton);
+            //set up vertical boxes for categories of actions
+            VBox lVBox = new VBox();
+            lVBox.setAlignment(Pos.TOP_CENTER);
             
+            VBox cVBox = new VBox();
+            cVBox.setAlignment(Pos.TOP_CENTER);
+            
+            VBox rVBox = new VBox();
+            rVBox.setAlignment(Pos.TOP_CENTER);
+
+            //add children to respective vboxes
+            lVBox.getChildren().add(importLabel);
+            lVBox.getChildren().add(selectFilesLabel);
+            lVBox.getChildren().add(selectFileButton);
+            
+            cVBox.getChildren().add(reportLabel);
+            cVBox.getChildren().add(reportSelectLabel);
+            cVBox.getChildren().add(combo_box);
+            cVBox.getChildren().add(selectReportButton);
+            
+            rVBox.getChildren().add(insertLabel);
+            rVBox.getChildren().add(farmInfoHBox);
+            rVBox.getChildren().add(dateInfoHBox);
+            
+            //add children to hbox
+            Insets margin = new Insets(12,12,12,12);
+            root.setLeft(lVBox);
+            root.setMargin(lVBox, margin);
+            root.setCenter(cVBox);
+            root.setMargin(cVBox, margin);
+            root.setRight(rVBox);
+            root.setMargin(rVBox, margin);
             
             //set the scene and start the show
         	stage.setScene(mainScene);
@@ -369,7 +424,7 @@ public class Main extends Application {
      */
     void farmReportScreen(Stage primaryStage, String inputFarmId, String inputYear) {
       BorderPane root = new BorderPane();
-      Scene scene = new Scene(root, 1000, 800);
+      Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
       scene.getStylesheets().add("cheese-factory.css");
       
       // report title and farm info
@@ -458,7 +513,7 @@ public class Main extends Application {
      */
     void annualReportScreen(Stage primaryStage, String inputYear) {
       BorderPane root = new BorderPane();
-      Scene scene = new Scene(root, 1000, 800);
+      Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
       scene.getStylesheets().add("cheese-factory.css");
       
       // report title and farm info
@@ -533,7 +588,7 @@ public class Main extends Application {
      */
     void monthlyReportScreen(Stage primaryStage, String inputYear, String inputMonth) {
       BorderPane root = new BorderPane();
-      Scene scene = new Scene(root, 1000, 800);
+      Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
       scene.getStylesheets().add("cheese-factory.css");
       
       // report title and farm info
@@ -618,7 +673,7 @@ public class Main extends Application {
      */
     void dateRangeReportScreen(Stage primaryStage, String inputStartMonth, String inputStartDay, String inputStartYear, String endStartMonth, String endStartDay, String endStartYear) {
       BorderPane root = new BorderPane();
-      Scene scene = new Scene(root, 1000, 800);
+      Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
       scene.getStylesheets().add("cheese-factory.css");
       
       // report title and farm info
