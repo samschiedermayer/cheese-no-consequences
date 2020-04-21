@@ -16,6 +16,15 @@
 	-fx-outer-border : #cecece;
 }
 
+.button {
+	-fx-background-color: #dddddd, white, white;
+}
+
+.button:hover {
+	-fx-background-color: #dddddd, white, #f8f8f8;
+	-fx-cursor: hand;
+}
+
 /* TableView CSS */
 .filler,.column-header,.show-hide-columns-button {
 	-fx-background-color: #dddddd, white, white;
@@ -33,5 +42,10 @@
 }
 .column-drag-header {
 	-fx-background-color: #2fb254;
+}
+
+.table-view {
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
 }
 /* END */
