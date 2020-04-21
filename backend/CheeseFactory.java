@@ -91,7 +91,22 @@ public class CheeseFactory implements CheeseFactoryADT {
   public HashMap<String, double[]> getDateRangeReport(Date start, Date end) {
     HashMap<String, double[]> dateRangeReport = new HashMap<>();
     
-    return null;
+    List<String> farmIDs = getAllFarmNames();
+    int totalMilkWeightOfFactory = 0;
+    
+    for (String key : farmIDs) {
+      totalMilkWeightOfFactory += farms.get(key).getMilkWeight(start, end);
+    }
+    
+    for (String key : farmIDs) {
+      double[] value = new double[2];
+      value[0] = (double) farms.get(key).getMilkWeight(start, end);
+      value[1] = (double) (value[0]/totalMilkWeightOfFactory) * 100;
+      
+      dateRangeReport.put(key, value);
+    }    
+
+    return dateRangeReport;
   }
 
 //sam
