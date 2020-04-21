@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import backend.CheeseFactory;
+import backend.Date;
+import backend.Farm;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -20,6 +22,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 /**
  * Filename: Main.java Project: Cheese-No-Consequences
@@ -260,6 +276,323 @@ public class Main extends Application {
       
             System.out.println(e.getMessage()); 
         } 
+    }
+	
+    /**
+     * Displays farm report screen
+     * 
+     * @param primaryStage
+     */
+    void farmReportScreen(Stage primaryStage) {
+      BorderPane root = new BorderPane();
+      Scene scene = new Scene(root, 1000, 800);
+      scene.getStylesheets().add("cheese-factory.css");
+      
+      // report title and farm info
+      GridPane top = new GridPane();
+      top.setAlignment(Pos.CENTER);
+      top.setPadding(new Insets(10, 10, 10, 10));
+      Label titleLabel = new Label("Farm Report");
+      
+      // add title to top
+      titleLabel.setId("report-title");
+      top.add(titleLabel, 0, 0);
+      GridPane.setHalignment(titleLabel, HPos.CENTER);
+      
+      // add report info to top      
+      GridPane info = new GridPane();
+      Label disFarmId = new Label("Farm: 1");
+      Label year = new Label("Year: 2020");
+      Label totalWeight = new Label("Total weight: 2107");
+      Label percentTotal = new Label("Percentage of Total Farms: 20%");
+      disFarmId.setId("report-info");
+      year.setId("report-info");
+      totalWeight.setId("report-info");
+      percentTotal.setId("report-info");
+      info.add(disFarmId, 0, 0);
+      info.add(year, 0, 1);
+      info.add(totalWeight, 1, 0);
+      info.add(percentTotal, 1, 1);
+      top.add(info, 0, 1);
+      info.setHgap(20);
+      GridPane.setHalignment(disFarmId, HPos.LEFT);
+      GridPane.setHalignment(year, HPos.LEFT);
+      GridPane.setHalignment(totalWeight, HPos.LEFT);
+      GridPane.setHalignment(percentTotal, HPos.LEFT);
+      
+      root.setTop(top);
+      
+      TableView<String> reportTable = new TableView<String>();
+      reportTable.autosize();
+      
+      // set up columns
+      TableColumn<String, String> farmId = new TableColumn<String, String>("Farm ID");
+      farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
+      farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<String, String> milkWeight = new TableColumn<String, String>("Milk Weight");
+      milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
+      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<String, String> percentMilk = new TableColumn<String, String>("% of Total Milk");
+      percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
+      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      
+      reportTable.getColumns().add(farmId);
+      reportTable.getColumns().add(milkWeight);
+      reportTable.getColumns().add(percentMilk);
+//    reportTable.setItems(data);
+      root.setCenter(reportTable);
+      
+      // table for report values
+      GridPane reportGrid = new GridPane();
+      final int numCols = 3;
+      
+      // set number of columns based on report
+      for (int i = 0; i < numCols; i++) {
+        ColumnConstraints colConst = new ColumnConstraints();
+        colConst.setPercentWidth(50.0 / numCols);
+        reportGrid.getColumnConstraints().add(colConst);
+      }
+      
+      reportGrid.setPadding(new Insets(10, 10, 10, 10));
+      reportGrid.setGridLinesVisible(true);
+      reportGrid.setAlignment(Pos.BASELINE_CENTER);
+      
+      // add data
+      // for loop to go through data
+
+      primaryStage.setTitle("Report Screen");
+      primaryStage.setScene(scene);
+      primaryStage.show();
+    }
+    
+    /**
+     * Displays annual report screen
+     * 
+     * @param primaryStage
+     */
+    void annualReportScreen(Stage primaryStage) {
+      BorderPane root = new BorderPane();
+      Scene scene = new Scene(root, 1000, 800);
+      scene.getStylesheets().add("cheese-factory.css");
+      
+      // report title and farm info
+      GridPane top = new GridPane();
+      top.setAlignment(Pos.CENTER);
+      top.setPadding(new Insets(10, 10, 10, 10));
+      Label titleLabel = new Label("Annual Report");
+      
+      // add title to top
+      titleLabel.setId("report-title");
+      top.add(titleLabel, 0, 0);
+      GridPane.setHalignment(titleLabel, HPos.CENTER);
+      
+      // add report info to top
+      StackPane info = new StackPane();
+      Label year = new Label("Year: 2020");
+      year.setId("report-info");
+      info.getChildren().add(year);
+      top.add(info, 0, 1);
+      
+      root.setTop(top);
+      
+      TableView<String> reportTable = new TableView<String>();
+      reportTable.autosize();
+      
+      // set up columns
+      TableColumn<String, String> farmId = new TableColumn<String, String>("Farm ID");
+      farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
+      farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<String, String> milkWeight = new TableColumn<String, String>("Milk Weight");
+      milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
+      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<String, String> percentMilk = new TableColumn<String, String>("% of Total Milk");
+      percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
+      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      
+      reportTable.getColumns().add(farmId);
+      reportTable.getColumns().add(milkWeight);
+      reportTable.getColumns().add(percentMilk);
+//    reportTable.setItems(data);
+      root.setCenter(reportTable);
+      
+      // table for report values
+      GridPane reportGrid = new GridPane();
+      final int numCols = 3;
+      
+      // set number of columns based on report
+      for (int i = 0; i < numCols; i++) {
+        ColumnConstraints colConst = new ColumnConstraints();
+        colConst.setPercentWidth(50.0 / numCols);
+        reportGrid.getColumnConstraints().add(colConst);
+      }
+      
+      reportGrid.setPadding(new Insets(10, 10, 10, 10));
+      reportGrid.setGridLinesVisible(true);
+      reportGrid.setAlignment(Pos.BASELINE_CENTER);
+      
+      // add data
+      // for loop to go through data
+
+      primaryStage.setTitle("Report Screen");
+      primaryStage.setScene(scene);
+      primaryStage.show();
+    }
+    
+    /**
+     * Displays monthly report screen
+     * 
+     * @param primaryStage
+     */
+    void monthlyReportScreen(Stage primaryStage) {
+      BorderPane root = new BorderPane();
+      Scene scene = new Scene(root, 1000, 800);
+      scene.getStylesheets().add("cheese-factory.css");
+      
+      // report title and farm info
+      GridPane top = new GridPane();
+      top.setAlignment(Pos.CENTER);
+      top.setPadding(new Insets(10, 10, 10, 10));
+      Label titleLabel = new Label("Monthly Report");
+      
+      // add title to top
+      titleLabel.setId("report-title");
+      top.add(titleLabel, 0, 0);
+      GridPane.setHalignment(titleLabel, HPos.CENTER);
+      
+      // add report info to top      
+      GridPane info = new GridPane();
+      Label year = new Label("Year: 2020");
+      Label month = new Label("Month: May");
+      year.setId("report-info");
+      month.setId("report-info");
+      info.add(year, 0, 0);
+      info.add(month, 1, 0);
+      top.add(info, 0, 1);
+      info.setHgap(20);
+      GridPane.setHalignment(year, HPos.CENTER);
+      GridPane.setHalignment(month, HPos.CENTER);
+      
+      root.setTop(top);
+      
+      TableView<String> reportTable = new TableView<String>();
+      reportTable.autosize();
+      
+      // set up columns
+      TableColumn<String, String> farmId = new TableColumn<String, String>("Farm ID");
+      farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
+      farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<String, String> milkWeight = new TableColumn<String, String>("Milk Weight");
+      milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
+      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<String, String> percentMilk = new TableColumn<String, String>("% of Total Milk");
+      percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
+      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      
+      reportTable.getColumns().add(farmId);
+      reportTable.getColumns().add(milkWeight);
+      reportTable.getColumns().add(percentMilk);
+//    reportTable.setItems(data);
+      root.setCenter(reportTable);
+      
+      // table for report values
+      GridPane reportGrid = new GridPane();
+      final int numCols = 3;
+      
+      // set number of columns based on report
+      for (int i = 0; i < numCols; i++) {
+        ColumnConstraints colConst = new ColumnConstraints();
+        colConst.setPercentWidth(50.0 / numCols);
+        reportGrid.getColumnConstraints().add(colConst);
+      }
+      
+      reportGrid.setPadding(new Insets(10, 10, 10, 10));
+      reportGrid.setGridLinesVisible(true);
+      reportGrid.setAlignment(Pos.BASELINE_CENTER);
+      
+      // add data
+      // for loop to go through data
+
+      primaryStage.setTitle("Report Screen");
+      primaryStage.setScene(scene);
+      primaryStage.show();
+    }
+    
+    /**
+     * Displays date range report screen
+     * 
+     * @param primaryStage
+     */
+    void dateRangeReportScreen(Stage primaryStage) {
+      BorderPane root = new BorderPane();
+      Scene scene = new Scene(root, 1000, 800);
+      scene.getStylesheets().add("cheese-factory.css");
+      
+      // report title and farm info
+      GridPane top = new GridPane();
+      top.setAlignment(Pos.CENTER);
+      top.setPadding(new Insets(10, 10, 10, 10));
+      Label titleLabel = new Label("Date Range Report");
+      
+      // add title to top
+      titleLabel.setId("report-title");
+      top.add(titleLabel, 0, 0);
+      GridPane.setHalignment(titleLabel, HPos.CENTER);
+      
+      // add report info to top      
+      GridPane info = new GridPane();
+      Label startDate = new Label("Start date: April 3, 2020");
+      Label endDate = new Label("End Date: June 8, 2020");
+      startDate.setId("report-info");
+      endDate.setId("report-info");
+      info.add(startDate, 0, 0);
+      info.add(endDate, 1, 0);
+      top.add(info, 0, 1);
+      info.setHgap(20);
+      GridPane.setHalignment(startDate, HPos.CENTER);
+      GridPane.setHalignment(endDate, HPos.CENTER);
+      
+      root.setTop(top);
+      
+      TableView<Farm> reportTable = new TableView<Farm>();
+      reportTable.autosize();
+      
+      // set up columns
+      TableColumn<Farm, String> farmId = new TableColumn<Farm, String>("Farm ID");
+      farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
+      farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<Farm, String> milkWeight = new TableColumn<Farm, String>("Milk Weight");
+      milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
+      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<Farm, String> percentMilk = new TableColumn<Farm, String>("% of Total Milk");
+      percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
+      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      
+      reportTable.getColumns().add(farmId);
+      reportTable.getColumns().add(milkWeight);
+      reportTable.getColumns().add(percentMilk);
+      root.setCenter(reportTable);
+      
+      // table for report values
+      GridPane reportGrid = new GridPane();
+      final int numCols = 3;
+      
+      // set number of columns based on report
+      for (int i = 0; i < numCols; i++) {
+        ColumnConstraints colConst = new ColumnConstraints();
+        colConst.setPercentWidth(50.0 / numCols);
+        reportGrid.getColumnConstraints().add(colConst);
+      }
+      
+      reportGrid.setPadding(new Insets(10, 10, 10, 10));
+      reportGrid.setGridLinesVisible(true);
+      reportGrid.setAlignment(Pos.BASELINE_CENTER);
+      
+      // add data
+      // for loop to go through data?
+
+      primaryStage.setTitle("Report Screen");
+      primaryStage.setScene(scene);
+      primaryStage.show();
     }
 
 	void reportScreen(Stage primaryStage) {
