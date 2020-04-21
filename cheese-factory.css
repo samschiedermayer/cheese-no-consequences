@@ -1,0 +1,37 @@
+/* Report page CSS */
+#report-title {
+	-fx-font-size: 32px;
+	-fx-text-fill: black;
+	-fx-text-alignment: center;
+}
+
+#report-info {
+	-fx-font-size: 18px;
+	-fx-text-fill: black;
+}
+/* END */
+
+.root {
+	-fx-body-color : #F5F5F5;
+	-fx-outer-border : #cecece;
+}
+
+/* TableView CSS */
+.filler,.column-header,.show-hide-columns-button {
+	-fx-background-color: #dddddd, white, white;
+}
+.show-hide-columns-button {
+	-fx-border-width: 0;
+	-fx-background-insets: 0 0 1 1;
+}
+.column-header:hover,.show-hide-columns-button:hover {
+	-fx-background-color: #dddddd, white, #f8f8f8;
+}
+.column-header-background > .filler {
+	-fx-border-color: transparent #dddddd transparent transparent;
+	-fx-border-insets: 0 1 0 0;
+}
+.column-drag-header {
+	-fx-background-color: #2fb254;
+}
+/* END */
