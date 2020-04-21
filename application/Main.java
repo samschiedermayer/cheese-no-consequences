@@ -231,6 +231,7 @@ public class Main extends Application {
                     	try {
                     		factory.importFarmData(file.getAbsolutePath());
                     	}catch (Exception a) {
+                    		a.printStackTrace();
                     		selectFilesLabel.setText("Loading File Failed Select a New File"); 
                     	}
                         

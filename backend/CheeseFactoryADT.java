@@ -67,6 +67,7 @@ public interface CheeseFactoryADT {
    * Will export all farm data to a CSV file
    * 
    * @param fileName - the name of the file the data should be exported to
+   * @throws IOException  - if there is an error writing to the file
    */
-  void exportFarmData(String fileName);
+  void exportFarmData(String fileName) throws IOException;
 }

@@ -2,6 +2,7 @@ package backend;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,14 +49,15 @@ public class CheeseFactory implements CheeseFactoryADT {
     int totalMilkWeightOfFactory = 0;
     
     //get total milk weight of factory to use for percentage
-    for (String key : farmIDs) {
-      totalMilkWeightOfFactory += farms.get(key).getMilkWeight(year);
+    for (int i = 0; i < farmIDs.size(); i++) {
+      totalMilkWeightOfFactory += farms.get(farmIDs.get(i)).getMilkWeight(year);
     }
     
     //add to hash map for each farmID
-    for (String key : farmIDs) {
+    for (int i = 0; i < farmIDs.size(); i++) {
+      String key = farmIDs.get(i);
       double[] value = new double[2];
-      value[0] = (double) farms.get(key).getMilkWeight(year);
+      value[0] = (double) farms.get(farmIDs.get(i)).getMilkWeight(year);
       value[1] = (double) (value[0]/totalMilkWeightOfFactory) * 100;
       
       annualReport.put(key, value);
@@ -67,23 +69,7 @@ public class CheeseFactory implements CheeseFactoryADT {
   //zach
   @Override
   public HashMap<String, double[]> getMonthlyReport(int year, int month){
-    HashMap<String, double[]> monthlyReport = new HashMap<>();
-    List<String> farmIDs = getAllFarmNames();
-    int totalMilkWeightOfFactory = 0;
-    
-    for (String key : farmIDs) {
-      totalMilkWeightOfFactory += farms.get(key).getMilkWeight(year, month);
-    }
-    
-    for (String key : farmIDs) {
-      double[] value = new double[2];
-      value[0] = (double) farms.get(key).getMilkWeight(year, month);
-      value[1] = (double) (value[0]/totalMilkWeightOfFactory) * 100;
-      
-      monthlyReport.put(key, value);
-    }
-    
-    return monthlyReport;
+    return null;
   }
 
   // zach
@@ -109,17 +95,19 @@ public class CheeseFactory implements CheeseFactoryADT {
     return dateRangeReport;
   }
 
-//sam
+ // sam
  @Override
  public void importFarmData(String fileName) throws IOException {
-   // TODO Auto-generated method stub
 	  BufferedReader reader = new BufferedReader(new FileReader(fileName));
+	  
+	  reader.readLine();
 	  
 	  int weight;
 	  Farm farm;
 	  String line = null, farmId;
 	  String[] split, dateSplit;
-	  while ((line = reader.readLine()) != null) {
+	  while ((line = reader.readLine()) != null)  {
+		  System.out.println(line);
 		  split = line.split(",");
 		  
 		  dateSplit = split[0].split("-");
@@ -150,9 +138,11 @@ public class CheeseFactory implements CheeseFactoryADT {
 
   // sam
   @Override
-  public void exportFarmData(String fileName) {
-    // TODO Auto-generated method stub
-
+  public void exportFarmData(String fileName) throws IOException {
+	  FileWriter writer = new FileWriter(fileName);
+	  
+	  writer.append("date,farm_id,weight\n");
+	  
   }
 
 
