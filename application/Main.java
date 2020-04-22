@@ -132,11 +132,12 @@ public class Main extends Application {
             Label insertLabel = new Label("Insert Data");
         	insertLabel.setFont(titleFont);
 
-            Label farmNameLabel = new Label("Farm ID: ");
+            Label farmNameLabel = new Label("Farm: ");
             farmNameLabel.setFont(labelFont);
             TextField farmNameField = new TextField();
             HBox farmInfoHBox = new HBox();
             farmInfoHBox.getChildren().add(farmNameLabel);
+            farmInfoHBox.setMargin(farmNameLabel, new Insets(0,12,0,0));
             farmInfoHBox.getChildren().add(farmNameField);
             
             Label dateLabel = new Label("Date: ");
@@ -144,7 +145,19 @@ public class Main extends Application {
             DatePicker datePicker = new DatePicker();
             HBox dateInfoHBox = new HBox();
             dateInfoHBox.getChildren().add(dateLabel);
+            dateInfoHBox.setMargin(dateLabel, new Insets(0,6,0,0));
             dateInfoHBox.getChildren().add(datePicker);
+            
+            Label milkLabel = new Label("Milk: ");
+            milkLabel.setFont(labelFont);
+            TextField milkField = new TextField();
+            HBox milkInfoHBox = new HBox();
+            milkInfoHBox.getChildren().add(milkLabel);
+            milkInfoHBox.setMargin(milkLabel, new Insets(0,14,0,0));
+            milkInfoHBox.getChildren().add(milkField);
+            
+            Button insertDataButton = new Button("Insert Data");
+            insertDataButton.setFont(buttonFont);
             
       
             //Event Handler for Report Selections Selections
@@ -414,6 +427,8 @@ public class Main extends Application {
             rVBox.setMargin(insertLabel, new Insets(0,0,12,0));
             rVBox.getChildren().add(farmInfoHBox);
             rVBox.getChildren().add(dateInfoHBox);
+            rVBox.getChildren().add(milkInfoHBox);
+            rVBox.getChildren().add(insertDataButton);
             
             //add children to hbox
             root.setLeft(lVBox);
@@ -421,7 +436,7 @@ public class Main extends Application {
             root.setCenter(cHBox);
             root.setMargin(cHBox, new Insets(12,12,12,12));
             root.setRight(rVBox);
-            root.setMargin(rVBox, new Insets(12,36,12,0));
+            root.setMargin(rVBox, new Insets(12,42,12,0));
             
             //set the scene and start the show
         	stage.setScene(mainScene);
