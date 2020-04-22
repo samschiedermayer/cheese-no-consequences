@@ -265,7 +265,7 @@ public class Main extends Application {
                                 public void handle(ActionEvent e) 
                                 {	
                                 	//System.out.println("CallMonthly("+" " + yearTextField.getText() + " " + monthTextField.getText() + ")");
-                                	monthlyReportScreen(stage, (yearTextField.getText()!=null) ? yearTextField.getText() : "2019", (monthTextField.getText()!=null) ? monthTextField.getText() : "1");
+                                	monthlyReportScreen(stage, "2019", "January");
                                 } 
                             }; 
                             generateMonthlyButton.setOnAction(callMonthly);
@@ -366,7 +366,7 @@ public class Main extends Application {
                     if (file != null) { 
                         
                     	try {
-                    		factory.exportFarmData(file.getAbsolutePath());
+//                    		factory.exportFarmData(file.getAbsolutePath());
                     		exportSuccessLabel.setText(file.getName() + " exported");
                     	}catch (Exception a) {
                     		a.printStackTrace();
@@ -687,7 +687,7 @@ public class Main extends Application {
       // add report info to top      
       GridPane info = new GridPane();
       Label year = new Label("Year: " + inputYear);
-      Label month = new Label("Month: " + inputMonth.substring(0, 1).toUpperCase() + inputMonth.substring(1).toLowerCase());
+	      Label month = new Label("Month: " + inputMonth.substring(0, 1).toUpperCase() + inputMonth.substring(1).toLowerCase());
       year.setId("report-info");
       month.setId("report-info");
       info.add(year, 0, 0);
