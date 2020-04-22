@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -27,6 +28,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -64,7 +66,7 @@ public class Main extends Application {
 	
 	private static Font buttonFont = new Font(14);
 	private static Font titleFont = new Font(24);
-	private static Font labelFont = new Font(18);
+	private static Font labelFont = new Font(16);
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -88,20 +90,43 @@ public class Main extends Application {
             Label reportLabel = new Label("Generate Report");
             reportLabel.setFont(titleFont);
             
+            HBox reportHBox = new HBox(12);
+            reportHBox.setAlignment(Pos.CENTER);
+            
             Label reportSelectLabel = new Label("Report Type:");
+            reportSelectLabel.setFont(labelFont);
         	ComboBox<String> combo_box = new ComboBox<String>();
-        	combo_box.getItems().addAll("Farm","Annual","Monthly","Date Range");
+        	combo_box.getItems().addAll("Annual","Monthly","Farm","Date Range");
+        	combo_box.getSelectionModel().selectFirst();
+        	
+            reportHBox.getChildren().add(reportSelectLabel);
+            reportHBox.getChildren().add(combo_box);
+
         	Button selectReportButton = new Button("Generate");
         	selectReportButton.setFont(buttonFont);
             
             //Select Files label, button, and file chooser
         	Label importLabel = new Label("Import Data");
-        	importLabel.setFont(new Font(24));
+        	importLabel.setFont(titleFont);
         	
             FileChooser file_chooser = new FileChooser(); 
+            
             Label selectFilesLabel = new Label("no files selected");
-            Button selectFileButton = new Button("Load .csv");
+            
+            Button selectFileButton = new Button("Import .csv");
             selectFileButton.setFont(buttonFont);
+            
+            //File exporter
+            Label exportLabel = new Label("Export Data");
+            exportLabel.setFont(titleFont);
+            
+            Label exportSuccessLabel = new Label("no files exported");
+            FileChooser exportChooser = new FileChooser();
+            
+            Button exportButton = new Button("Export .csv");
+            exportButton.setFont(buttonFont);
+            
+            
             
             //Title, fields, and button for manually inserting data
             Label insertLabel = new Label("Insert Data");
@@ -301,7 +326,7 @@ public class Main extends Application {
             }; 
             selectReportButton.setOnAction(confirmReport);
             
-            // Event Handler for file Selections
+            // Event Handler for file imports
             EventHandler<ActionEvent> selectFile =  new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 { 
@@ -318,43 +343,85 @@ public class Main extends Application {
                         
                     } 
                 } 
-            }; 
+            };
+            
+         // Event Handler for file exports
+            EventHandler<ActionEvent> selectExport =  new EventHandler<ActionEvent>() { 
+                public void handle(ActionEvent e) 
+                { 
+                    File file = exportChooser.showOpenDialog(stage); 
+                    if (file != null) { 
+                        
+                    	try {
+                    		factory.exportFarmData(file.getAbsolutePath());
+                    		exportSuccessLabel.setText(file.getName() + " exported");
+                    	}catch (Exception a) {
+                    		a.printStackTrace();
+                    		selectFilesLabel.setText("failed to export"); 
+                    	}
+                        
+                    } 
+                } 
+            };
       
             //set the action of the button
             selectFileButton.setOnAction(selectFile); 
+            exportButton.setOnAction(selectExport);
             
             //set up vertical boxes for categories of actions
-            VBox lVBox = new VBox();
+            VBox lVBox = new VBox(12);
             lVBox.setAlignment(Pos.TOP_CENTER);
             
-            VBox cVBox = new VBox();
+            VBox cVBox = new VBox(12);
             cVBox.setAlignment(Pos.TOP_CENTER);
             
-            VBox rVBox = new VBox();
+            VBox rVBox = new VBox(12);
             rVBox.setAlignment(Pos.TOP_CENTER);
+            
+            //set up the middle hbox to have separators
+            HBox cHBox = new HBox();
+            cHBox.setAlignment(Pos.TOP_CENTER);
+            Separator leftSeparator = new Separator(Orientation.VERTICAL);
+            cHBox.getChildren().add(leftSeparator);
+            cHBox.setMargin(leftSeparator, new Insets(0,24,0,0));
+            
+            cHBox.getChildren().add(cVBox);
 
+            Separator rightSeparator = new Separator(Orientation.VERTICAL);
+            cHBox.getChildren().add(rightSeparator);
+            cHBox.setMargin(rightSeparator, new Insets(0,0,0,24));
+            
             //add children to respective vboxes
             lVBox.getChildren().add(importLabel);
+            lVBox.setMargin(importLabel, new Insets(0,0,12,0));
             lVBox.getChildren().add(selectFilesLabel);
             lVBox.getChildren().add(selectFileButton);
             
+            Separator horizontalSeparator = new Separator(Orientation.HORIZONTAL);
+            lVBox.getChildren().add(horizontalSeparator);
+            
+            lVBox.getChildren().add(exportLabel);
+            lVBox.setMargin(exportLabel, new Insets(0,0,12,0));
+            lVBox.getChildren().add(exportSuccessLabel);
+            lVBox.getChildren().add(exportButton);
+            
             cVBox.getChildren().add(reportLabel);
-            cVBox.getChildren().add(reportSelectLabel);
-            cVBox.getChildren().add(combo_box);
+            cVBox.setMargin(reportLabel, new Insets(0,0,12,0));
+            cVBox.getChildren().add(reportHBox);
             cVBox.getChildren().add(selectReportButton);
             
             rVBox.getChildren().add(insertLabel);
+            rVBox.setMargin(insertLabel, new Insets(0,0,12,0));
             rVBox.getChildren().add(farmInfoHBox);
             rVBox.getChildren().add(dateInfoHBox);
             
             //add children to hbox
-            Insets margin = new Insets(12,12,12,12);
             root.setLeft(lVBox);
-            root.setMargin(lVBox, margin);
-            root.setCenter(cVBox);
-            root.setMargin(cVBox, margin);
+            root.setMargin(lVBox, new Insets(12,0,12,36));
+            root.setCenter(cHBox);
+            root.setMargin(cHBox, new Insets(12,12,12,12));
             root.setRight(rVBox);
-            root.setMargin(rVBox, margin);
+            root.setMargin(rVBox, new Insets(12,36,12,0));
             
             //set the scene and start the show
         	stage.setScene(mainScene);
