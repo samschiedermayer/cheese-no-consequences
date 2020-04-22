@@ -557,28 +557,21 @@ public class Main extends Application {
       reportTable.getColumns().add(month);
       reportTable.getColumns().add(milkWeight);
       ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(
-          new FarmsModel("April", 1000),
-          new FarmsModel("May", 2304));
+          new FarmsModel("January", 8543),
+          new FarmsModel("Febrary", 232),
+          new FarmsModel("March", 1284),
+          new FarmsModel("April", 1435),
+          new FarmsModel("May", 4542),
+          new FarmsModel("June", 2344),
+          new FarmsModel("July", 5432),
+          new FarmsModel("August", 7642),
+          new FarmsModel("September", 2343),
+          new FarmsModel("October", 3543),
+          new FarmsModel("November", 972),
+          new FarmsModel("December", 2304));
       reportTable.setItems(farmsModels);
+      
       root.setCenter(reportTable);
-      
-      // table for report values
-      GridPane reportGrid = new GridPane();
-      final int numCols = 3;
-      
-      // set number of columns based on report
-      for (int i = 0; i < numCols; i++) {
-        ColumnConstraints colConst = new ColumnConstraints();
-        colConst.setPercentWidth(50.0 / numCols);
-        reportGrid.getColumnConstraints().add(colConst);
-      }
-      
-      reportGrid.setPadding(new Insets(10, 10, 10, 10));
-      reportGrid.setGridLinesVisible(true);
-      reportGrid.setAlignment(Pos.BASELINE_CENTER);
-      
-      // add data
-      // for loop to go through data
       
       // back button
       Button backButton = new Button("Back");
@@ -618,42 +611,35 @@ public class Main extends Application {
       
       root.setTop(top);
       
-      TableView<Farm> reportTable = new TableView<Farm>();
+      // table for report data
+      TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
       reportTable.autosize();
       
       // set up columns
-      TableColumn<Farm, String> farmId = new TableColumn<Farm, String>("Farm ID");
+      TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
       farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
       farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-      TableColumn<Farm, Integer> milkWeight = new TableColumn<Farm, Integer>("Milk Weight");
+      TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
       milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
       milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-      TableColumn<Farm, Double> percentMilk = new TableColumn<Farm, Double>("% of Total Milk");
+      TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
       percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
       percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
       
       reportTable.getColumns().add(farmId);
       reportTable.getColumns().add(milkWeight);
       reportTable.getColumns().add(percentMilk);
+      
+      ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(
+          new FarmsModel("1", 4234, 28.47),
+          new FarmsModel("2", 1023, 6.88),
+          new FarmsModel("3", 1236, 8.31),
+          new FarmsModel("4", 1013, 6.81),
+          new FarmsModel("5", 6383, 42.92),
+          new FarmsModel("6", 983, 6.61));
+      reportTable.setItems(farmsModels);
+      
       root.setCenter(reportTable);
-      
-      // table for report values
-      GridPane reportGrid = new GridPane();
-      final int numCols = 3;
-      
-      // set number of columns based on report
-      for (int i = 0; i < numCols; i++) {
-        ColumnConstraints colConst = new ColumnConstraints();
-        colConst.setPercentWidth(50.0 / numCols);
-        reportGrid.getColumnConstraints().add(colConst);
-      }
-      
-      reportGrid.setPadding(new Insets(10, 10, 10, 10));
-      reportGrid.setGridLinesVisible(true);
-      reportGrid.setAlignment(Pos.BASELINE_CENTER);
-      
-      // add data
-      // for loop to go through data
       
       // back button
       Button backButton = new Button("Back");
@@ -699,6 +685,7 @@ public class Main extends Application {
       GridPane.setHalignment(month, HPos.CENTER);
       root.setTop(top);
       
+      // table for report data
       TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
       
       // set up columns
@@ -716,29 +703,17 @@ public class Main extends Application {
       reportTable.getColumns().add(milkWeight);
       reportTable.getColumns().add(percentMilk);
       
+      // mock data
       ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(
-          new FarmsModel("1", 1023, 10.0),
-          new FarmsModel("2", 2989, 22.3));
+          new FarmsModel("1", 4234, 28.47),
+          new FarmsModel("2", 1023, 6.88),
+          new FarmsModel("3", 1236, 8.31),
+          new FarmsModel("4", 1013, 6.81),
+          new FarmsModel("5", 6383, 42.92),
+          new FarmsModel("6", 983, 6.61));
       reportTable.setItems(farmsModels);
+      
       root.setCenter(reportTable);
-      
-      // table for report values
-      GridPane reportGrid = new GridPane();
-      final int numCols = 3;
-      
-      // set number of columns based on report
-      for (int i = 0; i < numCols; i++) {
-        ColumnConstraints colConst = new ColumnConstraints();
-        colConst.setPercentWidth(50.0 / numCols);
-        reportGrid.getColumnConstraints().add(colConst);
-      }
-      
-      reportGrid.setPadding(new Insets(10, 10, 10, 10));
-      reportGrid.setGridLinesVisible(true);
-      reportGrid.setAlignment(Pos.BASELINE_CENTER);
-      
-      // add data
-      // for loop to go through data
       
       // back button
       Button backButton = new Button("Back");
@@ -783,41 +758,35 @@ public class Main extends Application {
       GridPane.setHalignment(endDate, HPos.CENTER);
       root.setTop(top);
       
-      TableView<Farm> reportTable = new TableView<Farm>();
+      // table for report data
+      TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
       
       // set up columns
-      TableColumn<Farm, String> farmId = new TableColumn<Farm, String>("Farm ID");
+      TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
       farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
       farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-      TableColumn<Farm, Integer> milkWeight = new TableColumn<Farm, Integer>("Milk Weight");
+      TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
       milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
       milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-      TableColumn<Farm, String> percentMilk = new TableColumn<Farm, String>("% of Total Milk");
+      TableColumn<FarmsModel, String> percentMilk = new TableColumn<FarmsModel, String>("% of Total Milk");
       percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
       percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
       
       reportTable.getColumns().add(farmId);
       reportTable.getColumns().add(milkWeight);
       reportTable.getColumns().add(percentMilk);
+      
+      // mock data
+      ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(
+          new FarmsModel("1", 4234, 28.47),
+          new FarmsModel("2", 1023, 6.88),
+          new FarmsModel("3", 1236, 8.31),
+          new FarmsModel("4", 1013, 6.81),
+          new FarmsModel("5", 6383, 42.92),
+          new FarmsModel("6", 983, 6.61));
+      reportTable.setItems(farmsModels);
+      
       root.setCenter(reportTable);
-      
-      // table for report values
-      GridPane reportGrid = new GridPane();
-      final int numCols = 3;
-      
-      // set number of columns based on report
-      for (int i = 0; i < numCols; i++) {
-        ColumnConstraints colConst = new ColumnConstraints();
-        colConst.setPercentWidth(50.0 / numCols);
-        reportGrid.getColumnConstraints().add(colConst);
-      }
-      
-      reportGrid.setPadding(new Insets(10, 10, 10, 10));
-      reportGrid.setGridLinesVisible(true);
-      reportGrid.setAlignment(Pos.BASELINE_CENTER);
-      
-      // add data
-      // for loop to go through data?
 
       // back button
       Button backButton = new Button("Back");
@@ -826,6 +795,14 @@ public class Main extends Application {
       primaryStage.setScene(scene);
       primaryStage.show();
     }
+    
+    /**
+     * Creates a back button and the functionality to go back to a specific page
+     * 
+     * @param root
+     * @param primaryStage
+     * @param backButton
+     */
 
     void backButton(BorderPane root, Stage primaryStage, Button backButton) {
       HBox buttonHBox = new HBox();
