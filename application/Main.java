@@ -81,7 +81,7 @@ public class Main extends Application {
         	
         	
         	Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-        	mainScene.getStylesheets().add("cheese-factory.css");
+        	mainScene.getStylesheets().add("application/application.css");
 		           
             //Title and Header
             stage.setTitle(APP_TITLE);
@@ -265,7 +265,7 @@ public class Main extends Application {
                                 public void handle(ActionEvent e) 
                                 {	
                                 	//System.out.println("CallMonthly("+" " + yearTextField.getText() + " " + monthTextField.getText() + ")");
-                                	monthlyReportScreen(stage, yearTextField.getText(), monthTextField.getText());
+                                	monthlyReportScreen(stage, (yearTextField.getText()!=null) ? yearTextField.getText() : "2019", (monthTextField.getText()!=null) ? monthTextField.getText() : "1");
                                 } 
                             }; 
                             generateMonthlyButton.setOnAction(callMonthly);
@@ -507,7 +507,7 @@ public class Main extends Application {
     void farmReportScreen(Stage primaryStage, String inputFarmId, String inputYear) {
       BorderPane root = new BorderPane();
       Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-      scene.getStylesheets().add("cheese-factory.css");
+      scene.getStylesheets().add("application/application.css");
       
       // report title and farm info
       GridPane top = new GridPane();
@@ -596,7 +596,7 @@ public class Main extends Application {
     void annualReportScreen(Stage primaryStage, String inputYear) {
       BorderPane root = new BorderPane();
       Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-      scene.getStylesheets().add("cheese-factory.css");
+      scene.getStylesheets().add("application/application.css");
       
       // report title and farm info
       GridPane top = new GridPane();
@@ -671,7 +671,7 @@ public class Main extends Application {
     void monthlyReportScreen(Stage primaryStage, String inputYear, String inputMonth) {
       BorderPane root = new BorderPane();
       Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-      scene.getStylesheets().add("cheese-factory.css");
+      scene.getStylesheets().add("application/application.css");
       
       // report title and farm info
       GridPane top = new GridPane();
@@ -756,7 +756,7 @@ public class Main extends Application {
     void dateRangeReportScreen(Stage primaryStage, String inputStartMonth, String inputStartDay, String inputStartYear, String endStartMonth, String endStartDay, String endStartYear) {
       BorderPane root = new BorderPane();
       Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-      scene.getStylesheets().add("cheese-factory.css");
+      scene.getStylesheets().add("application/application.css");
       
       // report title and farm info
       GridPane top = new GridPane();

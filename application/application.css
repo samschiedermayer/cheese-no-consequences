@@ -25,6 +25,12 @@
 	-fx-cursor: hand;
 }
 
+.separator *.line { 
+-fx-border-style: solid;
+-fx-border-width: 1px;
+
+}
+
 /* TableView CSS */
 .filler,.column-header,.show-hide-columns-button {
 	-fx-background-color: #dddddd, white, white;
