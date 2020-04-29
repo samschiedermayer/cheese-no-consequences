@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -431,17 +432,17 @@ public class Main extends javafx.application.Application {
 			// Event Handler for file exports
 			EventHandler<ActionEvent> selectExport = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
-					File file = exportChooser.showOpenDialog(stage);
-					if (file != null) {
-
+					List<File> fileList = file_chooser.showOpenMultipleDialog(stage);
+					if(fileList != null) {
 						try {
-//                    		factory.exportFarmData(file.getAbsolutePath());
-							exportSuccessLabel.setText(file.getName() + " exported");
-						} catch (Exception a) {
+							for(File file : fileList) {
+								factory.importFarmData(file.getAbsolutePath());
+								selectFilesLabel.setText(file.getName() + " imported");
+							}
+						}catch (Exception a) {
 							a.printStackTrace();
-							selectFilesLabel.setText("failed to export");
+							selectFilesLabel.setText("Loading File Failed Select a New File");
 						}
-
 					}
 				}
 			};
@@ -476,6 +477,24 @@ public class Main extends javafx.application.Application {
             			return;
             		}
             		
+            		try {
+            			factory.addDataPoint(farm, milk, date);
+            			System.out.println("added data point");
+            		} catch (DuplicateAdditionException dae) {
+            			System.out.println("duplicate data point");
+            			int prev = dae.getWeight();
+            			
+            			Alert alert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
+            			alert.setTitle("Warning");
+            			alert.setHeaderText(null);
+            			alert.setContentText("Data point for "+ farm + " already exists on " + date.toString() +" for " + prev + "lb." +
+            					"\nWould you like to replace this entry with "+ milk + "lb?");
+            			alert.showAndWait();
+
+            		}
+            		
+            		farmNameField.clear();
+            		milkField.clear();
             		
             	}
             };

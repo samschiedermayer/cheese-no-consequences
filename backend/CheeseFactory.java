@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import exceptions.DuplicateAdditionException;
 
@@ -20,9 +21,9 @@ public class CheeseFactory implements CheeseFactoryADT {
 
 	// maya
 	@Override
-	public List<String> getAllFarmNames() {
+	public Set<String> getAllFarmNames() {
 		@SuppressWarnings("unchecked")
-		List<String> farmNames = (List<String>) farms.keySet();
+		Set<String> farmNames = farms.keySet();
 		return farmNames;
 	}
 
@@ -30,14 +31,14 @@ public class CheeseFactory implements CheeseFactoryADT {
 	@Override
 	public double[][] getFarmReport(String farmName, int year) {
 		double[][] farmReport = new double[12][2];
-		List<String> farmIDs = getAllFarmNames();
+		Set<String> farmIDs = getAllFarmNames();
 		// get total milk weight per month
 		int monthCounter = 1;
 		// assumes month indexing starts at 1 (for January)
 		while (monthCounter <= 12) {
 			double totalMilkWeight = 0;
-			for (int i = 0; i < farmIDs.size(); i++) {
-				totalMilkWeight += farms.get(farmIDs.get(i)).getMilkWeight(year, monthCounter);
+			for (String id : farmIDs) {
+				totalMilkWeight += farms.get(id).getMilkWeight(year, monthCounter);
 			}
 			farmReport[monthCounter - 1][0] = totalMilkWeight;
 			// get total milk weight from farm per month
@@ -53,7 +54,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 	@Override
 	public HashMap<String, double[]> getAnnualReport(int year) {
 		HashMap<String, double[]> annualReport = new HashMap<>();
-		List<String> farmIDs = getAllFarmNames();
+		Set<String> farmIDs = getAllFarmNames();
 		int totalMilkWeightOfFactory = 0;
 
 		// get total milk weight of factory to use for percentage
@@ -77,7 +78,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 	@Override
 	public HashMap<String, double[]> getMonthlyReport(int year, int month) {
 	  HashMap<String, double[]> monthlyReport = new HashMap<>();
-      List<String> farmIDs = getAllFarmNames();
+      Set<String> farmIDs = getAllFarmNames();
       int totalMilkWeightOfFactory = 0;
       
 	// get total milk weight of factory to use for percentage
@@ -101,7 +102,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 	public HashMap<String, double[]> getDateRangeReport(LocalDate start, LocalDate end) {
 		HashMap<String, double[]> dateRangeReport = new HashMap<>();
 
-		List<String> farmIDs = getAllFarmNames();
+		Set<String> farmIDs = getAllFarmNames();
 		int totalMilkWeightOfFactory = 0;
 
 		for (String key : farmIDs) {
@@ -167,7 +168,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 	public void exportFarmData(String fileName) throws IOException {
 		FileWriter writer = new FileWriter(fileName);
 		
-		List<String> farmIDs = getAllFarmNames();
+		Set<String> farmIDs = getAllFarmNames();
 		
 		for (String farmID: farmIDs) {
 		  HashMap<LocalDate, Integer> farmMilkWeights = farms.get(farmID).getMilkWeightsHashMap();

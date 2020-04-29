@@ -3,7 +3,7 @@ package backend;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 import exceptions.DuplicateAdditionException;
 
@@ -14,7 +14,7 @@ public interface CheeseFactoryADT {
    * 
    * @return list of all farm names
    */
-  List<String> getAllFarmNames();
+  Set<String> getAllFarmNames();
 
   /**
    * Will return list of all milk weights and percentage milk weights for a given farm for a given
