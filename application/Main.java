@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.beans.value.ChangeListener;
 
@@ -414,24 +415,6 @@ public class Main extends javafx.application.Application {
 			// Event Handler for file imports
 			EventHandler<ActionEvent> selectFile = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
-					File file = file_chooser.showOpenDialog(stage);
-					if (file != null) {
-
-						try {
-							factory.importFarmData(file.getAbsolutePath());
-							selectFilesLabel.setText(file.getName() + " imported");
-						} catch (Exception a) {
-							a.printStackTrace();
-							selectFilesLabel.setText("Loading File Failed Select a New File");
-						}
-
-					}
-				}
-			};
-
-			// Event Handler for file exports
-			EventHandler<ActionEvent> selectExport = new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent e) {
 					List<File> fileList = file_chooser.showOpenMultipleDialog(stage);
 					if(fileList != null) {
 						try {
@@ -440,6 +423,22 @@ public class Main extends javafx.application.Application {
 								selectFilesLabel.setText(file.getName() + " imported");
 							}
 						}catch (Exception a) {
+							a.printStackTrace();
+							selectFilesLabel.setText("Loading File Failed Select a New File");
+						}
+					}
+				}
+			};
+
+			// Event Handler for file exports
+			EventHandler<ActionEvent> selectExport = new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent e) {
+					File file = file_chooser.showOpenDialog(stage);
+					if(file != null) {
+						try {
+							factory.exportFarmData(file.getAbsolutePath());
+							exportLabel.setText(file.getName() + " exported");
+						} catch (Exception a) {
 							a.printStackTrace();
 							selectFilesLabel.setText("Loading File Failed Select a New File");
 						}
@@ -489,7 +488,11 @@ public class Main extends javafx.application.Application {
             			alert.setHeaderText(null);
             			alert.setContentText("Data point for "+ farm + " already exists on " + date.toString() +" for " + prev + "lb." +
             					"\nWould you like to replace this entry with "+ milk + "lb?");
-            			alert.showAndWait();
+            			
+            			Optional<ButtonType> result = alert.showAndWait();
+            			
+            			if(result.isPresent() && result.get() == ButtonType.OK)
+            				factory.forceAddDataPoint(farm, milk, date);
 
             		}
             		
