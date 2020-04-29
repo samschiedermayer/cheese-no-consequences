@@ -5,11 +5,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.value.ChangeListener;
+
 import backend.CheeseFactory;
 import backend.Farm;
 import exceptions.DuplicateAdditionException;
 import javafx.application.Application;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -50,7 +53,7 @@ import javafx.scene.text.Text;
  * 
  * Main controls the GUI created with Java FX
  */
-public class Main extends Application {
+public class Main extends javafx.application.Application {
 
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 400;
@@ -122,29 +125,38 @@ public class Main extends Application {
 			Button exportButton = new Button("Export .csv");
 			exportButton.setFont(buttonFont);
 
-			// Title, fields, and button for manually inserting data
-			Label insertLabel = new Label("Insert Data");
-			insertLabel.setFont(titleFont);
+			//Title, fields, and button for manually inserting data
+            Label insertLabel = new Label("Insert Data");
+        	insertLabel.setFont(titleFont);
 
-			Label farmNameLabel = new Label("Farm: ");
-			farmNameLabel.setFont(labelFont);
-			TextField farmNameField = new TextField();
-			HBox farmInfoHBox = new HBox();
-			farmInfoHBox.getChildren().add(farmNameLabel);
-			farmInfoHBox.setMargin(farmNameLabel, new Insets(0, 12, 0, 0));
-			farmInfoHBox.getChildren().add(farmNameField);
-
-			Label dateLabel = new Label("Date: ");
-			dateLabel.setFont(labelFont);
-			DatePicker datePicker = new DatePicker();
-			HBox dateInfoHBox = new HBox();
-			dateInfoHBox.getChildren().add(dateLabel);
-			dateInfoHBox.setMargin(dateLabel, new Insets(0, 6, 0, 0));
-			dateInfoHBox.getChildren().add(datePicker);
-
-			Label milkLabel = new Label("Milk: ");
-			milkLabel.setFont(labelFont);
-			TextField milkField = new TextField();
+            Label farmNameLabel = new Label("Farm: ");
+            farmNameLabel.setFont(labelFont);
+            TextField farmNameField = new TextField();
+            HBox farmInfoHBox = new HBox();
+            farmInfoHBox.getChildren().add(farmNameLabel);
+            farmInfoHBox.setMargin(farmNameLabel, new Insets(0,12,0,0));
+            farmInfoHBox.getChildren().add(farmNameField);
+            
+            Label dateLabel = new Label("Date: ");
+            dateLabel.setFont(labelFont);
+            DatePicker datePicker = new DatePicker();
+            datePicker.setValue(LocalDate.now());
+            HBox dateInfoHBox = new HBox();
+            dateInfoHBox.getChildren().add(dateLabel);
+            dateInfoHBox.setMargin(dateLabel, new Insets(0,6,0,0));
+            dateInfoHBox.getChildren().add(datePicker);
+            
+            Label milkLabel = new Label("Milk: ");
+            milkLabel.setFont(labelFont);
+            TextField milkField = new TextField();
+            milkField.textProperty().addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					if (!newValue.matches("\\d*")) {
+			            milkField.setText(newValue.replaceAll("[^\\d]", ""));
+			        }
+				}
+            });
 			HBox milkInfoHBox = new HBox();
 			milkInfoHBox.getChildren().add(milkLabel);
 			milkInfoHBox.setMargin(milkLabel, new Insets(0, 14, 0, 0));
@@ -354,9 +366,44 @@ public class Main extends Application {
 				}
 			};
 
-			// set the action of the button
-			selectFileButton.setOnAction(selectFile);
-			exportButton.setOnAction(selectExport);
+			// Event Handler for inputting raw data
+            EventHandler<ActionEvent> insertDataHandler = new EventHandler<ActionEvent>() {
+            	public void handle(ActionEvent e) {
+            		String farm = "";
+            		int milk = 0;
+            		LocalDate date = null;
+            		try {
+            			farm = farmNameField.getText();
+            			milk = Integer.parseInt(milkField.getText());
+            			date = datePicker.getValue();
+            			
+            			if (farm.contentEquals("")) {
+            				Alert errorAlert = new Alert(AlertType.ERROR);
+                			errorAlert.setHeaderText(null);
+                			errorAlert.setContentText("Must enter a farm ID.");
+                			errorAlert.showAndWait();
+                			return;
+            			}
+            			
+            		} catch (NumberFormatException nfe) {
+            			Alert errorAlert = new Alert(AlertType.ERROR);
+            			errorAlert.setHeaderText(null);
+            			if (farm.contentEquals(""))
+            				errorAlert.setContentText("Must enter a number for milk weight and a farm ID.");
+            			else
+            				errorAlert.setContentText("Must enter a number for milk weight.");
+            			errorAlert.showAndWait();
+            			return;
+            		}
+            		
+            		
+            	}
+            };
+      
+            //set the action of the button
+            selectFileButton.setOnAction(selectFile); 
+            exportButton.setOnAction(selectExport);
+            insertDataButton.setOnAction(insertDataHandler);
 
 			// set up vertical boxes for categories of actions
 			VBox lVBox = new VBox(12);
@@ -779,6 +826,7 @@ public class Main extends Application {
 			}
 		});
 	}
+
 
 	public static void main(String[] args) {
 		factory = new CheeseFactory();
