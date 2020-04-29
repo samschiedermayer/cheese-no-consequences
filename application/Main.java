@@ -243,7 +243,7 @@ public class Main extends javafx.application.Application {
 							public void handle(ActionEvent e) {
 								// System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " +
 								// yearTextField.getText() + ")");
-								farmReportScreen(stage, farmIdTextField.getText(), yearTextField.getText()); // String
+								farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText())); // String
 																												// farmIdTextField.getText(),String
 																												// yearTextField.getText()
 							}
@@ -270,7 +270,7 @@ public class Main extends javafx.application.Application {
 						EventHandler<ActionEvent> callAnnual = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
 								// System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
-								annualReportScreen(stage, yearTextField.getText());
+								annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));
 							}
 						};
 						generateAnnualButton.setOnAction(callAnnual);
@@ -300,7 +300,7 @@ public class Main extends javafx.application.Application {
 							public void handle(ActionEvent e) {
 								// System.out.println("CallMonthly("+" " + yearTextField.getText() + " " +
 								// monthTextField.getText() + ")");
-								monthlyReportScreen(stage, "2019", "January");
+								monthlyReportScreen(stage, Integer.parseInt(yearTextField.getText()), monthTextField.getText());
 							}
 						};
 						generateMonthlyButton.setOnAction(callMonthly);
@@ -555,13 +555,50 @@ public class Main extends javafx.application.Application {
 			this.percentMilk = percentMilk;
 		}
 	}
+	
+	/**
+	 * Gets a month index and turns it into the string name representation of that month
+	 * 
+	 * @param monthIndex
+	 * @return string of month name
+	 */
+	private String getMonth(int monthIndex) {
+      switch (monthIndex) {
+        case 1:
+          return "January";
+        case 2:
+          return "February";
+        case 3:
+          return "March";
+        case 4:
+          return "April";
+        case 5:
+          return "May";
+        case 6:
+          return "June";
+        case 7:
+          return "July";
+        case 8:
+          return "August";
+        case 9:
+          return "September";
+        case 10:
+          return "October";
+        case 11:
+          return "November";
+        case 12:
+          return "December";
+        default:
+          return null;
+      }
+    }
 
 	/**
 	 * Displays farm report screen
 	 * 
 	 * @param primaryStage
 	 */
-	void farmReportScreen(Stage primaryStage, String inputFarmId, String inputYear) {
+	void farmReportScreen(Stage primaryStage, String inputFarmId, int inputYear) {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.getStylesheets().add("application/application.css");
@@ -614,6 +651,16 @@ public class Main extends javafx.application.Application {
 		reportTable.getColumns().add(month);
 		reportTable.getColumns().add(milkWeight);
 		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
+		
+		double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
+		
+		// put all farm info into model for display
+	     for (int i = 1; i <= farmInfo[0].length; i++) {
+	       for (int j = 0; j < farmInfo.length; j++) {
+	         farmsModels.add(new FarmsModel(getMonth(i), farmInfo[i][j]));
+	       }
+	     }
+		
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
@@ -631,7 +678,7 @@ public class Main extends javafx.application.Application {
 	 * 
 	 * @param primaryStage
 	 */
-	void annualReportScreen(Stage primaryStage, String inputYear) {
+	void annualReportScreen(Stage primaryStage, int inputYear) {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.getStylesheets().add("application/application.css");
@@ -693,7 +740,7 @@ public class Main extends javafx.application.Application {
 	 * 
 	 * @param primaryStage
 	 */
-	void monthlyReportScreen(Stage primaryStage, String inputYear, String inputMonth) {
+	void monthlyReportScreen(Stage primaryStage, int inputYear, String inputMonth) {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.getStylesheets().add("application/application.css");
