@@ -82,6 +82,13 @@ public class Main extends javafx.application.Application {
 
 	void homeScreen(Stage stage) {
 		try {
+		  Image cowPrint = new Image("cow_print.jpg");
+          
+          //create background Image with cowPrint Image
+          BackgroundImage background_image = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,  
+              BackgroundPosition.CENTER, BackgroundSize.DEFAULT); 
+
+          Background background = new Background(background_image); 
 
 			BorderPane root = new BorderPane();
 
@@ -228,14 +235,7 @@ public class Main extends javafx.application.Application {
                       backButton.setOnAction(back);
 
                       selectedReportvBox.setAlignment(Pos.TOP_CENTER);
-                      
-                      Image cowPrint = new Image("cow_print.jpg");
-                      
-                      //create background Image with cowPrint Image
-                      BackgroundImage background_fill = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,  
-                          BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT); 
-            
-                      Background background = new Background(background_fill); 
+ 
                       selectedReportvBox.setBackground(background);
 
 						// Event Handler for file Selections
@@ -278,6 +278,8 @@ public class Main extends javafx.application.Application {
                     	selectedReportvBox.setSpacing(5);
                     	
                         backButton.setOnAction(back);
+
+                        selectedReportvBox.setBackground(background);
                         
                     	// Event Handler for file Selections
                         EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
@@ -293,25 +295,35 @@ public class Main extends javafx.application.Application {
 					case "Monthly":
 						selectedReportLabel = new Label("Monthly Report");
 						selectedReportLabel.setFont(titleFont);
+						
 						yearLabel = new Label("Enter Year:");
+						yearLabel.setFont(labelFont);
+                        yearTextField = new TextField();
+                        HBox yearInfoHBox2 = new HBox();
+                        yearInfoHBox2.getChildren().add(yearLabel);
+                        yearInfoHBox2.setMargin(yearLabel, new Insets(0,6,0,0));
+                        yearInfoHBox2.getChildren().add(yearTextField);
+                        yearInfoHBox2.setAlignment(Pos.CENTER);
 						
 						ComboBox<String> combo_box = new ComboBox<String>();
 						
-						combo_box.getItems().addAll("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
+						combo_box.getItems().addAll("", "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
 						combo_box.getSelectionModel().selectFirst();
-						
-						yearLabel.setFont(labelFont);
-						yearTextField = new TextField();
+
 						monthLabel = new Label("Select Month:");
 						monthLabel.setFont(labelFont);
+						HBox monthLabelHBox = new HBox();
+						monthLabelHBox.getChildren().add(monthLabel);
+						monthLabelHBox.setMargin(monthLabel, new Insets(0,6,0,0));
+						monthLabelHBox.getChildren().add(combo_box);
+						monthLabelHBox.setAlignment(Pos.CENTER);
+						
 						Button generateMonthlyButton = new Button("Generate Monthly Report");
 						backButton = new Button("Back");
 
 						selectedReportvBox.getChildren().add(selectedReportLabel);
-						selectedReportvBox.getChildren().add(yearLabel);
-						selectedReportvBox.getChildren().add(yearTextField);
-						selectedReportvBox.getChildren().add(monthLabel);
-						selectedReportvBox.getChildren().add(combo_box);
+						selectedReportvBox.getChildren().add(yearInfoHBox2);
+						selectedReportvBox.getChildren().add(monthLabelHBox);
 						selectedReportvBox.setSpacing(5);
 						selectedReportvBox.getChildren().add(generateMonthlyButton);
 
@@ -319,6 +331,8 @@ public class Main extends javafx.application.Application {
 						selectedReportvBox.setAlignment(Pos.TOP_CENTER);
 
 						backButton.setOnAction(back);
+						
+						selectedReportvBox.setBackground(background);
 
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callMonthly = new EventHandler<ActionEvent>() {
@@ -368,6 +382,8 @@ public class Main extends javafx.application.Application {
 						selectedReportvBox.setAlignment(Pos.TOP_CENTER);
 
 						backButton.setOnAction(back);
+						
+						selectedReportvBox.setBackground(background);
 
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callDateRange = new EventHandler<ActionEvent>() {
