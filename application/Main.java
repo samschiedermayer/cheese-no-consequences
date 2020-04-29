@@ -263,7 +263,7 @@ public class Main extends javafx.application.Application {
                     	yearInfoHBox1.getChildren().add(yearTextField);
                     	yearInfoHBox1.setAlignment(Pos.TOP_CENTER);
 
-                    	Button generateAnnualButton = new Button("Generate Farm Report");
+                    	Button generateAnnualButton = new Button("Generate Annual Report");
                     	backButton = new Button("Back");
                     	
                     	selectedReportvBox.getChildren().add(selectedReportLabel);
@@ -304,7 +304,7 @@ public class Main extends javafx.application.Application {
 						yearTextField = new TextField();
 						monthLabel = new Label("Select Month:");
 						monthLabel.setFont(labelFont);
-						Button generateMonthlyButton = new Button("Generate Farm Report");
+						Button generateMonthlyButton = new Button("Generate Monthly Report");
 						backButton = new Button("Back");
 
 						selectedReportvBox.getChildren().add(selectedReportLabel);
@@ -350,7 +350,7 @@ public class Main extends javafx.application.Application {
 						DatePicker startDatePicker = new DatePicker();
 						DatePicker endDatePicker = new DatePicker();
 
-						Button generateDateRangeButton = new Button("Generate Farm Report");
+						Button generateDateRangeButton = new Button("Generate Date Range Report");
 						selectedReportvBox.getChildren().add(selectedReportLabel);
 
 						// adding starting elements

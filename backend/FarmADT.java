@@ -1,12 +1,14 @@
 package backend;
 
 import java.time.LocalDate;
-
+import java.util.HashMap;
 import exceptions.DuplicateAdditionException;
 
 public abstract class FarmADT {
 
   public String farmID;
+  
+  public abstract HashMap<LocalDate, Integer> getMilkWeightsHashMap();
 
   /**
    * Will return an integer that represents the milk weight of a farm for the given year
@@ -47,5 +49,6 @@ public abstract class FarmADT {
   public abstract void modifyMilkWeightForDay(LocalDate date, int weight);
   
   public abstract void removeMilkWeightForDay(LocalDate date, int weight);
+  
 
 }

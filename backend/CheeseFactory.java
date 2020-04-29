@@ -166,8 +166,21 @@ public class CheeseFactory implements CheeseFactoryADT {
 	@Override
 	public void exportFarmData(String fileName) throws IOException {
 		FileWriter writer = new FileWriter(fileName);
+		
+		List<String> farmIDs = getAllFarmNames();
+		
+		for (String farmID: farmIDs) {
+		  HashMap<LocalDate, Integer> farmMilkWeights = farms.get(farmID).getMilkWeightsHashMap();
+		  List<LocalDate> dates = (List<LocalDate>) farmMilkWeights.keySet();
+		  
+		  for (LocalDate date: dates) {
+		    int weight = farms.get(farmID).getMilkWeight(date);
+		    
+		    writer.append(date + ", " + farmID + ", " + weight + "\n");
+		  }
+		}
 
-		writer.append("date,farm_id,weight\n");
+		
 
 	}
 

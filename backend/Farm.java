@@ -15,6 +15,11 @@ public class Farm extends FarmADT {
 		this.farmID = farmID;
 		milkWeights = new HashMap<>();
 	}
+
+	@Override
+	public HashMap<LocalDate, Integer> getMilkWeightsHashMap(){
+	  return milkWeights;
+	}
 	
 	@Override
 	public int getMilkWeight(int year) {
