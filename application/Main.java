@@ -252,29 +252,44 @@ public class Main extends javafx.application.Application {
 
 						break;
 					case "Annual":
-						selectedReportLabel = new Label("Annual Report");
-						yearLabel = new Label("Enter Year:");
-						yearTextField = new TextField();
-						Button generateAnnualButton = new Button("Generate Farm Report");
-						backButton = new Button("Back");
-						selectedReportvBox.getChildren().add(selectedReportLabel);
-						selectedReportvBox.getChildren().add(yearLabel);
-						selectedReportvBox.getChildren().add(yearTextField);
-						selectedReportvBox.getChildren().add(generateAnnualButton);
+                    	selectedReportvBox.setAlignment(Pos.TOP_CENTER);
+                    	selectedReportLabel = new Label("Annual Report");
+                    	
+                    	yearLabel= new Label("Enter Year:");
+                    	yearTextField = new TextField ();
+                    	HBox yearInfoHBox1 = new HBox();
+                    	yearInfoHBox1.getChildren().add(yearLabel);
+                    	yearInfoHBox1.setMargin(yearLabel, new Insets(0,14,0,0));
+                    	yearInfoHBox1.getChildren().add(yearTextField);
+                    	yearInfoHBox1.setAlignment(Pos.TOP_CENTER);
 
-						selectedReportvBox.getChildren().add(backButton);
+                    	Button generateAnnualButton = new Button("Generate Farm Report");
+                    	backButton = new Button("Back");
+                    	
+                    	selectedReportvBox.getChildren().add(selectedReportLabel);
+                    	selectedReportvBox.getChildren().add(yearInfoHBox1);
+                    	selectedReportvBox.getChildren().add(generateAnnualButton);
+                    	selectedReportvBox.getChildren().add(backButton);
+                    	
+                    	selectedReportLabel.setFont(titleFont);
+                    	yearLabel.setFont(labelFont);
+                    	backButton.setFont(buttonFont);
+                    	generateAnnualButton.setFont(buttonFont);
+                    	selectedReportvBox.setSpacing(5);
+                    	
+                        backButton.setOnAction(back);
+                        
+                    	// Event Handler for file Selections
+                        EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
+                            public void handle(ActionEvent e) 
+                            {
+                            	//System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
+                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));
+                            }
+                        }; 
+                        generateAnnualButton.setOnAction(callAnnual);
+                        break; 
 
-						backButton.setOnAction(back);
-
-						// Event Handler for file Selections
-						EventHandler<ActionEvent> callAnnual = new EventHandler<ActionEvent>() {
-							public void handle(ActionEvent e) {
-								// System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
-								annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));
-							}
-						};
-						generateAnnualButton.setOnAction(callAnnual);
-						break;
 					case "Monthly":
 						selectedReportLabel = new Label("Monthly Report");
 						yearLabel = new Label("Enter Year:");
