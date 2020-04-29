@@ -43,7 +43,7 @@ public class Farm extends FarmADT {
 	@Override
 	public void addMilkWeightForDay(LocalDate date, int weight) throws DuplicateAdditionException {
 		if (milkWeights.containsKey(date))
-			throw new DuplicateAdditionException();
+			throw new DuplicateAdditionException(milkWeights.get(date));
 		
 		milkWeights.put(date, weight);
 	}
@@ -76,6 +76,11 @@ public class Farm extends FarmADT {
 		}
 		
 		return total;
+	}
+
+	@Override
+	public int getMilkWeight(LocalDate date) {
+		return milkWeights.get(date);
 	}
 	
 

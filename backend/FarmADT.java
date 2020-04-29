@@ -26,6 +26,14 @@ public abstract class FarmADT {
   public abstract int getMilkWeight(int year, int month);
   
   /**
+   * Will return an integer for the total milk weight of a farm with the given date
+   * 
+   * @param date - the date requested
+   * @return an integer representing the total milk weight for the given date for this farm
+   */
+  public abstract int getMilkWeight(LocalDate date);
+  
+  /**
    * Will return an integer for the sum of milk weight of a farm within the given date range
    * 
    * @param start - the date at which the summation should start (inclusive)

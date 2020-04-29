@@ -171,4 +171,30 @@ public class CheeseFactory implements CheeseFactoryADT {
 
 	}
 
+	@Override
+	public void addDataPoint(String farmId, int milkWeight, LocalDate date) throws DuplicateAdditionException {
+		
+		Farm farm = null;
+		if (farms.containsKey(farmId)) {
+			farm = farms.get(farmId);
+		} else {
+			farm = new Farm(farmId);
+			farms.put(farmId, farm);
+		}
+		
+		farm.addMilkWeightForDay(date, milkWeight);
+	}
+
+	@Override
+	public void forceAddDataPoint(String farmId, int milkWeight, LocalDate date) {
+		
+		try {
+			addDataPoint(farmId, milkWeight, date);
+		} catch (DuplicateAdditionException e) {
+			Farm farm = farms.get(farmId);
+			farm.modifyMilkWeightForDay(date, milkWeight);
+		}
+		
+	}
+
 }

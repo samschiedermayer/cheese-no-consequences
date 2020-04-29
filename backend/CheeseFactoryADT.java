@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
+import exceptions.DuplicateAdditionException;
+
 public interface CheeseFactoryADT {
 
   /**
@@ -56,6 +58,25 @@ public interface CheeseFactoryADT {
    */
   HashMap<String, double[]> getDateRangeReport(LocalDate start, LocalDate end);
 
+  /**
+   * Add a new data entry for milk on a day
+   * 
+   * @param farmId - the name of the farm for this data point
+   * @param milkWeight - the amount of milk for this farm on this date
+   * @param date - the day on which this data point takes place
+   * @throws DuplicateAdditionException - if there is already an entry on the specified date
+   */
+  void addDataPoint(String farmId, int milkWeight, LocalDate date) throws DuplicateAdditionException;
+  
+  /**
+   * Add a new data entry for milk on a day, regardless of whether there is already an entry
+   * 
+   * @param farmId - the name of the farm for this data point
+   * @param milkWeight - the amount of milk for this farm on this date
+   * @param date - the day on which this data point takes place
+   */
+  void forceAddDataPoint(String farmId, int milkWeight, LocalDate date);
+  
   /**
    * Will load in data from a specified CSV file
    * 
