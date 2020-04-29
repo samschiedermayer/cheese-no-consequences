@@ -243,7 +243,7 @@ public class Main extends javafx.application.Application {
 							public void handle(ActionEvent e) {
 								// System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " +
 								// yearTextField.getText() + ")");
-								farmReportScreen(stage, farmIdTextField.getText(), yearTextField.getText()); // String
+								farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText())); // String
 																												// farmIdTextField.getText(),String
 																												// yearTextField.getText()
 							}
@@ -252,29 +252,44 @@ public class Main extends javafx.application.Application {
 
 						break;
 					case "Annual":
-						selectedReportLabel = new Label("Annual Report");
-						yearLabel = new Label("Enter Year:");
-						yearTextField = new TextField();
-						Button generateAnnualButton = new Button("Generate Farm Report");
-						backButton = new Button("Back");
-						selectedReportvBox.getChildren().add(selectedReportLabel);
-						selectedReportvBox.getChildren().add(yearLabel);
-						selectedReportvBox.getChildren().add(yearTextField);
-						selectedReportvBox.getChildren().add(generateAnnualButton);
+                    	selectedReportvBox.setAlignment(Pos.TOP_CENTER);
+                    	selectedReportLabel = new Label("Annual Report");
+                    	
+                    	yearLabel= new Label("Enter Year:");
+                    	yearTextField = new TextField ();
+                    	HBox yearInfoHBox1 = new HBox();
+                    	yearInfoHBox1.getChildren().add(yearLabel);
+                    	yearInfoHBox1.setMargin(yearLabel, new Insets(0,14,0,0));
+                    	yearInfoHBox1.getChildren().add(yearTextField);
+                    	yearInfoHBox1.setAlignment(Pos.TOP_CENTER);
 
-						selectedReportvBox.getChildren().add(backButton);
+                    	Button generateAnnualButton = new Button("Generate Farm Report");
+                    	backButton = new Button("Back");
+                    	
+                    	selectedReportvBox.getChildren().add(selectedReportLabel);
+                    	selectedReportvBox.getChildren().add(yearInfoHBox1);
+                    	selectedReportvBox.getChildren().add(generateAnnualButton);
+                    	selectedReportvBox.getChildren().add(backButton);
+                    	
+                    	selectedReportLabel.setFont(titleFont);
+                    	yearLabel.setFont(labelFont);
+                    	backButton.setFont(buttonFont);
+                    	generateAnnualButton.setFont(buttonFont);
+                    	selectedReportvBox.setSpacing(5);
+                    	
+                        backButton.setOnAction(back);
+                        
+                    	// Event Handler for file Selections
+                        EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
+                            public void handle(ActionEvent e) 
+                            {
+                            	//System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
+                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));
+                            }
+                        }; 
+                        generateAnnualButton.setOnAction(callAnnual);
+                        break; 
 
-						backButton.setOnAction(back);
-
-						// Event Handler for file Selections
-						EventHandler<ActionEvent> callAnnual = new EventHandler<ActionEvent>() {
-							public void handle(ActionEvent e) {
-								// System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
-								annualReportScreen(stage, yearTextField.getText());
-							}
-						};
-						generateAnnualButton.setOnAction(callAnnual);
-						break;
 					case "Monthly":
 						selectedReportLabel = new Label("Monthly Report");
 						yearLabel = new Label("Enter Year:");
@@ -300,7 +315,7 @@ public class Main extends javafx.application.Application {
 							public void handle(ActionEvent e) {
 								// System.out.println("CallMonthly("+" " + yearTextField.getText() + " " +
 								// monthTextField.getText() + ")");
-								monthlyReportScreen(stage, "2019", "January");
+								monthlyReportScreen(stage, Integer.parseInt(yearTextField.getText()), monthTextField.getText());
 							}
 						};
 						generateMonthlyButton.setOnAction(callMonthly);
@@ -509,17 +524,17 @@ public class Main extends javafx.application.Application {
 	public class FarmsModel {
 		private SimpleStringProperty farmId;
 		private SimpleStringProperty month;
-		private SimpleIntegerProperty milkWeight;
+		private SimpleDoubleProperty milkWeight;
 		private SimpleDoubleProperty percentMilk;
 
-		public FarmsModel(String month, Integer milkWeight) {
+		public FarmsModel(String month, Double milkWeight) {
 			this.month = new SimpleStringProperty(month);
-			this.milkWeight = new SimpleIntegerProperty(milkWeight);
+			this.milkWeight = new SimpleDoubleProperty(milkWeight);
 		}
 
-		public FarmsModel(String farmId, Integer milkWeight, Double percentMilk) {
+		public FarmsModel(String farmId, Double milkWeight, Double percentMilk) {
 			this.farmId = new SimpleStringProperty(farmId);
-			this.milkWeight = new SimpleIntegerProperty(milkWeight);
+			this.milkWeight = new SimpleDoubleProperty(milkWeight);
 			this.percentMilk = new SimpleDoubleProperty(percentMilk);
 		}
 
@@ -539,11 +554,11 @@ public class Main extends javafx.application.Application {
 			this.month = month;
 		}
 
-		public int getMilkWeight() {
+		public double getMilkWeight() {
 			return milkWeight.get();
 		}
 
-		public void setMilkWeight(SimpleIntegerProperty milkWeight) {
+		public void setMilkWeight(SimpleDoubleProperty milkWeight) {
 			this.milkWeight = milkWeight;
 		}
 
@@ -555,13 +570,50 @@ public class Main extends javafx.application.Application {
 			this.percentMilk = percentMilk;
 		}
 	}
+	
+	/**
+	 * Gets a month index and turns it into the string name representation of that month
+	 * 
+	 * @param monthIndex
+	 * @return string of month name
+	 */
+	private String getMonth(int monthIndex) {
+      switch (monthIndex) {
+        case 1:
+          return "January";
+        case 2:
+          return "February";
+        case 3:
+          return "March";
+        case 4:
+          return "April";
+        case 5:
+          return "May";
+        case 6:
+          return "June";
+        case 7:
+          return "July";
+        case 8:
+          return "August";
+        case 9:
+          return "September";
+        case 10:
+          return "October";
+        case 11:
+          return "November";
+        case 12:
+          return "December";
+        default:
+          return null;
+      }
+    }
 
 	/**
 	 * Displays farm report screen
 	 * 
 	 * @param primaryStage
 	 */
-	void farmReportScreen(Stage primaryStage, String inputFarmId, String inputYear) {
+	void farmReportScreen(Stage primaryStage, String inputFarmId, int inputYear) {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.getStylesheets().add("application/application.css");
@@ -579,8 +631,8 @@ public class Main extends javafx.application.Application {
 
 		// add report info to top
 		GridPane info = new GridPane();
-		Label disFarmId = new Label("Farm: 1");
-		Label year = new Label("Year: 2020");
+		Label disFarmId = new Label("Farm: " + inputFarmId);
+		Label year = new Label("Year: " + inputYear);
 		Label totalWeight = new Label("Total weight: 2107");
 		Label percentTotal = new Label("Percent of Total Farms: 20%");
 		disFarmId.setId("report-info");
@@ -607,17 +659,23 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> month = new TableColumn<FarmsModel, String>("Month");
 		month.setCellValueFactory(new PropertyValueFactory<FarmsModel, String>("Month"));
 		month.prefWidthProperty().bind(reportTable.widthProperty().divide(2));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
-		milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Integer>("MilkWeight"));
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
+		milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("MilkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(2));
 
 		reportTable.getColumns().add(month);
 		reportTable.getColumns().add(milkWeight);
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("January", 8543),
-				new FarmsModel("Febrary", 232), new FarmsModel("March", 1284), new FarmsModel("April", 1435),
-				new FarmsModel("May", 4542), new FarmsModel("June", 2344), new FarmsModel("July", 5432),
-				new FarmsModel("August", 7642), new FarmsModel("September", 2343), new FarmsModel("October", 3543),
-				new FarmsModel("November", 972), new FarmsModel("December", 2304));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
+		
+		double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
+		
+		// put all farm info into model for display
+	     for (int i = 1; i <= farmInfo[0].length; i++) {
+	       for (int j = 0; j < farmInfo.length; j++) {
+	         farmsModels.add(new FarmsModel(getMonth(i), farmInfo[i][j]));
+	       }
+	     }
+		
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
@@ -635,7 +693,7 @@ public class Main extends javafx.application.Application {
 	 * 
 	 * @param primaryStage
 	 */
-	void annualReportScreen(Stage primaryStage, String inputYear) {
+	void annualReportScreen(Stage primaryStage, int inputYear) {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.getStylesheets().add("application/application.css");
@@ -653,7 +711,7 @@ public class Main extends javafx.application.Application {
 
 		// add report info to top
 		StackPane info = new StackPane();
-		Label year = new Label("Year: 2020");
+		Label year = new Label("Year: " + inputYear);
 		year.setId("report-info");
 		info.getChildren().add(year);
 		top.add(info, 0, 1);
@@ -668,7 +726,7 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
 		farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
 		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
 		milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 		TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
@@ -679,9 +737,7 @@ public class Main extends javafx.application.Application {
 		reportTable.getColumns().add(milkWeight);
 		reportTable.getColumns().add(percentMilk);
 
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("1", 4234, 28.47),
-				new FarmsModel("2", 1023, 6.88), new FarmsModel("3", 1236, 8.31), new FarmsModel("4", 1013, 6.81),
-				new FarmsModel("5", 6383, 42.92), new FarmsModel("6", 983, 6.61));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
@@ -699,7 +755,7 @@ public class Main extends javafx.application.Application {
 	 * 
 	 * @param primaryStage
 	 */
-	void monthlyReportScreen(Stage primaryStage, String inputYear, String inputMonth) {
+	void monthlyReportScreen(Stage primaryStage, int inputYear, String inputMonth) {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.getStylesheets().add("application/application.css");
@@ -738,7 +794,7 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
 		farmId.setCellValueFactory(new PropertyValueFactory<>("FarmId"));
 		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
 		milkWeight.setCellValueFactory(new PropertyValueFactory<>("MilkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 		TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
@@ -750,9 +806,7 @@ public class Main extends javafx.application.Application {
 		reportTable.getColumns().add(percentMilk);
 
 		// mock data
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("1", 4234, 28.47),
-				new FarmsModel("2", 1023, 6.88), new FarmsModel("3", 1236, 8.31), new FarmsModel("4", 1013, 6.81),
-				new FarmsModel("5", 6383, 42.92), new FarmsModel("6", 983, 6.61));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
@@ -809,7 +863,7 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
 		farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
 		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
 		milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 		TableColumn<FarmsModel, String> percentMilk = new TableColumn<FarmsModel, String>("% of Total Milk");
@@ -821,9 +875,7 @@ public class Main extends javafx.application.Application {
 		reportTable.getColumns().add(percentMilk);
 
 		// mock data
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("1", 4234, 28.47),
-				new FarmsModel("2", 1023, 6.88), new FarmsModel("3", 1236, 8.31), new FarmsModel("4", 1013, 6.81),
-				new FarmsModel("5", 6383, 42.92), new FarmsModel("6", 983, 6.61));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
