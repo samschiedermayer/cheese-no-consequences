@@ -509,17 +509,17 @@ public class Main extends javafx.application.Application {
 	public class FarmsModel {
 		private SimpleStringProperty farmId;
 		private SimpleStringProperty month;
-		private SimpleIntegerProperty milkWeight;
+		private SimpleDoubleProperty milkWeight;
 		private SimpleDoubleProperty percentMilk;
 
-		public FarmsModel(String month, Integer milkWeight) {
+		public FarmsModel(String month, Double milkWeight) {
 			this.month = new SimpleStringProperty(month);
-			this.milkWeight = new SimpleIntegerProperty(milkWeight);
+			this.milkWeight = new SimpleDoubleProperty(milkWeight);
 		}
 
-		public FarmsModel(String farmId, Integer milkWeight, Double percentMilk) {
+		public FarmsModel(String farmId, Double milkWeight, Double percentMilk) {
 			this.farmId = new SimpleStringProperty(farmId);
-			this.milkWeight = new SimpleIntegerProperty(milkWeight);
+			this.milkWeight = new SimpleDoubleProperty(milkWeight);
 			this.percentMilk = new SimpleDoubleProperty(percentMilk);
 		}
 
@@ -539,11 +539,11 @@ public class Main extends javafx.application.Application {
 			this.month = month;
 		}
 
-		public int getMilkWeight() {
+		public double getMilkWeight() {
 			return milkWeight.get();
 		}
 
-		public void setMilkWeight(SimpleIntegerProperty milkWeight) {
+		public void setMilkWeight(SimpleDoubleProperty milkWeight) {
 			this.milkWeight = milkWeight;
 		}
 
@@ -607,17 +607,13 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> month = new TableColumn<FarmsModel, String>("Month");
 		month.setCellValueFactory(new PropertyValueFactory<FarmsModel, String>("Month"));
 		month.prefWidthProperty().bind(reportTable.widthProperty().divide(2));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
-		milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Integer>("MilkWeight"));
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
+		milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("MilkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(2));
 
 		reportTable.getColumns().add(month);
 		reportTable.getColumns().add(milkWeight);
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("January", 8543),
-				new FarmsModel("Febrary", 232), new FarmsModel("March", 1284), new FarmsModel("April", 1435),
-				new FarmsModel("May", 4542), new FarmsModel("June", 2344), new FarmsModel("July", 5432),
-				new FarmsModel("August", 7642), new FarmsModel("September", 2343), new FarmsModel("October", 3543),
-				new FarmsModel("November", 972), new FarmsModel("December", 2304));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
@@ -668,7 +664,7 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
 		farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
 		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
 		milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 		TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
@@ -679,9 +675,7 @@ public class Main extends javafx.application.Application {
 		reportTable.getColumns().add(milkWeight);
 		reportTable.getColumns().add(percentMilk);
 
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("1", 4234, 28.47),
-				new FarmsModel("2", 1023, 6.88), new FarmsModel("3", 1236, 8.31), new FarmsModel("4", 1013, 6.81),
-				new FarmsModel("5", 6383, 42.92), new FarmsModel("6", 983, 6.61));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
@@ -738,7 +732,7 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
 		farmId.setCellValueFactory(new PropertyValueFactory<>("FarmId"));
 		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
 		milkWeight.setCellValueFactory(new PropertyValueFactory<>("MilkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 		TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
@@ -750,9 +744,7 @@ public class Main extends javafx.application.Application {
 		reportTable.getColumns().add(percentMilk);
 
 		// mock data
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("1", 4234, 28.47),
-				new FarmsModel("2", 1023, 6.88), new FarmsModel("3", 1236, 8.31), new FarmsModel("4", 1013, 6.81),
-				new FarmsModel("5", 6383, 42.92), new FarmsModel("6", 983, 6.61));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
@@ -809,7 +801,7 @@ public class Main extends javafx.application.Application {
 		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
 		farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
 		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Integer> milkWeight = new TableColumn<FarmsModel, Integer>("Milk Weight");
+		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
 		milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
 		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 		TableColumn<FarmsModel, String> percentMilk = new TableColumn<FarmsModel, String>("% of Total Milk");
@@ -821,9 +813,7 @@ public class Main extends javafx.application.Application {
 		reportTable.getColumns().add(percentMilk);
 
 		// mock data
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList(new FarmsModel("1", 4234, 28.47),
-				new FarmsModel("2", 1023, 6.88), new FarmsModel("3", 1236, 8.31), new FarmsModel("4", 1013, 6.81),
-				new FarmsModel("5", 6383, 42.92), new FarmsModel("6", 983, 6.61));
+		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 		reportTable.setItems(farmsModels);
 
 		root.setCenter(reportTable);
