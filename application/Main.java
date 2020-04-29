@@ -292,10 +292,18 @@ public class Main extends javafx.application.Application {
 
 					case "Monthly":
 						selectedReportLabel = new Label("Monthly Report");
+						selectedReportLabel.setFont(titleFont);
 						yearLabel = new Label("Enter Year:");
+						
+						ComboBox<String> combo_box = new ComboBox<String>();
+						
+						combo_box.getItems().addAll("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
+						combo_box.getSelectionModel().selectFirst();
+						
+						yearLabel.setFont(labelFont);
 						yearTextField = new TextField();
-						monthLabel = new Label("Enter Month:");
-						monthTextField = new TextField();
+						monthLabel = new Label("Select Month:");
+						monthLabel.setFont(labelFont);
 						Button generateMonthlyButton = new Button("Generate Farm Report");
 						backButton = new Button("Back");
 
@@ -303,19 +311,27 @@ public class Main extends javafx.application.Application {
 						selectedReportvBox.getChildren().add(yearLabel);
 						selectedReportvBox.getChildren().add(yearTextField);
 						selectedReportvBox.getChildren().add(monthLabel);
-						selectedReportvBox.getChildren().add(monthTextField);
+						selectedReportvBox.getChildren().add(combo_box);
+						selectedReportvBox.setSpacing(5);
 						selectedReportvBox.getChildren().add(generateMonthlyButton);
 
 						selectedReportvBox.getChildren().add(backButton);
+						selectedReportvBox.setAlignment(Pos.TOP_CENTER);
 
 						backButton.setOnAction(back);
 
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callMonthly = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
-								// System.out.println("CallMonthly("+" " + yearTextField.getText() + " " +
-								// monthTextField.getText() + ")");
-								monthlyReportScreen(stage, Integer.parseInt(yearTextField.getText()), monthTextField.getText());
+								try {
+									Integer year = Integer.valueOf(yearTextField.getText());
+									monthlyReportScreen(stage, year, combo_box.getValue());
+								}catch(Exception excep) {
+									Alert errorAlert = new Alert(AlertType.ERROR);
+									errorAlert.setHeaderText(null);
+									errorAlert.setContentText("Please Enter a Valid Year");
+									errorAlert.showAndWait();
+								}
 							}
 						};
 						generateMonthlyButton.setOnAction(callMonthly);
