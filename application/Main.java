@@ -629,80 +629,76 @@ public class Main extends javafx.application.Application {
 	 * 
 	 * @param primaryStage
 	 */
-	void farmReportScreen(Stage primaryStage, String inputFarmId, int inputYear) {
-		BorderPane root = new BorderPane();
-		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-		scene.getStylesheets().add("application/application.css");
+    void farmReportScreen(Stage primaryStage, String inputFarmId, int inputYear) {
+      BorderPane root = new BorderPane();
+      Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+      scene.getStylesheets().add("application/application.css");
 
-		// report title and farm info
-		GridPane top = new GridPane();
-		top.setAlignment(Pos.CENTER);
-		top.setPadding(new Insets(10, 10, 10, 10));
-		Label titleLabel = new Label("Farm Report");
+      // report title and farm info
+      GridPane top = new GridPane();
+      top.setAlignment(Pos.CENTER);
+      top.setPadding(new Insets(10, 10, 10, 10));
+      Label titleLabel = new Label("Farm Report");
 
-		// add title to top
-		titleLabel.setId("report-title");
-		top.add(titleLabel, 0, 0);
-		GridPane.setHalignment(titleLabel, HPos.CENTER);
+      // add title to top
+      titleLabel.setId("report-title");
+      top.add(titleLabel, 0, 0);
+      GridPane.setHalignment(titleLabel, HPos.CENTER);
 
-		// add report info to top
-		GridPane info = new GridPane();
-		Label disFarmId = new Label("Farm: " + inputFarmId);
-		Label year = new Label("Year: " + inputYear);
-		Label totalWeight = new Label("Total weight: 2107");
-		Label percentTotal = new Label("Percent of Total Farms: 20%");
-		disFarmId.setId("report-info");
-		year.setId("report-info");
-		totalWeight.setId("report-info");
-		percentTotal.setId("report-info");
-		info.add(disFarmId, 0, 0);
-		info.add(year, 0, 1);
-		info.add(totalWeight, 1, 0);
-		info.add(percentTotal, 1, 1);
-		top.add(info, 0, 1);
-		info.setHgap(20);
-		GridPane.setHalignment(disFarmId, HPos.RIGHT);
-		GridPane.setHalignment(year, HPos.RIGHT);
-		GridPane.setHalignment(totalWeight, HPos.CENTER);
-		GridPane.setHalignment(percentTotal, HPos.CENTER);
+      // add report info to top
+      FlowPane info = new FlowPane();
+      Label disFarmId = new Label("Farm: " + inputFarmId);
+      Label year = new Label("Year: " + inputYear);
+      Label totalWeight = new Label("Total weight: 2107");
+      disFarmId.setId("report-info");
+      year.setId("report-info");
+      totalWeight.setId("report-info");
+      info.getChildren().addAll(disFarmId, year, totalWeight);
+      top.add(info, 0, 1);
+      info.setHgap(20);
+      info.setAlignment(Pos.CENTER);
 
-		root.setTop(top);
+      root.setTop(top);
 
-		TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
-		reportTable.autosize();
+      TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
+      reportTable.autosize();
 
-		// set up columns
-		TableColumn<FarmsModel, String> month = new TableColumn<FarmsModel, String>("Month");
-		month.setCellValueFactory(new PropertyValueFactory<FarmsModel, String>("Month"));
-		month.prefWidthProperty().bind(reportTable.widthProperty().divide(2));
-		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
-		milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("MilkWeight"));
-		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(2));
+      // set up columns
+      TableColumn<FarmsModel, String> month = new TableColumn<FarmsModel, String>("Month");
+      month.setCellValueFactory(new PropertyValueFactory<FarmsModel, String>("Month"));
+      month.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
+      milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("MilkWeight"));
+      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<FarmsModel, Double> milkPercent = new TableColumn<FarmsModel, Double>("Percent of Total Milk Weight");
+      milkPercent.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("MilkPercent"));
+      milkPercent.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 
-		reportTable.getColumns().add(month);
-		reportTable.getColumns().add(milkWeight);
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
-		
-		double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
-		
-		// put all farm info into model for display
-	     for (int i = 1; i <= farmInfo[0].length; i++) {
-	       for (int j = 0; j < farmInfo.length; j++) {
-	         farmsModels.add(new FarmsModel(getMonth(i), farmInfo[i][j]));
-	       }
-	     }
-		
-		reportTable.setItems(farmsModels);
+      reportTable.getColumns().add(month);
+      reportTable.getColumns().add(milkWeight);
+      reportTable.getColumns().add(milkPercent);
+      ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
+      
+      double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
+    
+      // put all farm info into model for display
+      for (int i = 1; i <= farmInfo[0].length; i++) {
+        for (int j = 0; j < farmInfo.length; j++) {
+          farmsModels.add(new FarmsModel(getMonth(i), farmInfo[i][j]));
+        }
+      }
+      
+      reportTable.setItems(farmsModels);
+      
+      root.setCenter(reportTable);
 
-		root.setCenter(reportTable);
+      // back button
+      Button backButton = new Button("Back");
+      backButton(root, primaryStage, backButton);
 
-		// back button
-		Button backButton = new Button("Back");
-		backButton(root, primaryStage, backButton);
-
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
+      primaryStage.setScene(scene);
+      primaryStage.show();
+  }
 
 	/**
 	 * Displays annual report screen
