@@ -415,17 +415,17 @@ public class Main extends javafx.application.Application {
 			// Event Handler for file exports
 			EventHandler<ActionEvent> selectExport = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
-					File file = exportChooser.showOpenDialog(stage);
-					if (file != null) {
-
+					List<File> fileList = file_chooser.showOpenMultipleDialog(stage);
+					if(fileList != null) {
 						try {
-//                    		factory.exportFarmData(file.getAbsolutePath());
-							exportSuccessLabel.setText(file.getName() + " exported");
-						} catch (Exception a) {
+							for(File file : fileList) {
+								factory.importFarmData(file.getAbsolutePath());
+								selectFilesLabel.setText(file.getName() + " imported");
+							}
+						}catch (Exception a) {
 							a.printStackTrace();
-							selectFilesLabel.setText("failed to export");
+							selectFilesLabel.setText("Loading File Failed Select a New File");
 						}
-
 					}
 				}
 			};
