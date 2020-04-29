@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -460,6 +461,24 @@ public class Main extends javafx.application.Application {
             			return;
             		}
             		
+            		try {
+            			factory.addDataPoint(farm, milk, date);
+            			System.out.println("added data point");
+            		} catch (DuplicateAdditionException dae) {
+            			System.out.println("duplicate data point");
+            			int prev = dae.getWeight();
+            			
+            			Alert alert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
+            			alert.setTitle("Warning");
+            			alert.setHeaderText(null);
+            			alert.setContentText("Data point for "+ farm + " already exists on " + date.toString() +" for " + prev + "lb." +
+            					"\nWould you like to replace this entry with "+ milk + "lb?");
+            			alert.showAndWait();
+
+            		}
+            		
+            		farmNameField.clear();
+            		milkField.clear();
             		
             	}
             };
