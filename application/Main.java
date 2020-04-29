@@ -38,8 +38,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
@@ -186,24 +192,51 @@ public class Main extends javafx.application.Application {
 
 					switch (combo_box.getValue()) {
 					case "Farm":
-						selectedReportLabel = new Label("Farm Report");
-						Label farmIDLabel = new Label("Farm Id Number:");
-						farmIdTextField = new TextField();
-						yearLabel = new Label("Enter Year:");
-						yearTextField = new TextField();
-						Button generateFarmButton = new Button("Generate Farm Report");
-						yearTextField.getText();
-						backButton = new Button("Back");
+					  selectedReportLabel = new Label("Farm Report");
+                      selectedReportLabel.setFont(titleFont);
+                      
+                      Label  farmIDLabel= new Label("Farm Id Number:");
+                      farmIDLabel.setFont(labelFont);
+                      farmIdTextField = new TextField ();
+                      HBox farmIdInfoHBox = new HBox();
+                      farmIdInfoHBox.getChildren().add(farmIDLabel);
+                      farmIdInfoHBox.setMargin(farmIDLabel, new Insets(0,6,0,0));
+                      farmIdInfoHBox.getChildren().add(farmIdTextField);
+                      farmIdInfoHBox.setAlignment(Pos.CENTER);
+                      
+                      yearLabel= new Label("Enter Year:");
+                      yearLabel.setFont(labelFont);
+                      yearTextField = new TextField ();
+                      HBox yearInfoHBox = new HBox();
+                      yearInfoHBox.getChildren().add(yearLabel);
+                      yearInfoHBox.setMargin(yearLabel, new Insets(0,6,0,0));
+                      yearInfoHBox.getChildren().add(yearTextField);
+                      yearInfoHBox.setAlignment(Pos.CENTER);
+                      
+                      
+                      Button generateFarmButton = new Button("Generate Farm Report");
+                      yearTextField.getText();
+                      backButton = new Button("Back");
+                      
+                      selectedReportvBox.getChildren().add(selectedReportLabel);
+                      selectedReportvBox.getChildren().add(farmIdInfoHBox);
+                      selectedReportvBox.getChildren().add(yearInfoHBox);
+                      selectedReportvBox.getChildren().add(generateFarmButton);
+                      selectedReportvBox.getChildren().add(backButton);
+                      selectedReportvBox.setSpacing(5);
+                      
+                      backButton.setOnAction(back);
 
-						selectedReportvBox.getChildren().add(selectedReportLabel);
-						selectedReportvBox.getChildren().add(farmIDLabel);
-						selectedReportvBox.getChildren().add(farmIdTextField);
-						selectedReportvBox.getChildren().add(yearLabel);
-						selectedReportvBox.getChildren().add(yearTextField);
-						selectedReportvBox.getChildren().add(generateFarmButton);
-						selectedReportvBox.getChildren().add(backButton);
-
-						backButton.setOnAction(back);
+                      selectedReportvBox.setAlignment(Pos.TOP_CENTER);
+                      
+                      Image cowPrint = new Image("cow_print.jpg");
+                      
+                      //create background Image with cowPrint Image
+                      BackgroundImage background_fill = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,  
+                          BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT); 
+            
+                      Background background = new Background(background_fill); 
+                      selectedReportvBox.setBackground(background);
 
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callFarm = new EventHandler<ActionEvent>() {
