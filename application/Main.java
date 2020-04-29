@@ -29,7 +29,9 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.geometry.HPos;
@@ -84,11 +86,9 @@ public class Main extends javafx.application.Application {
 	void homeScreen(Stage stage) {
 		try {
 		  Image cowPrint = new Image("cow_print.jpg");
-          
           //create background Image with cowPrint Image
           BackgroundImage background_image = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,  
               BackgroundPosition.CENTER, BackgroundSize.DEFAULT); 
-
           Background background = new Background(background_image); 
 
 			BorderPane root = new BorderPane();
@@ -202,6 +202,7 @@ public class Main extends javafx.application.Application {
 					case "Farm":
 					  selectedReportLabel = new Label("Farm Report");
                       selectedReportLabel.setFont(titleFont);
+                      selectedReportLabel.setTextFill(Color.web("#e6c900"));
                       
                       Label  farmIDLabel= new Label("Farm Id Number:");
                       farmIDLabel.setFont(labelFont);
