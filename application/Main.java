@@ -616,8 +616,8 @@ public class Main extends javafx.application.Application {
 
 		// add report info to top
 		GridPane info = new GridPane();
-		Label disFarmId = new Label("Farm: 1");
-		Label year = new Label("Year: 2020");
+		Label disFarmId = new Label("Farm: " + inputFarmId);
+		Label year = new Label("Year: " + inputYear);
 		Label totalWeight = new Label("Total weight: 2107");
 		Label percentTotal = new Label("Percent of Total Farms: 20%");
 		disFarmId.setId("report-info");
@@ -696,7 +696,7 @@ public class Main extends javafx.application.Application {
 
 		// add report info to top
 		StackPane info = new StackPane();
-		Label year = new Label("Year: 2020");
+		Label year = new Label("Year: " + inputYear);
 		year.setId("report-info");
 		info.getChildren().add(year);
 		top.add(info, 0, 1);
