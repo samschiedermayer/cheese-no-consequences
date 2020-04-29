@@ -1,5 +1,6 @@
 package backend;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,7 @@ import exceptions.DuplicateAdditionException;
 
 public class Farm extends FarmADT {
 
-	private HashMap<Date,Integer> milkWeights;
+	private HashMap<LocalDate,Integer> milkWeights;
 	
 	public Farm(String farmID) {
 		this.farmID = farmID;
@@ -20,7 +21,7 @@ public class Farm extends FarmADT {
 		final int[] total = new int[1];
 		
 		milkWeights.forEach((date, weight) -> {
-			if (date.year == year)
+			if (date.getYear() == year)
 				total[0] += weight;
 		});
 		
@@ -32,7 +33,7 @@ public class Farm extends FarmADT {
 		final int[] total = new int[1];
 		
 		milkWeights.forEach((date, weight) -> {
-			if (date.year == year && date.month == month)
+			if (date.getYear() == year && date.getMonthValue() == month)
 				total[0] += weight;
 		});
 		
@@ -40,7 +41,7 @@ public class Farm extends FarmADT {
 	}
 
 	@Override
-	public void addMilkWeightForDay(Date date, int weight) throws DuplicateAdditionException {
+	public void addMilkWeightForDay(LocalDate date, int weight) throws DuplicateAdditionException {
 		if (milkWeights.containsKey(date))
 			throw new DuplicateAdditionException();
 		
@@ -48,24 +49,24 @@ public class Farm extends FarmADT {
 	}
 
 	@Override
-	public void modifyMilkWeightForDay(Date date, int weight) {
+	public void modifyMilkWeightForDay(LocalDate date, int weight) {
 		milkWeights.put(date, weight);
 	}
 
 	@Override
-	public void removeMilkWeightForDay(Date date, int weight) {
+	public void removeMilkWeightForDay(LocalDate date, int weight) {
 		milkWeights.remove(date);
 	}
 
 	@Override
-	public int getMilkWeight(Date start, Date end) {
+	public int getMilkWeight(LocalDate start, LocalDate end) {
 		
 		@SuppressWarnings("unchecked")
-		List<Date> dates = (List<Date>) milkWeights.keySet();
+		List<LocalDate> dates = (List<LocalDate>) milkWeights.keySet();
 		Collections.sort(dates);
 		
 		int total = 0;
-		for (Date date : dates) {
+		for (LocalDate date : dates) {
 			if (date.compareTo(end) > 0) {
 				break;
 			}

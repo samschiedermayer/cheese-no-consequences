@@ -1,6 +1,7 @@
 package backend;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public interface CheeseFactoryADT {
    * @return - a HashMap with keys as a farm id String and values as a 2 length array that stores
    *         [0] -> total milk weight, [1] -> percent milk weight
    */
-  HashMap<String, double[]> getDateRangeReport(Date start, Date end);
+  HashMap<String, double[]> getDateRangeReport(LocalDate start, LocalDate end);
 
   /**
    * Will load in data from a specified CSV file

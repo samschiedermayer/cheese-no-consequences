@@ -1,5 +1,7 @@
 package backend;
 
+import java.time.LocalDate;
+
 import exceptions.DuplicateAdditionException;
 
 public abstract class FarmADT {
@@ -30,12 +32,12 @@ public abstract class FarmADT {
    * @param end   - the date at which the summation should end (inclusive)
    * @return an integer representing the total milk weight from a certain time period from this farm
    */
-  public abstract int getMilkWeight(Date start, Date end);
+  public abstract int getMilkWeight(LocalDate start, LocalDate end);
   
-  public abstract void addMilkWeightForDay(Date date, int weight) throws DuplicateAdditionException;
+  public abstract void addMilkWeightForDay(LocalDate date, int weight) throws DuplicateAdditionException;
   
-  public abstract void modifyMilkWeightForDay(Date date, int weight);
+  public abstract void modifyMilkWeightForDay(LocalDate date, int weight);
   
-  public abstract void removeMilkWeightForDay(Date date, int weight);
+  public abstract void removeMilkWeightForDay(LocalDate date, int weight);
 
 }

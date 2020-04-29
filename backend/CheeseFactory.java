@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 
 	// zach
 	@Override
-	public HashMap<String, double[]> getDateRangeReport(Date start, Date end) {
+	public HashMap<String, double[]> getDateRangeReport(LocalDate start, LocalDate end) {
 		HashMap<String, double[]> dateRangeReport = new HashMap<>();
 
 		List<String> farmIDs = getAllFarmNames();
@@ -134,8 +135,12 @@ public class CheeseFactory implements CheeseFactoryADT {
 			split = line.split(",");
 
 			dateSplit = split[0].split("-");
-			Date date = new Date(Integer.parseInt(dateSplit[2]), Integer.parseInt(dateSplit[1]),
-					Integer.parseInt(dateSplit[0]));
+			
+			int year = Integer.parseInt(dateSplit[0]);
+			int month = Integer.parseInt(dateSplit[1]);
+			int day = Integer.parseInt(dateSplit[2]);
+			
+			LocalDate date = LocalDate.of(year, month, day);
 
 			farmId = split[1];
 
