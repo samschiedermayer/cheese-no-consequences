@@ -1050,6 +1050,7 @@ public class Main extends javafx.application.Application {
 	
 	private TableView<FarmsModel> reportTable(String reportType, String farmId, int inputYear, int inputMonth, LocalDate startDateObject, LocalDate endDateObject) {
       TableView<FarmsModel> reportTable = new TableView<FarmsModel>(); // table for report data
+      
       String infoType;
       if (reportType.equals("farm")) {
         infoType = "Month";
@@ -1091,7 +1092,7 @@ public class Main extends javafx.application.Application {
       reportTable.getColumns().add(maxMilk);
       
 	  ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
-	  DecimalFormat decFormat = new DecimalFormat("#.##"); // format percent double values
+	  DecimalFormat decFormat = new DecimalFormat("0.00"); // format percent double values
 	  
       switch (reportType) {
         case "farm":
@@ -1100,7 +1101,7 @@ public class Main extends javafx.application.Application {
           // put all farm info into model for display
           for (int i = 0; i < farmInfo.length; i++) {
             if (Double.isNaN((farmInfo[i][1]))) {
-              farmInfo[i][1] = 0.0;
+              farmInfo[i][1] = Double.parseDouble(decFormat.format(0.00));
             } else {
               farmInfo[i][1] = Double.parseDouble(decFormat.format(farmInfo[i][1]));
             }
@@ -1153,7 +1154,9 @@ public class Main extends javafx.application.Application {
 	 */
 	void backButton(BorderPane root, Stage primaryStage, Button backButton) {
 		HBox buttonHBox = new HBox();
+		buttonHBox.setPadding(new Insets(5, 0, 5, 0));
 		backButton.setMaxHeight(200);
+//		backButton.setId("back-button");
 		buttonHBox.getChildren().add(backButton);
 		buttonHBox.setAlignment(Pos.BASELINE_CENTER);
 		root.setBottom(buttonHBox);
