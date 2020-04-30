@@ -315,8 +315,15 @@ public class Main extends javafx.application.Application {
 									errorAlert.showAndWait();
 									return;
 								}
-								farmReportScreen(stage, "Farm " + farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
-								
+								if(farmIdTextField.getText().contains("Farm")) {
+									farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
+								}else if(farmIdTextField.getText().toLowerCase().contains("farm")){
+									String id = farmIdTextField.getText().replaceAll("[^0-9]", "");
+									id = "Farm " + id;
+									farmReportScreen(stage, id, Integer.parseInt(yearTextField.getText()));
+								}else {
+									farmReportScreen(stage, "Farm " + farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
+								}
 							}
 						};
 						generateFarmButton.setOnAction(callFarm);
