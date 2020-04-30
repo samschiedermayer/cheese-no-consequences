@@ -1,9 +1,12 @@
 package application;
 
+import static java.util.Map.entry;    
+
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javafx.beans.value.ChangeListener;
@@ -306,17 +309,53 @@ public class Main extends javafx.application.Application {
                         yearInfoHBox2.getChildren().add(yearTextField);
                         yearInfoHBox2.setAlignment(Pos.CENTER);
 						
-						ComboBox<String> combo_box = new ComboBox<String>();
+						ComboBox<String> comboBox = new ComboBox<>();
 						
-						combo_box.getItems().addAll("", "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
-						combo_box.getSelectionModel().selectFirst();
+						ObservableList<String> months = FXCollections.observableArrayList(
+								"January",
+								"February",
+								"March",
+								"April",
+								"May",
+								"June",
+								"July",
+								"August",
+								"September",
+								"October",
+								"November",
+								"December"
+						);
+						
+						
+						Map<String, Integer> monthMap = Map.ofEntries(
+								entry("January",1),
+								entry("February",2),
+								entry("March",3),
+								entry("April",4),
+								entry("May",5),
+								entry("June",6),
+								entry("July",7),
+								entry("August",8),
+								entry("September",9),
+								entry("October",10),
+								entry("November",11),
+								entry("December",12)
+						);
+						
+						
+						
+						comboBox.getSelectionModel().selectFirst();
+						
+						comboBox.setItems(months);
+						
+						
 
 						monthLabel = new Label("Select Month:");
 						monthLabel.setFont(labelFont);
 						HBox monthLabelHBox = new HBox();
 						monthLabelHBox.getChildren().add(monthLabel);
 						monthLabelHBox.setMargin(monthLabel, new Insets(0,6,0,0));
-						monthLabelHBox.getChildren().add(combo_box);
+						monthLabelHBox.getChildren().add(comboBox);
 						monthLabelHBox.setAlignment(Pos.CENTER);
 						
 						Button generateMonthlyButton = new Button("Generate Monthly Report");
@@ -340,7 +379,7 @@ public class Main extends javafx.application.Application {
 							public void handle(ActionEvent e) {
 								try {
 									Integer year = Integer.valueOf(yearTextField.getText());
-									monthlyReportScreen(stage, year, combo_box.getValue());
+									monthlyReportScreen(stage, year, monthMap.get(combo_box.getValue()));
 								}catch(Exception excep) {
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
@@ -803,7 +842,7 @@ public class Main extends javafx.application.Application {
 	 * 
 	 * @param primaryStage
 	 */
-	void monthlyReportScreen(Stage primaryStage, int inputYear, String inputMonth) {
+	void monthlyReportScreen(Stage primaryStage, int inputYear, int inputMonth) {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		scene.getStylesheets().add("application/application.css");
@@ -822,8 +861,7 @@ public class Main extends javafx.application.Application {
 		// add report info to top
 		GridPane info = new GridPane();
 		Label year = new Label("Year: " + inputYear);
-		Label month = new Label(
-				"Month: " + inputMonth.substring(0, 1).toUpperCase() + inputMonth.substring(1).toLowerCase());
+		Label month = new Label("Month: " + getMonth(inputMonth));
 		year.setId("report-info");
 		month.setId("report-info");
 		info.add(year, 0, 0);
