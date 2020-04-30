@@ -1,7 +1,27 @@
+/**
+ *  Main.java 
+ *	
+ *	Authors:
+ *	Sam Schiedermayer, LEC001, sschiedermay@wisc.edu
+ *	Mya Schmitz, LEC001, mschmitz9@wisc.edu
+ *	Mike Sexton, LEC001, msexton4@wisc.edu
+ *	Maya Shoval, LEC001, shoval@wisc.edu
+ *	Zachary Stange, LEC002, zstange@wisc.edu
+ *	Date: 04/30/2019
+ *	
+ *	Course:		CS400
+ *	Semester:	Spring 2020
+ * 	
+ * 	IDE: 		Eclipse for Java Developers
+ *  Version:	2019-12 (4.14.0)
+ * 	Build id: 	20191212-1212
+ *  
+ *  Due Date: 04/30/2019
+ *	
+ */
 package application;
 
 import static java.util.Map.entry;    
-
 import java.io.File;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -10,9 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import javafx.beans.value.ChangeListener;
-import javafx.application.Application;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -33,9 +51,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.geometry.HPos;
@@ -45,21 +61,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 
 /**
  * Filename: Main.java Project: Cheese-No-Consequences
@@ -73,9 +79,6 @@ public class Main extends javafx.application.Application {
 	private static final String APP_TITLE = "Milk No Consequences";
 	private static TextField yearTextField;
 	private static TextField farmIdTextField;
-	private static TextField monthTextField;
-	private static LocalDate startDate;
-	private static LocalDate endDate;
 	private static CheeseFactory factory;
 
 	private static Font buttonFont = new Font(14);
@@ -84,18 +87,22 @@ public class Main extends javafx.application.Application {
 	
 	private static int numImported = 0;
 
+	/**
+	 * This method calls the starting screen homeScreen
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		homeScreen(primaryStage);
 	}
 
+	/**
+	 * Home Screen allowes the user to generate reports, add/remove data, and export data
+	 * @param stage
+	 */
 	void homeScreen(Stage stage) {
 		try {
-//		  Image cowPrint = new Image("cow_print.jpg");
-          //create background Image with cowPrint Image
-//          BackgroundImage background_image = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT); 
-//          Background background = new Background(background_image); 
-
+			
+			//Create the root BorderPane
 			BorderPane root = new BorderPane();
 
 			Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -110,49 +117,47 @@ public class Main extends javafx.application.Application {
 
 			HBox reportHBox = new HBox(12);
 			reportHBox.setAlignment(Pos.CENTER);
-
+			
+			//create combo_box for selecting report types and label
 			Label reportSelectLabel = new Label("Report Type:");
 			reportSelectLabel.setFont(labelFont);
 			ComboBox<String> combo_box = new ComboBox<String>();
 			combo_box.getItems().addAll("Farm", "Annual", "Monthly", "Date Range");
 			combo_box.getSelectionModel().selectFirst();
 
+			//add combo_box and label
 			reportHBox.getChildren().add(reportSelectLabel);
 			reportHBox.getChildren().add(combo_box);
 
+			//add generate button
 			Button selectReportButton = new Button("Generate");
 			selectReportButton.setFont(buttonFont);
 
 			// Select Files label, button, and file chooser
 			Label importLabel = new Label("Import Data");
 			importLabel.setFont(titleFont);
-
 			FileChooser file_chooser = new FileChooser();
-
 			Label selectFilesLabel = new Label("no files loaded");
-
 			Button selectFileButton = new Button("Import .csv");
 			selectFileButton.setFont(buttonFont);
 
 			// File exporter
 			Label exportLabel = new Label("Export Data");
 			exportLabel.setFont(titleFont);
-
 			Label exportSuccessLabel = new Label("no files exported");
 			FileChooser exportChooser = new FileChooser();
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
             exportChooser.getExtensionFilters().add(extFilter);
-
 			Button exportButton = new Button("Export .csv");
 			exportButton.setFont(buttonFont);
 			
+			//Clear all data label and button
 			Button clearAllButton = new Button("Clear all Data");
 			clearAllButton.setFont(buttonFont);
 
 			//Title, fields, and button for manually inserting data
             Label insertLabel = new Label("Insert or Remove Data");
         	insertLabel.setFont(titleFont);
-
             Label farmNameLabel = new Label("Farm: ");
             farmNameLabel.setFont(labelFont);
             TextField farmNameField = new TextField();
@@ -161,6 +166,7 @@ public class Main extends javafx.application.Application {
             farmInfoHBox.setMargin(farmNameLabel, new Insets(0,12,0,0));
             farmInfoHBox.getChildren().add(farmNameField);
             
+            //adding date pickers and UI elements for inserting data
             Label dateLabel = new Label("Date: ");
             dateLabel.setFont(labelFont);
             DatePicker datePicker = new DatePicker();
@@ -170,6 +176,7 @@ public class Main extends javafx.application.Application {
             dateInfoHBox.getChildren().add(dateLabel);
             dateInfoHBox.setMargin(dateLabel, new Insets(0,6,0,0));
             dateInfoHBox.getChildren().add(datePicker);
+            
             
             Label milkLabel = new Label("Milk: ");
             milkLabel.setFont(labelFont);
@@ -192,9 +199,9 @@ public class Main extends javafx.application.Application {
 			milkInfoHBox.setMargin(milkLabel, new Insets(0, 14, 0, 0));
 			milkInfoHBox.getChildren().add(milkField);
 
+			//insert and remove buttons
 			Button insertDataButton = new Button("Insert Data");
 			insertDataButton.setFont(buttonFont);
-			
 			Button removeDataButton = new Button("Remove Data");
 			removeDataButton.setFont(buttonFont);
 			
@@ -225,6 +232,7 @@ public class Main extends javafx.application.Application {
 			// Event Handler for Report Selections Selections
 			EventHandler<ActionEvent> confirmReport = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
+					//common variables that are used for each Report selected
 					VBox selectedReportvBox = new VBox();
 					Scene selectedReportScene = new Scene(selectedReportvBox, WINDOW_WIDTH, WINDOW_HEIGHT);
 					selectedReportScene.getStylesheets().add("application/application.css");
@@ -241,23 +249,27 @@ public class Main extends javafx.application.Application {
 						}
 					};
 
+					//switching on the string in the combo_box code for specific report types will generate new GUI screens
 					switch (combo_box.getValue()) {
 					case "Farm":
+					  //create UI Elements
 					  selectedReportLabel = new Label("Farm Report");
                       selectedReportLabel.setFont(titleFont);
-                      
                       Label  farmIDLabel= new Label("Farm Id:");
                       farmIDLabel.setFont(labelFont);
                       farmIdTextField = new TextField ();
                       HBox farmIdInfoHBox = new HBox();
+                      
+                      //add UI elements and format
                       farmIdInfoHBox.getChildren().add(farmIDLabel);
                       farmIdInfoHBox.setMargin(farmIDLabel, new Insets(0,6,0,0));
                       farmIdInfoHBox.getChildren().add(farmIdTextField);
                       farmIdInfoHBox.setAlignment(Pos.CENTER);
-                      
                       yearLabel= new Label("Enter Year:");
                       yearLabel.setFont(labelFont);
                       yearTextField = new TextField ();
+                      
+                      //If the user enters anything that is not a number it will remove it
                       yearTextField.textProperty().addListener(new ChangeListener<String>() {
           				@Override
           				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -271,17 +283,19 @@ public class Main extends javafx.application.Application {
           		            }
           				}
                       });
+                      
+                      // add and format text fields
                       HBox yearInfoHBox = new HBox();
                       yearInfoHBox.getChildren().add(yearLabel);
                       yearInfoHBox.setMargin(yearLabel, new Insets(0,6,0,0));
                       yearInfoHBox.getChildren().add(yearTextField);
                       yearInfoHBox.setAlignment(Pos.CENTER);
                       
-                      
                       Button generateFarmButton = new Button("Generate Farm Report");
                       yearTextField.getText();
                       backButton = new Button("Back");
                       
+                      //add all UI elements to the vBox
                       selectedReportvBox.getChildren().add(selectedReportLabel);
                       selectedReportvBox.getChildren().add(farmIdInfoHBox);
                       selectedReportvBox.getChildren().add(yearInfoHBox);
@@ -289,15 +303,16 @@ public class Main extends javafx.application.Application {
                       selectedReportvBox.getChildren().add(backButton);
                       selectedReportvBox.setSpacing(5);
                       
+                      //set the action of the back button
                       backButton.setOnAction(back);
 
                       selectedReportvBox.setAlignment(Pos.TOP_CENTER);
  
-//                      selectedReportvBox.setBackground(background);
 
-						// Event Handler for file Selections
+						// Event Handler for Generate report button
 						EventHandler<ActionEvent> callFarm = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
+								//check to make sure FarmID is not empty if it is show an alert
 								if (farmIdTextField.getText().isEmpty()) {
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
@@ -308,6 +323,7 @@ public class Main extends javafx.application.Application {
 									errorAlert.showAndWait();
 									return;
 								}
+								//check to see if year field is empty and show an alert if it is
 								if (yearTextField.getText().isEmpty()) {
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
@@ -315,12 +331,19 @@ public class Main extends javafx.application.Application {
 									errorAlert.showAndWait();
 									return;
 								}
+								
+								//make sure the farm ID is formatted correctly
+								//if the id contains "Farm" pass along to farmReportScreen
 								if(farmIdTextField.getText().contains("Farm")) {
 									farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
+								
+									//if "Farm" is capitalized incorrectly fix and call farmReportScreen
 								}else if(farmIdTextField.getText().toLowerCase().contains("farm")){
 									String id = farmIdTextField.getText().replaceAll("[^0-9]", "");
 									id = "Farm " + id;
 									farmReportScreen(stage, id, Integer.parseInt(yearTextField.getText()));
+									
+									//if "Farm" is not included add and call farmReportScreen
 								}else {
 									farmReportScreen(stage, "Farm " + farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
 								}
@@ -330,11 +353,14 @@ public class Main extends javafx.application.Application {
 
 						break;
 					case "Annual":
+						//format vBox and set UI elements
                     	selectedReportvBox.setAlignment(Pos.TOP_CENTER);
                     	selectedReportLabel = new Label("Annual Report");
                     	
                     	yearLabel= new Label("Enter Year:");
                     	yearTextField = new TextField ();
+                    	
+                    	//If the user enters anything that is not a number it will remove it
                     	yearTextField.textProperty().addListener(new ChangeListener<String>() {
             				@Override
             				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -348,6 +374,8 @@ public class Main extends javafx.application.Application {
               		            }
             				}
                         });
+                    	
+                    	//add HBox for formatting
                     	HBox yearInfoHBox1 = new HBox();
                     	yearInfoHBox1.getChildren().add(yearLabel);
                     	yearInfoHBox1.setMargin(yearLabel, new Insets(0,14,0,0));
@@ -357,25 +385,28 @@ public class Main extends javafx.application.Application {
                     	Button generateAnnualButton = new Button("Generate Annual Report");
                     	backButton = new Button("Back");
                     	
+                    	//add all UI elements to screen
                     	selectedReportvBox.getChildren().add(selectedReportLabel);
                     	selectedReportvBox.getChildren().add(yearInfoHBox1);
                     	selectedReportvBox.getChildren().add(generateAnnualButton);
                     	selectedReportvBox.getChildren().add(backButton);
                     	
+                    	//format the screen
                     	selectedReportLabel.setFont(titleFont);
                     	yearLabel.setFont(labelFont);
                     	backButton.setFont(buttonFont);
                     	generateAnnualButton.setFont(buttonFont);
                     	selectedReportvBox.setSpacing(5);
                     	
+                    	//add action of back button
                         backButton.setOnAction(back);
 
-//                        selectedReportvBox.setBackground(background);
                         
                     	// Event Handler for file Selections
                         EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
                             public void handle(ActionEvent e) 
                             {
+                            	//if the year is empty alert and prompt to enter a valid year
 								try {
 	                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));
 								}catch(Exception excep) {
@@ -389,16 +420,20 @@ public class Main extends javafx.application.Application {
 								}
                             }
                         }; 
+                        
+                        //add action of generateAnnualButton
                         generateAnnualButton.setOnAction(callAnnual);
                         break; 
 
 					case "Monthly":
+						//add UI elements
 						selectedReportLabel = new Label("Monthly Report");
 						selectedReportLabel.setFont(titleFont);
-						
 						yearLabel = new Label("Enter Year:");
 						yearLabel.setFont(labelFont);
                         yearTextField = new TextField();
+                        
+                        //If the user enters anything that is not a number it will remove it
                     	yearTextField.textProperty().addListener(new ChangeListener<String>() {
             				@Override
             				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -412,14 +447,16 @@ public class Main extends javafx.application.Application {
               		            }
             				}
                         });
+                    	
+                    	//add HBox for formatting
                         HBox yearInfoHBox2 = new HBox();
                         yearInfoHBox2.getChildren().add(yearLabel);
                         yearInfoHBox2.setMargin(yearLabel, new Insets(0,6,0,0));
                         yearInfoHBox2.getChildren().add(yearTextField);
                         yearInfoHBox2.setAlignment(Pos.CENTER);
 						
+                        //create comboBox for month selection
 						ComboBox<String> comboBox = new ComboBox<>();
-						
 						ObservableList<String> months = FXCollections.observableArrayList(
 								"January",
 								"February",
@@ -434,13 +471,10 @@ public class Main extends javafx.application.Application {
 								"November",
 								"December"
 						);
-						
 						comboBox.setItems(months);
-						
 						comboBox.getSelectionModel().selectFirst();
 						
-						
-
+						//add UI labels and elements
 						monthLabel = new Label("Select Month:");
 						monthLabel.setFont(labelFont);
 						HBox monthLabelHBox = new HBox();
@@ -449,23 +483,23 @@ public class Main extends javafx.application.Application {
 						monthLabelHBox.getChildren().add(comboBox);
 						monthLabelHBox.setAlignment(Pos.CENTER);
 						
+						//create buttons
 						Button generateMonthlyButton = new Button("Generate Monthly Report");
 						backButton = new Button("Back");
 
+						//add UI elements to vBox and format
 						selectedReportvBox.getChildren().add(selectedReportLabel);
 						selectedReportvBox.getChildren().add(yearInfoHBox2);
 						selectedReportvBox.getChildren().add(monthLabelHBox);
 						selectedReportvBox.setSpacing(5);
 						selectedReportvBox.getChildren().add(generateMonthlyButton);
-
 						selectedReportvBox.getChildren().add(backButton);
 						selectedReportvBox.setAlignment(Pos.TOP_CENTER);
 
+						//set action of back button
 						backButton.setOnAction(back);
 						
-//						selectedReportvBox.setBackground(background);
-
-						// Event Handler for file Selections
+						// Event Handler for Genearte monthly report
 						EventHandler<ActionEvent> callMonthly = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
 								try {
@@ -484,8 +518,10 @@ public class Main extends javafx.application.Application {
 											entry("November",11),
 											entry("December",12)
 									);
+									//call monthlyReportScreen to generate report
 									monthlyReportScreen(stage, year, monthMap.get(comboBox.getValue()));
 								}catch(Exception excep) {
+									//catch exceptions or invalid year or month and alert
 									excep.printStackTrace();
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
@@ -498,28 +534,32 @@ public class Main extends javafx.application.Application {
 								}
 							}
 						};
+						//add action to generateMontlyButton
 						generateMonthlyButton.setOnAction(callMonthly);
 						break;
+						
 					case "Date Range":
+						//add labels and UI elements
 						selectedReportLabel = new Label("Date Range Report");
 						selectedReportLabel.setFont(titleFont);
 						Label startLabel = new Label("Enter Starting Date:");
 						startLabel.setFont(labelFont);
 						Label endLabel = new Label("Enter Ending Date:");
-
 						endLabel = new Label("Enter Ending Date:");
 						endLabel.setFont(labelFont);
-
 						backButton = new Button("Back");
 						
+						//add start date picker
 						DatePicker startDatePicker = new DatePicker();
 						startDatePicker.getEditor().setDisable(true);
 			            startDatePicker.setValue(LocalDate.now());
 
+			            //add end date picker
 						DatePicker endDatePicker = new DatePicker();
 						endDatePicker.getEditor().setDisable(true);
 			            endDatePicker.setValue(LocalDate.now());
 
+			            //create new button and add vBox or formatting
 						Button generateDateRangeButton = new Button("Generate Date Range Report");
 						selectedReportvBox.getChildren().add(selectedReportLabel);
 
@@ -530,18 +570,15 @@ public class Main extends javafx.application.Application {
 						selectedReportvBox.getChildren().add(endLabel);
 						selectedReportvBox.getChildren().add(endDatePicker);
 
-						// generate button
+						// generate button, format, and set action
 						selectedReportvBox.getChildren().add(generateDateRangeButton);
 						selectedReportvBox.setSpacing(5);
 						selectedReportvBox.getChildren().add(backButton);
-
 						selectedReportvBox.setAlignment(Pos.TOP_CENTER);
-
 						backButton.setOnAction(back);
 						
-//						selectedReportvBox.setBackground(background);
 
-						// Event Handler for file Selections
+						// Event Handler for generateDateRangeButton
 						EventHandler<ActionEvent> callDateRange = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
 								try {
@@ -552,6 +589,7 @@ public class Main extends javafx.application.Application {
 									}	
 									dateRangeReportScreen(stage, startDatePicker.getValue(), endDatePicker.getValue());
 								}catch(Exception error) {
+									//catch exceptions for null inputs and set an alert 
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
 									if(startDatePicker.getValue() == null) {
@@ -568,10 +606,12 @@ public class Main extends javafx.application.Application {
 							}
 						};
 						
+						//set event for generateDateRangeButton
 						generateDateRangeButton.setOnAction(callDateRange);
 						break;
 
 					}
+					//show the scene
 					stage.setScene(selectedReportScene);
 					stage.show();
 				}
@@ -821,6 +861,7 @@ public class Main extends javafx.application.Application {
             	
             };
             
+            //event handler for the clear all data button
             EventHandler<ActionEvent> clearAllHandler = new EventHandler<ActionEvent>() {
 
 				@Override
@@ -1397,6 +1438,10 @@ public class Main extends javafx.application.Application {
 		});
 	}
 
+	/**
+	 * Main method
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		factory = new CheeseFactory();
 		launch(args);
