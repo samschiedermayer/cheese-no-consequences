@@ -139,6 +139,8 @@ public class Main extends javafx.application.Application {
 
 			Label exportSuccessLabel = new Label("no files exported");
 			FileChooser exportChooser = new FileChooser();
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+            exportChooser.getExtensionFilters().add(extFilter);
 
 			Button exportButton = new Button("Export .csv");
 			exportButton.setFont(buttonFont);
@@ -512,7 +514,7 @@ public class Main extends javafx.application.Application {
 			// Event Handler for file exports
 			EventHandler<ActionEvent> selectExport = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
-					File file = file_chooser.showOpenDialog(stage);
+					File file = file_chooser.showSaveDialog(stage);
 					if(file != null) {
 						try {
 							factory.exportFarmData(file.getAbsolutePath());

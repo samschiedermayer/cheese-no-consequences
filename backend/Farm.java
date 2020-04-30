@@ -1,6 +1,7 @@
 package backend;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +68,7 @@ public class Farm extends FarmADT {
 	public int getMilkWeight(LocalDate start, LocalDate end) {
 		
 		@SuppressWarnings("unchecked")
-		List<LocalDate> dates = (List<LocalDate>) milkWeights.keySet();
+		List<LocalDate> dates =  new ArrayList<>(milkWeights.keySet());
 		Collections.sort(dates);
 		
 		int total = 0;

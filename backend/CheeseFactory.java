@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -133,21 +134,30 @@ public class CheeseFactory implements CheeseFactoryADT {
 		Farm farm;
 		String line = null, farmId;
 		String[] split, dateSplit;
+		int year, month, day;
 		while ((line = reader.readLine()) != null) {
-			System.out.println(line);
 			split = line.split(",");
+			if (split.length != 3)
+				continue;
 
 			dateSplit = split[0].split("-");
+			if (dateSplit.length != 3)
+				continue;
 			
-			int year = Integer.parseInt(dateSplit[0]);
-			int month = Integer.parseInt(dateSplit[1]);
-			int day = Integer.parseInt(dateSplit[2]);
+			try {
+				year = Integer.parseInt(dateSplit[0]);
+				month = Integer.parseInt(dateSplit[1]);
+				day = Integer.parseInt(dateSplit[2]);
+				
+				weight = Integer.parseInt(split[2]);
+			} catch (NumberFormatException e) {
+				continue;
+			}
 			
 			LocalDate date = LocalDate.of(year, month, day);
 
 			farmId = split[1];
-
-			weight = Integer.parseInt(split[2]);
+			
 
 			if (!farms.containsKey(farmId)) {
 				farm = new Farm(farmId);
@@ -155,6 +165,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 			} else {
 				farm = farms.get(farmId);
 			}
+			
 			try {
 				farm.addMilkWeightForDay(date, weight);
 			} catch (DuplicateAdditionException e) {
@@ -168,23 +179,22 @@ public class CheeseFactory implements CheeseFactoryADT {
 	// sam
 	@Override
 	public void exportFarmData(String fileName) throws IOException {
-		FileWriter writer = new FileWriter(fileName);
 		
-		Set<String> farmIDs = getAllFarmNames();
-		
-		for (String farmID: farmIDs) {
-		  HashMap<LocalDate, Integer> farmMilkWeights = farms.get(farmID).getMilkWeightsHashMap();
-		  List<LocalDate> dates = (List<LocalDate>) farmMilkWeights.keySet();
-		  
-		  for (LocalDate date: dates) {
-		    int weight = farms.get(farmID).getMilkWeight(date);
-		    
-		    writer.append(date + ", " + farmID + ", " + weight + "\n");
-		  }
+		try (FileWriter writer = new FileWriter(fileName)){
+			writer.append("date,farm_id,weight\n");
+			farms.forEach((id,farm) -> {
+				farm.getMilkWeightsHashMap().forEach((date,weight) -> {
+					try {
+						writer.append(date + "," + id + "," + weight + "\n");
+					} catch (IOException e) {
+						throw new UncheckedIOException(e.getMessage(),e);
+					}
+				});
+			});
+		} catch (UncheckedIOException e) {
+			throw new IOException(e.getMessage());
 		}
-
 		
-
 	}
 
 	@Override
