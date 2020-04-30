@@ -648,6 +648,18 @@ public class Main extends javafx.application.Application {
             exportButton.setOnAction(selectExport);
             insertDataButton.setOnAction(insertDataHandler);
             removeDataButton.setOnAction(removeDataHandler);
+            
+            // add exit button
+            HBox exitHBox = new HBox();
+            Button exitButton = new Button("Exit");
+            exitHBox.getChildren().add(exitButton);
+            exitButton.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+              @Override
+              public void handle(MouseEvent e) {
+                Stage stage = (Stage) exitButton.getScene().getWindow();
+                stage.close();
+              }
+            });
 
 			// set up vertical boxes for categories of actions
 			VBox lVBox = new VBox(12);
@@ -690,6 +702,8 @@ public class Main extends javafx.application.Application {
 			cVBox.setMargin(reportLabel, new Insets(0, 0, 12, 0));
 			cVBox.getChildren().add(reportHBox);
 			cVBox.getChildren().add(selectReportButton);
+			cVBox.getChildren().add(exitHBox);
+            exitHBox.setAlignment(Pos.BOTTOM_CENTER);
 
 			rVBox.getChildren().add(insertLabel);
 			rVBox.setMargin(insertLabel, new Insets(0, 0, 12, 0));
@@ -703,7 +717,7 @@ public class Main extends javafx.application.Application {
 			insertRemoveHBox.setMargin(insertDataButton, new Insets(0, 0, 0, 24));
 
 			rVBox.getChildren().add(insertRemoveHBox);
-
+			
 			// add children to hbox
 			root.setLeft(lVBox);
 			root.setMargin(lVBox, new Insets(12, 0, 12, 36));
@@ -711,6 +725,7 @@ public class Main extends javafx.application.Application {
 			root.setMargin(cHBox, new Insets(12, 12, 12, 12));
 			root.setRight(rVBox);
 			root.setMargin(rVBox, new Insets(12, 42, 12, 0));
+//			root.setBottom(buttonHBox);
 
 			// set the scene and start the show
 			stage.setScene(mainScene);
