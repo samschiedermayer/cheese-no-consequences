@@ -366,7 +366,11 @@ public class Main extends javafx.application.Application {
 								}catch(Exception excep) {
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
-									errorAlert.setContentText("Please Enter a Valid Year");
+									if(yearTextField.getText().trim().toString().isEmpty()) {
+										errorAlert.setContentText("Please Enter a Valid Year");	
+									}else {
+										errorAlert.setContentText("Please Select a Month");
+									}
 									errorAlert.showAndWait();
 								}
 							}
