@@ -585,6 +585,10 @@ public class Main extends javafx.application.Application {
 						for(File file : fileList) {
 
 							try {
+								if (!file.getAbsolutePath().endsWith(".csv")) {
+									failedList.add(file);
+									continue;
+								}
 								factory.importFarmData(file.getAbsolutePath());
 								++numImported;
 								selectFilesLabel.setText(numImported + ((numImported == 1) ? " file imported" : " files imported"));
@@ -825,6 +829,7 @@ public class Main extends javafx.application.Application {
         				numImported = 0;
         				selectFilesLabel.setText("no files loaded");
         				exportSuccessLabel.setText("no files exported");
+        				historyListView.setItems(factory.history);
         				        				
         				Alert alert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
        					alert.setTitle("Success");
