@@ -609,13 +609,13 @@ public class Main extends javafx.application.Application {
 							errorAlert.setContentText(errMsg);
 							errorAlert.showAndWait();
 						} else {
-							Alert errorAlert = new Alert(AlertType.INFORMATION);
-							errorAlert.setHeaderText(null);
+							Alert successAlert = new Alert(AlertType.INFORMATION);
+							successAlert.setHeaderText(null);
 							if (fileList.size() == 1)
-								errorAlert.setContentText("Successfully loaded 1 file.");
+								successAlert.setContentText("Successfully loaded 1 file.");
 							else
-								errorAlert.setContentText("Successfully loaded " + fileList.size() + " files.");
-							errorAlert.showAndWait();
+								successAlert.setContentText("Successfully loaded " + fileList.size() + " files.");
+							successAlert.showAndWait();
 						}
 					}
 				}
@@ -626,6 +626,13 @@ public class Main extends javafx.application.Application {
 				public void handle(ActionEvent e) {
 					File file = file_chooser.showSaveDialog(stage);
 					if(file != null) {
+						if (!file.getAbsolutePath().endsWith(".csv")) {
+							Alert errorAlert = new Alert(AlertType.ERROR);
+							errorAlert.setHeaderText(null);
+							errorAlert.setContentText("Filename must end in .csv.");
+							errorAlert.showAndWait();
+							return;
+						}
 						try {
 							factory.exportFarmData(file.getAbsolutePath());
 							exportSuccessLabel.setText(file.getName() + " exported");
