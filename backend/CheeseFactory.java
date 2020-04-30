@@ -52,7 +52,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 			farmReport[monthCounter -1][4] = stats[2];
 
 			farmReport[monthCounter - 1][0] = farmMilkWeight;
-			double percentMilkWeight = (farmMilkWeight / totalMilkWeight) * 100;
+			double percentMilkWeight = (totalMilkWeight != 0) ? (farmMilkWeight / totalMilkWeight) * 100 : 0;
 			farmReport[monthCounter - 1][1] = percentMilkWeight;
 			monthCounter++;
 		}
@@ -75,7 +75,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 		for (String key : farmIDs) {
 			double[] value = new double[5];
 			value[0] = (double) farms.get(key).getMilkWeight(year);
-			value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
+			value[1] = (double) ((totalMilkWeightOfFactory != 0) ? (value[0] / totalMilkWeightOfFactory) * 100 : 0);
 			
 			int[] stats = farms.get(key).getMilkWeightStatistics(year);
 			value[2] = stats[0];
@@ -104,7 +104,7 @@ public class CheeseFactory implements CheeseFactoryADT {
       for (String key : farmIDs) {
           double[] value = new double[5];
           value[0] = (double) farms.get(key).getMilkWeight(year);
-          value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
+          value[1] = (double) ((totalMilkWeightOfFactory != 0) ? (value[0] / totalMilkWeightOfFactory) * 100 : 0);
           
           int[] stats = farms.get(key).getMilkWeightStatistics(year);
           value[2] = stats[0];
@@ -131,7 +131,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 		for (String key : farmIDs) {
 			double[] value = new double[5];
 			value[0] = (double) farms.get(key).getMilkWeight(start, end);
-			value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
+			value[1] = (double) ((totalMilkWeightOfFactory != 0) ? (value[0] / totalMilkWeightOfFactory) * 100 : 0);
 			
 			int[] stats = farms.get(key).getMilkWeightStatistics(start, end);
 			value[2] = stats[0];

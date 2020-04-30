@@ -113,7 +113,7 @@ public class Main extends javafx.application.Application {
 			Label reportSelectLabel = new Label("Report Type:");
 			reportSelectLabel.setFont(labelFont);
 			ComboBox<String> combo_box = new ComboBox<String>();
-			combo_box.getItems().addAll("", "Annual", "Monthly", "Farm", "Date Range");
+			combo_box.getItems().addAll("Farm", "Annual", "Monthly", "Date Range");
 			combo_box.getSelectionModel().selectFirst();
 
 			reportHBox.getChildren().add(reportSelectLabel);
@@ -314,6 +314,7 @@ public class Main extends javafx.application.Application {
 	                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));																				// farmIdTextField.getText(),String
 									// yearTextField.getText()
 								}catch(Exception excep) {
+									excep.printStackTrace();
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
 									if(yearTextField.getText().trim().isEmpty()) {
@@ -356,9 +357,9 @@ public class Main extends javafx.application.Application {
 								"December"
 						);
 						
-						comboBox.getSelectionModel().selectFirst();
-						
 						comboBox.setItems(months);
+						
+						comboBox.getSelectionModel().selectFirst();
 						
 						
 

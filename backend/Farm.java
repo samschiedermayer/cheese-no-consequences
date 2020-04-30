@@ -64,6 +64,8 @@ public class Farm extends FarmADT {
 					stats[2] = weight;
 			}
 		});
+		if (count[0] == 0)
+			return new int[] {0, 0, 0};
 		
 		stats[0] /= count[0];
 		
@@ -88,6 +90,8 @@ public class Farm extends FarmADT {
 					stats[2] = weight;
 			}
 		});
+		if (count[0] == 0)
+			return new int[] {0, 0, 0};
 		
 		stats[0] /= count[0];
 		
@@ -157,6 +161,8 @@ public class Farm extends FarmADT {
 			}
 		}
 		
+		if (count == 0)
+			return new int[] {0, 0, 0};
 		int avg = total / count;
 		
 		return new int[] {avg,min,max};
