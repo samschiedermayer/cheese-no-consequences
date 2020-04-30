@@ -1,4 +1,4 @@
-package exceptions;
+package application;
 
 @SuppressWarnings("serial")
 public class DuplicateAdditionException extends Exception {

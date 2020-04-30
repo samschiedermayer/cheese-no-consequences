@@ -1,4 +1,4 @@
-package backend;
+package application;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import exceptions.DuplicateAdditionException;
+import application.DataOperation.Type;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

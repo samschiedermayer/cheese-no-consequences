@@ -12,11 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javafx.beans.value.ChangeListener;
-
-import backend.CheeseFactory;
-import backend.DataOperation;
-import backend.Farm;
-import exceptions.DuplicateAdditionException;
 import javafx.application.Application;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;

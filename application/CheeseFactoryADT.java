@@ -1,11 +1,9 @@
-package backend;
+package application;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Set;
-
-import exceptions.DuplicateAdditionException;
 
 public interface CheeseFactoryADT {
 
