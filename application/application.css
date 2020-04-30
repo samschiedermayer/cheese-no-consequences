@@ -65,11 +65,6 @@
 	-fx-faint-focus-color: transparent;
 }
 
-/* right justify data in table */
-.table-view,.table-column {
-  -fx-alignment: CENTER-RIGHT;
-}
-
 /* get rid of horizontal scroll bar */
 .table-view .scroll-bar:horizontal * {
     -fx-min-width: 0;
