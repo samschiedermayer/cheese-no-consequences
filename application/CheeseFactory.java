@@ -155,7 +155,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 	public void importFarmData(String fileName) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
-		reader.readLine();
+		System.out.println(reader.readLine());
 
 		int weight;
 		Farm farm;
@@ -163,13 +163,17 @@ public class CheeseFactory implements CheeseFactoryADT {
 		String[] split, dateSplit;
 		int year, month, day;
 		while ((line = reader.readLine()) != null) {
+			System.out.println(line);
 			split = line.split(",");
 			if (split.length != 3)
 				continue;
 
 			dateSplit = split[0].split("-");
-			if (dateSplit.length != 3)
-				continue;
+			if (dateSplit.length != 3) {
+				dateSplit = split[0].split("/");
+				if (dateSplit.length != 3)
+					continue;
+			}
 			
 			try {
 				year = Integer.parseInt(dateSplit[0]);
@@ -177,6 +181,8 @@ public class CheeseFactory implements CheeseFactoryADT {
 				day = Integer.parseInt(dateSplit[2]);
 				
 				weight = Integer.parseInt(split[2]);
+				if (weight <= 0)
+					throw new NumberFormatException("weight must be a positive number");
 			} catch (NumberFormatException e) {
 				continue;
 			}
