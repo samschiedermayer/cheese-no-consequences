@@ -31,7 +31,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 	// maya
 	@Override
 	public double[][] getFarmReport(String farmName, int year) throws IllegalArgumentException {
-		double[][] farmReport = new double[12][2];
+		double[][] farmReport = new double[12][5];
 		// get total milk weight per month
 		
 		Farm farm = farms.get(farmName);
@@ -45,6 +45,12 @@ public class CheeseFactory implements CheeseFactoryADT {
 		while (monthCounter <= 12) {
 			// get total milk weight from farm per month
 			double farmMilkWeight = farm.getMilkWeight(year, monthCounter);
+			int[] stats = farm.getMilkWeightStatistics(year, monthCounter);
+			
+			farmReport[monthCounter -1][2] = stats[0];
+			farmReport[monthCounter -1][3] = stats[1];
+			farmReport[monthCounter -1][4] = stats[2];
+
 			farmReport[monthCounter - 1][0] = farmMilkWeight;
 			double percentMilkWeight = (farmMilkWeight / totalMilkWeight) * 100;
 			farmReport[monthCounter - 1][1] = percentMilkWeight;
@@ -67,9 +73,14 @@ public class CheeseFactory implements CheeseFactoryADT {
 
 		// add to hash map for each farmID
 		for (String key : farmIDs) {
-			double[] value = new double[2];
+			double[] value = new double[5];
 			value[0] = (double) farms.get(key).getMilkWeight(year);
 			value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
+			
+			int[] stats = farms.get(key).getMilkWeightStatistics(year);
+			value[2] = stats[0];
+			value[3] = stats[1];
+			value[4] = stats[2];
 
 			annualReport.put(key, value);
 		}
@@ -91,9 +102,14 @@ public class CheeseFactory implements CheeseFactoryADT {
 
       // add to hash map for each farmID
       for (String key : farmIDs) {
-          double[] value = new double[2];
+          double[] value = new double[5];
           value[0] = (double) farms.get(key).getMilkWeight(year);
           value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
+          
+          int[] stats = farms.get(key).getMilkWeightStatistics(year);
+          value[2] = stats[0];
+          value[3] = stats[1];
+		  value[4] = stats[2];
 
           monthlyReport.put(key, value);
       }
@@ -113,9 +129,14 @@ public class CheeseFactory implements CheeseFactoryADT {
 		}
 
 		for (String key : farmIDs) {
-			double[] value = new double[2];
+			double[] value = new double[5];
 			value[0] = (double) farms.get(key).getMilkWeight(start, end);
 			value[1] = (double) (value[0] / totalMilkWeightOfFactory) * 100;
+			
+			int[] stats = farms.get(key).getMilkWeightStatistics(start, end);
+			value[2] = stats[0];
+			value[3] = stats[1];
+			value[4] = stats[2];
 
 			dateRangeReport.put(key, value);
 		}

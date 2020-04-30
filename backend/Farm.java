@@ -45,6 +45,54 @@ public class Farm extends FarmADT {
 		
 		return total[0];
 	}
+	
+	public int[] getMilkWeightStatistics(int year, int month) {
+		final int[] stats = new int[3];
+		stats[0] = 0; //average
+		stats[1] = Integer.MAX_VALUE; //min
+		stats[2] = Integer.MIN_VALUE; //max
+		
+		final int[] count = new int[1];
+		count[0] = 0;
+		milkWeights.forEach((date, weight) -> {
+			if (date.getYear() == year && date.getMonthValue() == month) {
+				++count[0];
+				stats[0] += weight;
+				if (weight < stats[1])
+					stats[1] = weight;
+				if (weight > stats[2])
+					stats[2] = weight;
+			}
+		});
+		
+		stats[0] /= count[0];
+		
+		return stats;
+	}
+	
+	public int[] getMilkWeightStatistics(int year) {
+		final int[] stats = new int[3];
+		stats[0] = 0; //average
+		stats[1] = Integer.MAX_VALUE; //min
+		stats[2] = Integer.MIN_VALUE; //max
+		
+		final int[] count = new int[1];
+		count[0] = 0;
+		milkWeights.forEach((date, weight) -> {
+			if (date.getYear() == year) {
+				++count[0];
+				stats[0] += weight;
+				if (weight < stats[1])
+					stats[1] = weight;
+				if (weight > stats[2])
+					stats[2] = weight;
+			}
+		});
+		
+		stats[0] /= count[0];
+		
+		return stats;
+	}
 
 	@Override
 	public void addMilkWeightForDay(LocalDate date, int weight) throws DuplicateAdditionException {
@@ -82,6 +130,25 @@ public class Farm extends FarmADT {
 		}
 		
 		return total;
+	}
+	
+	public int[] getMilkWeightStatistics(LocalDate start, LocalDate end) {
+		
+		@SuppressWarnings("unchecked")
+		List<LocalDate> dates =  new ArrayList<>(milkWeights.keySet());
+		Collections.sort(dates);
+		
+		int total = 0;
+		for (LocalDate date : dates) {
+			if (date.compareTo(end) > 0) {
+				break;
+			}
+			if(date.compareTo(start) > 0) {
+				total += milkWeights.get(date);
+			}
+		}
+		
+		return new int[] {total};
 	}
 
 	@Override
