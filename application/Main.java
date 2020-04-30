@@ -242,11 +242,23 @@ public class Main extends javafx.application.Application {
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callFarm = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
-								// System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " +
-								// yearTextField.getText() + ")");
-								farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText())); // String
-																												// farmIdTextField.getText(),String
-																												// yearTextField.getText()
+								try {
+									// System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " +
+									// yearTextField.getText() + ")");
+									farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText())); // String
+																													// farmIdTextField.getText(),String
+																													// yearTextField.getText()
+								}catch(Exception excep) {
+									Alert errorAlert = new Alert(AlertType.ERROR);
+									errorAlert.setHeaderText(null);
+									if(farmIdTextField.getText().trim().isEmpty()) {
+										errorAlert.setContentText("Please Enter a Valid Farm ID");	
+									}else {
+										errorAlert.setContentText("Please Enter a Valid Year");
+									}
+									
+									errorAlert.showAndWait();
+								}
 							}
 						};
 						generateFarmButton.setOnAction(callFarm);
@@ -286,8 +298,18 @@ public class Main extends javafx.application.Application {
                         EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
                             public void handle(ActionEvent e) 
                             {
-                            	//System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
-                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));
+								try {
+	                            	//System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
+	                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));																				// farmIdTextField.getText(),String
+									// yearTextField.getText()
+								}catch(Exception excep) {
+									Alert errorAlert = new Alert(AlertType.ERROR);
+									errorAlert.setHeaderText(null);
+									if(yearTextField.getText().trim().isEmpty()) {
+										errorAlert.setContentText("Please Enter a Valid Farm ID");
+									}
+									errorAlert.showAndWait();
+								}
                             }
                         }; 
                         generateAnnualButton.setOnAction(callAnnual);
@@ -389,13 +411,25 @@ public class Main extends javafx.application.Application {
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callDateRange = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
-
 								try {
+									LocalDate startDate = startDatePicker.getValue();
+									LocalDate endDate = endDatePicker.getValue();
+									if(endDate.isBefore(startDate)) {
+										throw new IllegalArgumentException();
+										}	
 									dateRangeReportScreen(stage, startDatePicker.getValue(), endDatePicker.getValue());
 								}catch(Exception error) {
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
-									errorAlert.setContentText("Please Select Valid Dates");
+									if(startDatePicker.getValue() == null) {
+										errorAlert.setContentText("Please Select a Valid Start Date");
+									}
+									else if(endDatePicker.getValue() == null) {
+										errorAlert.setContentText("Please Select a Valid End Date");
+									}
+									else {
+										errorAlert.setContentText("End Date is Before Start Date");
+									}
 									errorAlert.showAndWait();
 								}
 							}
