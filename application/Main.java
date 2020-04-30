@@ -3,6 +3,7 @@ package application;
 import static java.util.Map.entry;    
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -249,11 +250,7 @@ public class Main extends javafx.application.Application {
 						EventHandler<ActionEvent> callFarm = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
 								try {
-									// System.out.println("CallFarm("+ " " + farmIdTextField.getText() + ", " +
-									// yearTextField.getText() + ")");
-									farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText())); // String
-																													// farmIdTextField.getText(),String
-																													// yearTextField.getText()
+									farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
 								} catch (NullPointerException nullExcep) {
 								    Alert errorAlert = new Alert(AlertType.ERROR);
 								    errorAlert.setHeaderText(null);
@@ -310,9 +307,7 @@ public class Main extends javafx.application.Application {
                             public void handle(ActionEvent e) 
                             {
 								try {
-	                            	//System.out.println("CallAnnual("+" " + yearTextField.getText() + ")");
-	                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));																				// farmIdTextField.getText(),String
-									// yearTextField.getText()
+	                            	annualReportScreen(stage, Integer.parseInt(yearTextField.getText()));
 								}catch(Exception excep) {
 									excep.printStackTrace();
 									Alert errorAlert = new Alert(AlertType.ERROR);
@@ -1000,6 +995,7 @@ public class Main extends javafx.application.Application {
       reportTable.getColumns().add(maxMilk);
       
 	  ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
+	  DecimalFormat decFormat = new DecimalFormat("#.##"); // format percent double values
 	  
       switch (reportType) {
         case "farm":
@@ -1009,6 +1005,8 @@ public class Main extends javafx.application.Application {
           for (int i = 0; i < farmInfo.length; i++) {
             if (Double.isNaN((farmInfo[i][1]))) {
               farmInfo[i][1] = 0.0;
+            } else {
+              farmInfo[i][1] = Double.parseDouble(decFormat.format(farmInfo[i][1]));
             }
             
             farmsModels.add(new FarmsModel(getMonth(i + 1), farmInfo[i][0], farmInfo[i][1], farmInfo[i][2], farmInfo[i][3], farmInfo[i][4]));
@@ -1019,6 +1017,7 @@ public class Main extends javafx.application.Application {
           
           // add data to model
           annualInfo.forEach((id, milkInfo) -> {
+            milkInfo[1] = Double.parseDouble(decFormat.format(milkInfo[1]));
             farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
           });
           break;
@@ -1027,6 +1026,7 @@ public class Main extends javafx.application.Application {
           
           // add data to model
           monthlyInfo.forEach((id, milkInfo) -> {
+            milkInfo[1] = Double.parseDouble(decFormat.format(milkInfo[1]));
             farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
           });
           break;
@@ -1035,6 +1035,7 @@ public class Main extends javafx.application.Application {
           
           // add data to model
           rangeInfo.forEach((id, milkInfo) -> {
+            milkInfo[1] = Double.parseDouble(decFormat.format(milkInfo[1]));
             farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
           });
           break;
