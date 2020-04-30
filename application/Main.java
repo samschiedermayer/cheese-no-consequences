@@ -147,7 +147,7 @@ public class Main extends javafx.application.Application {
 			exportButton.setFont(buttonFont);
 
 			//Title, fields, and button for manually inserting data
-            Label insertLabel = new Label("Insert Data");
+            Label insertLabel = new Label("Insert or Remove Data");
         	insertLabel.setFont(titleFont);
 
             Label farmNameLabel = new Label("Farm: ");
@@ -185,7 +185,10 @@ public class Main extends javafx.application.Application {
 
 			Button insertDataButton = new Button("Insert Data");
 			insertDataButton.setFont(buttonFont);
-
+			
+			Button removeDataButton = new Button("Remove Data");
+			removeDataButton.setFont(buttonFont);
+			
 			// Event Handler for Report Selections Selections
 			EventHandler<ActionEvent> confirmReport = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
@@ -210,7 +213,7 @@ public class Main extends javafx.application.Application {
 					  selectedReportLabel = new Label("Farm Report");
                       selectedReportLabel.setFont(titleFont);
                       
-                      Label  farmIDLabel= new Label("Farm Id Number:");
+                      Label  farmIDLabel= new Label("Farm Id:");
                       farmIDLabel.setFont(labelFont);
                       farmIdTextField = new TextField ();
                       HBox farmIdInfoHBox = new HBox();
@@ -555,21 +558,35 @@ public class Main extends javafx.application.Application {
             		
             		try {
             			factory.addDataPoint(farm, milk, date);
-            			System.out.println("added data point");
+            			
+            			Alert successAlert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
+            			successAlert.setTitle("Info");
+            			successAlert.setHeaderText(null);
+            			successAlert.setContentText("Successfully added data point for farm: "+ farm + " on " + date.toString() +" of " + milk + "lb.");
+            			
+            			successAlert.showAndWait();
             		} catch (DuplicateAdditionException dae) {
-            			System.out.println("duplicate data point");
             			int prev = dae.getWeight();
             			
             			Alert alert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
             			alert.setTitle("Warning");
             			alert.setHeaderText(null);
-            			alert.setContentText("Data point for "+ farm + " already exists on " + date.toString() +" for " + prev + "lb." +
+            			alert.setContentText("Data point for farm: "+ farm + " already exists on " + date.toString() +" for " + prev + "lb." +
             					"\nWould you like to replace this entry with "+ milk + "lb?");
             			
             			Optional<ButtonType> result = alert.showAndWait();
             			
-            			if(result.isPresent() && result.get() == ButtonType.OK)
+            			if(result.isPresent() && result.get() == ButtonType.OK) {
             				factory.forceAddDataPoint(farm, milk, date);
+            				
+            				Alert successAlert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
+                			successAlert.setTitle("Info");
+                			successAlert.setHeaderText(null);
+                			successAlert.setContentText("Successfully modified data point for farm: "+ farm + " on " + date.toString() + 
+                					" from " + prev + "lb to " + milk + "lb.");
+                			
+                			successAlert.showAndWait();
+            			}
 
             		}
             		
@@ -578,11 +595,59 @@ public class Main extends javafx.application.Application {
             		
             	}
             };
+            
+         // Event Handler for manually removing raw data
+            EventHandler<ActionEvent> removeDataHandler = new EventHandler<ActionEvent>() {
+            	public void handle(ActionEvent e) {
+            		String farm = "";
+            		
+            		LocalDate date = null;
+            		farm = farmNameField.getText();
+            		date = datePicker.getValue();
+            			
+            		if (farm.contentEquals("")) {
+            			Alert errorAlert = new Alert(AlertType.ERROR);
+                		errorAlert.setHeaderText(null);
+                		errorAlert.setContentText("Must enter a farm ID.");
+                		errorAlert.showAndWait();
+                		return;
+            		}
+            			
+            		
+            		
+            		Alert confirmAlert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
+        			confirmAlert.setTitle("Warning");
+        			confirmAlert.setHeaderText(null);
+        			confirmAlert.setContentText("Are you sure that you want to remove entry on "+ date + " for farm: " + farm + "?");
+        			
+        			Optional<ButtonType> confirmResult = confirmAlert.showAndWait();
+        			
+        			if(confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+            		
+       					Integer prev = factory.removeDataPoint(farm, date);
+            			
+       					Alert alert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
+       					alert.setTitle("Warning");
+       					alert.setHeaderText(null);
+       					if (prev == null)
+       						alert.setContentText("Could not find data point on " + date + " at farm: " + farm + ".");
+       					else
+       						alert.setContentText("Successfully removed data point of " + prev + " on " + date + " at farm: " + farm + ".");
+       					
+        				alert.showAndWait();
+            		
+        				farmNameField.clear();
+        				milkField.clear();
+        			}
+            		
+            	}
+            };
       
             //set the action of the button
             selectFileButton.setOnAction(selectFile); 
             exportButton.setOnAction(selectExport);
             insertDataButton.setOnAction(insertDataHandler);
+            removeDataButton.setOnAction(removeDataHandler);
 
 			// set up vertical boxes for categories of actions
 			VBox lVBox = new VBox(12);
@@ -631,7 +696,13 @@ public class Main extends javafx.application.Application {
 			rVBox.getChildren().add(farmInfoHBox);
 			rVBox.getChildren().add(dateInfoHBox);
 			rVBox.getChildren().add(milkInfoHBox);
-			rVBox.getChildren().add(insertDataButton);
+			
+			HBox insertRemoveHBox = new HBox(8);
+			insertRemoveHBox.getChildren().add(insertDataButton);
+			insertRemoveHBox.getChildren().add(removeDataButton);
+			insertRemoveHBox.setMargin(insertDataButton, new Insets(0, 0, 0, 24));
+
+			rVBox.getChildren().add(insertRemoveHBox);
 
 			// add children to hbox
 			root.setLeft(lVBox);

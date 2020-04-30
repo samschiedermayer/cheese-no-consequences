@@ -48,7 +48,7 @@ public abstract class FarmADT {
   
   public abstract void modifyMilkWeightForDay(LocalDate date, int weight);
   
-  public abstract void removeMilkWeightForDay(LocalDate date, int weight);
+  public abstract Integer removeMilkWeightForDay(LocalDate date);
   
 
 }

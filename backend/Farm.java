@@ -112,8 +112,8 @@ public class Farm extends FarmADT {
 	}
 
 	@Override
-	public void removeMilkWeightForDay(LocalDate date, int weight) {
-		milkWeights.remove(date);
+	public Integer removeMilkWeightForDay(LocalDate date) {
+		return milkWeights.remove(date);
 	}
 
 	@Override

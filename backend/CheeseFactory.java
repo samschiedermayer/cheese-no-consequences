@@ -243,5 +243,10 @@ public class CheeseFactory implements CheeseFactoryADT {
 		}
 		
 	}
+	
+	public Integer removeDataPoint(String farmId, LocalDate date) {
+		Farm farm = farms.get(farmId);
+		return (farm != null) ? farm.removeMilkWeightForDay(date) : null;
+	}
 
 }
