@@ -134,7 +134,7 @@ public class Main extends javafx.application.Application {
 
 			FileChooser file_chooser = new FileChooser();
 
-			Label selectFilesLabel = new Label("no files selected");
+			Label selectFilesLabel = new Label("no files loaded");
 
 			Button selectFileButton = new Button("Import .csv");
 			selectFileButton.setFont(buttonFont);
@@ -150,6 +150,9 @@ public class Main extends javafx.application.Application {
 
 			Button exportButton = new Button("Export .csv");
 			exportButton.setFont(buttonFont);
+			
+			Button clearAllButton = new Button("Clear all Data");
+			clearAllButton.setFont(buttonFont);
 
 			//Title, fields, and button for manually inserting data
             Label insertLabel = new Label("Insert or Remove Data");
@@ -394,6 +397,19 @@ public class Main extends javafx.application.Application {
 						yearLabel = new Label("Enter Year:");
 						yearLabel.setFont(labelFont);
                         yearTextField = new TextField();
+                    	yearTextField.textProperty().addListener(new ChangeListener<String>() {
+            				@Override
+            				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            					if (!newValue.matches("\\d*")) {
+            			            yearTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            			        }
+            					int maxLength = 9;
+              					if (newValue.length() > maxLength) {
+              		                String s = newValue.substring(0, maxLength);
+              		                yearTextField.setText(s);
+              		            }
+            				}
+                        });
                         HBox yearInfoHBox2 = new HBox();
                         yearInfoHBox2.getChildren().add(yearLabel);
                         yearInfoHBox2.setMargin(yearLabel, new Insets(0,6,0,0));
@@ -791,6 +807,36 @@ public class Main extends javafx.application.Application {
 				}
             	
             };
+            
+            EventHandler<ActionEvent> clearAllHandler = new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent arg0) {
+		        	
+		        	Alert confirmAlert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
+        			confirmAlert.setTitle("Warning");
+        			confirmAlert.setHeaderText(null);
+        			confirmAlert.setContentText("Do you really want to clear all imported and manually entered data?");
+        			
+        			Optional<ButtonType> confirmResult = confirmAlert.showAndWait();
+        			
+        			if(confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+        				factory.clearAllData();
+        				numImported = 0;
+        				selectFilesLabel.setText("no files loaded");
+        				exportSuccessLabel.setText("no files exported");
+        				        				
+        				Alert alert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
+       					alert.setTitle("Success");
+       					alert.setHeaderText(null);
+       					alert.setContentText("Successfully cleared all data.");
+       					
+        				alert.showAndWait();
+        			}
+				}
+
+            };
+            
       
             //set the action of the button
             selectFileButton.setOnAction(selectFile); 
@@ -798,6 +844,7 @@ public class Main extends javafx.application.Application {
             insertDataButton.setOnAction(insertDataHandler);
             removeDataButton.setOnAction(removeDataHandler);
             undoButton.setOnAction(undoHandler);
+            clearAllButton.setOnAction(clearAllHandler);
             
             // add exit button
             HBox exitHBox = new HBox();
@@ -842,6 +889,11 @@ public class Main extends javafx.application.Application {
 			lVBox.setMargin(exportLabel, new Insets(0, 0, 12, 0));
 			lVBox.getChildren().add(exportSuccessLabel);
 			lVBox.getChildren().add(exportButton);
+			
+			Separator lowerHorizontalSeparator = new Separator(Orientation.HORIZONTAL);
+			lVBox.getChildren().add(lowerHorizontalSeparator);
+			lVBox.setMargin(lowerHorizontalSeparator, new Insets(24, 0, 0, 0));
+			lVBox.getChildren().add(clearAllButton);
 
 			cVBox.getChildren().add(reportLabel);
 			cVBox.setMargin(reportLabel, new Insets(0, 0, 12, 0));

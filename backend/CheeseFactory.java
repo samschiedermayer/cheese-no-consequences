@@ -284,5 +284,10 @@ public class CheeseFactory implements CheeseFactoryADT {
 				break;
 		}
 	}
+	
+	public void clearAllData() {
+		this.farms = new HashMap<>();
+		this.history = FXCollections.observableArrayList();
+	}
 
 }
