@@ -983,7 +983,6 @@ public class Main extends javafx.application.Application {
 			root.setMargin(cHBox, new Insets(12, 12, 12, 12));
 			root.setRight(rVBox);
 			root.setMargin(rVBox, new Insets(12, 42, 12, 0));
-//			root.setBottom(buttonHBox);
 
 			// set the scene and start the show
 			stage.setScene(mainScene);
@@ -996,7 +995,13 @@ public class Main extends javafx.application.Application {
 		}
 	}
 
+	/**
+	 * Represents a FarmsModel to aid inputting data into table
+	 * 
+	 * @author ateam198
+	 */
 	public class FarmsModel {
+	    // variables to help create data to input into table
 		private SimpleStringProperty info;
 		private SimpleStringProperty month;
 		private SimpleDoubleProperty milkWeight;
@@ -1005,6 +1010,16 @@ public class Main extends javafx.application.Application {
 		private SimpleDoubleProperty minMilk;
 		private SimpleDoubleProperty maxMilk;
 
+		/**
+		 * Represents a FarmsModel object that will allow the report screens to populate table with data
+		 * 
+		 * @param info        - represents either farm id or month depending on report type
+		 * @param milkWeight  - represents the total milk weight
+		 * @param percentMilk - represents the total milk percentage
+		 * @param avgMilk     - represents the average milk weight
+		 * @param minMilk     - represents the minimum milk weight
+		 * @param maxMilk     - represents the maximum milk weight
+		 */
 		public FarmsModel(String info, Double milkWeight, Double percentMilk, Double avgMilk, Double minMilk, Double maxMilk) {
 			this.info = new SimpleStringProperty(info);
 			this.milkWeight = new SimpleDoubleProperty(milkWeight);
@@ -1013,60 +1028,129 @@ public class Main extends javafx.application.Application {
 			this.minMilk = new SimpleDoubleProperty(minMilk);
 			this.maxMilk = new SimpleDoubleProperty(maxMilk);
 		}
-		
 
+		/**
+		 * Gets the current info value.
+		 * 
+		 * @return the current info
+		 */
         public String getInfo() {
             return info.get();
         }
 
+        /**
+         * Sets the current info
+         * 
+         * @param info - represents either Farm ID or the Month, depending on the type of report called
+         */
         public void setInfo(SimpleStringProperty info) {
             this.info = info;
         }
 
+        /**
+         * Gets the current month in a string representation.
+         * 
+         * @return the current month
+         */
         public String getMonth() {
             return month.get();
         }
 
+        /**
+         * Sets the month in a string representation
+         * 
+         * @param month - represents the month to set the current month to
+         */
         public void setMonth(SimpleStringProperty month) {
             this.month = month;
         }
 
+        /**
+         * Gets the current total milk weight
+         * 
+         * @return the current total milk weight
+         */
         public double getMilkWeight() {
             return milkWeight.get();
         }
 
+        /**
+         * Sets the total milk weight
+         * 
+         * @param milkWeight - represents the total milk weight to set the current total milk weight to
+         */
         public void setMilkWeight(SimpleDoubleProperty milkWeight) {
             this.milkWeight = milkWeight;
         }
         
+        /**
+         * Gets the current total milk percentage
+         * 
+         * @return the current total milk percentage
+         */
         public double getPercentMilk() {
           return percentMilk.get();
         }
 
+        /**
+         * Sets the total milk percentage
+         * 
+         * @param percentMilk - represents the percent of total milk to set the current milk percentage to
+         */
         public void setPercentMilk(SimpleDoubleProperty percentMilk) {
           this.percentMilk = percentMilk;
         }
 
+        /**
+         * Gets the average milk weight
+         * 
+         * @return the current average milk weight
+         */
         public double getAvgMilk() {
             return avgMilk.get();
         }
 
+        /**
+         * Sets the average milk weight
+         * 
+         * @param avgMilk - represents the average milk weight to set the current average milk weight to
+         */
         public void setAvgMilk(SimpleDoubleProperty avgMilk) {
             this.avgMilk = avgMilk;
         }
         
+        /**
+         * Sets the minimum milk weight
+         * 
+         * @return the current minimum milk weight
+         */
         public double getMinMilk() {
           return minMilk.get();
         }
 
+        /**
+         * Sets the minimum milk weight
+         * 
+         * @param minMilk - represents the minimum milk weight to set the current minimum milk weight to
+         */
         public void setMinMilk(SimpleDoubleProperty minMilk) {
           this.minMilk = minMilk;
         }
         
+        /**
+         * Gets the maximum milk weight
+         * 
+         * @return the current maximum milk weight
+         */
         public double getMaxMilk() {
           return maxMilk.get();
         }
 
+        /**
+         * Sets the maximum milk weight
+         * 
+         * @param maxMilk - represents the maximum milk weight to set the current maximum milk weight to
+         */
         public void setMaxMilk(SimpleDoubleProperty maxMilk) {
           this.maxMilk = maxMilk;
         }
@@ -1075,8 +1159,8 @@ public class Main extends javafx.application.Application {
 	/**
 	 * Gets a month index and turns it into the string name representation of that month
 	 * 
-	 * @param monthIndex
-	 * @return string of month name
+	 * @param monthIndex - represents the index of the month, ranging from 1-12
+	 * @return string representation, the month name, obtained from the month index
 	 */
 	private String getMonth(int monthIndex) {
       switch (monthIndex) {
@@ -1112,7 +1196,9 @@ public class Main extends javafx.application.Application {
 	/**
 	 * Displays farm report screen
 	 * 
-	 * @param primaryStage
+	 * @param primaryStage - stage for UI
+	 * @param inputFarmId  - user inputed farm id
+	 * @param inputYear    - user inputed year
 	 */
     void farmReportScreen(Stage primaryStage, String inputFarmId, int inputYear) {
       BorderPane root = new BorderPane();
@@ -1125,6 +1211,7 @@ public class Main extends javafx.application.Application {
       double totalMilkWeight = 0.0;
       double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
       
+      // get the total milk weight for current report
       for (int i = 0; i < farmInfo.length; i++) {
         totalMilkWeight += farmInfo[i][0];
       }
@@ -1155,9 +1242,9 @@ public class Main extends javafx.application.Application {
       information.setHgap(20);
       information.setAlignment(Pos.CENTER);
 
-      root.setTop(top);      
+      root.setTop(top);
       
-      // back button
+      // back button to home screen
       Button backButton = new Button("Back");
       backButton(root, primaryStage, backButton);
 
@@ -1168,7 +1255,8 @@ public class Main extends javafx.application.Application {
 	/**
 	 * Displays annual report screen
 	 * 
-	 * @param primaryStage
+	 * @param primaryStage - stage for UI
+     * @param inputYear    - user inputed year
 	 */
 	void annualReportScreen(Stage primaryStage, int inputYear) {
 		BorderPane root = new BorderPane();
@@ -1200,7 +1288,7 @@ public class Main extends javafx.application.Application {
 
 		root.setCenter(reportTable);
 
-		// back button
+		// back button to home screen
 		Button backButton = new Button("Back");
 		backButton(root, primaryStage, backButton);
 
@@ -1211,7 +1299,9 @@ public class Main extends javafx.application.Application {
 	/**
 	 * Displays monthly report screen
 	 * 
-	 * @param primaryStage
+	 * @param primaryStage - stage for UI
+     * @param inputYear    - user inputed year
+     * @param inputMonth   - user inputed month
 	 */
 	void monthlyReportScreen(Stage primaryStage, int inputYear, int inputMonth) {
 		BorderPane root = new BorderPane();
@@ -1251,7 +1341,7 @@ public class Main extends javafx.application.Application {
 
 		root.setCenter(reportTable);
 
-		// back button
+		// back button to home screen
 		Button backButton = new Button("Back");
 		backButton(root, primaryStage, backButton);
 
@@ -1262,7 +1352,9 @@ public class Main extends javafx.application.Application {
 	/**
 	 * Displays date range report screen
 	 * 
-	 * @param primaryStage
+	 * @param primaryStage     - stage for UI
+	 * @param startDateObject  - represents user chosen start date
+	 * @param endDateObject    - represents user chosen end date
 	 */
 	void dateRangeReportScreen(Stage primaryStage, LocalDate startDateObject, LocalDate endDateObject) {
 		BorderPane root = new BorderPane();
@@ -1296,10 +1388,11 @@ public class Main extends javafx.application.Application {
 		GridPane.setHalignment(endDate, HPos.CENTER);
 		root.setTop(top);
 
+		// add report table to center
 		TableView<FarmsModel> reportTable = reportTable("date", null, -1, -1, startDateObject, endDateObject);
 		root.setCenter(reportTable);
 
-		// back button
+		// back button to home screen
 		Button backButton = new Button("Back");
 		backButton(root, primaryStage, backButton);
 
@@ -1307,9 +1400,26 @@ public class Main extends javafx.application.Application {
 		primaryStage.show();
 	}
 	
+	/**
+	 * Creates a report table based on the specified type of report. Not all parameters will be used in each call.
+	 * 
+	 * Farm Report requires:       reportType, farmId, inputYear
+	 * Annual Report requires:     reportType, inputYear
+	 * Monthly Report requires:    reportType, inputYear, inputMonth
+	 * Date Range Report requires: reportType, startDateObject, endDateObject
+	 * 
+	 * @param reportType       - specified type of report
+	 * @param farmId           - specified farm id to get
+	 * @param inputYear        - specified input year
+	 * @param inputMonth       - specified input month
+	 * @param startDateObject  - specified start date
+	 * @param endDateObject    - specified end date
+	 * @return report table for the specified report
+	 */
 	private TableView<FarmsModel> reportTable(String reportType, String farmId, int inputYear, int inputMonth, LocalDate startDateObject, LocalDate endDateObject) {
       TableView<FarmsModel> reportTable = new TableView<FarmsModel>(); // table for report data
       
+      // get type of info for info column
       String infoType;
       if (reportType.equals("farm")) {
         infoType = "Month";
@@ -1317,7 +1427,7 @@ public class Main extends javafx.application.Application {
         infoType = "Farm ID";
       }
 
-      // set up columns
+      // set up columns: info (either Farm ID or Month), milk weight, percent milk, average, min, max
       TableColumn<FarmsModel, String> info = new TableColumn<FarmsModel, String>(infoType);
       info.setCellValueFactory(new PropertyValueFactory<>("info"));
       info.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
@@ -1347,7 +1457,7 @@ public class Main extends javafx.application.Application {
       maxMilk.setCellValueFactory(new PropertyValueFactory<>("maxMilk"));
       maxMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
 
-      // add columns to table
+      // add all data columns to table
       reportTable.getColumns().add(info);
       reportTable.getColumns().add(milkWeight);
       reportTable.getColumns().add(percentMilk);
@@ -1358,6 +1468,7 @@ public class Main extends javafx.application.Application {
 	  ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 	  DecimalFormat decFormat = new DecimalFormat("0.00"); // format percent double values
 	  
+	  // choose report type to input corresponding required data
       switch (reportType) {
         case "farm":
           double[][] farmInfo = factory.getFarmReport(farmId, inputYear);
@@ -1366,7 +1477,7 @@ public class Main extends javafx.application.Application {
           for (int i = 0; i < farmInfo.length; i++) {
             if (Double.isNaN((farmInfo[i][1]))) {
               farmInfo[i][1] = Double.parseDouble(decFormat.format(0.00));
-            } else {
+            } else { // format numbers to precision of 2
               farmInfo[i][1] = Double.parseDouble(decFormat.format(farmInfo[i][1]));
             }
             
@@ -1376,7 +1487,7 @@ public class Main extends javafx.application.Application {
         case "annual":
           HashMap<String, double[]> annualInfo = factory.getAnnualReport(inputYear);
           
-          // add data to model
+          // add annual report data to model
           annualInfo.forEach((id, milkInfo) -> {
             milkInfo[1] = Double.parseDouble(decFormat.format(milkInfo[1]));
             farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
@@ -1385,7 +1496,7 @@ public class Main extends javafx.application.Application {
         case "monthly":
           HashMap<String, double[]> monthlyInfo = factory.getMonthlyReport(inputYear, inputMonth);
           
-          // add data to model
+          // add monthly report data to model
           monthlyInfo.forEach((id, milkInfo) -> {
             milkInfo[1] = Double.parseDouble(decFormat.format(milkInfo[1]));
             farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
@@ -1394,7 +1505,7 @@ public class Main extends javafx.application.Application {
         case "date":
           HashMap<String, double[]> rangeInfo = factory.getDateRangeReport(startDateObject, endDateObject);     
           
-          // add data to model
+          // add date range report data to model
           rangeInfo.forEach((id, milkInfo) -> {
             milkInfo[1] = Double.parseDouble(decFormat.format(milkInfo[1]));
             farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
@@ -1404,7 +1515,7 @@ public class Main extends javafx.application.Application {
           break;
       }
       
-      // add data to table
+      // add all data to table to populate rows
       reportTable.setItems(farmsModels);
       if (!reportType.equals("farm")) {
         reportTable.getSortOrder().add(info);
@@ -1424,12 +1535,11 @@ public class Main extends javafx.application.Application {
 		HBox buttonHBox = new HBox();
 		buttonHBox.setPadding(new Insets(5, 0, 5, 0));
 		backButton.setMaxHeight(200);
-//		backButton.setId("back-button");
 		buttonHBox.getChildren().add(backButton);
 		buttonHBox.setAlignment(Pos.BASELINE_CENTER);
 		root.setBottom(buttonHBox);
 
-		// back button functionality
+		// back button functionality to return to home screen on click
 		backButton.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -1439,7 +1549,8 @@ public class Main extends javafx.application.Application {
 	}
 
 	/**
-	 * Main method
+	 * Launches Cheese No Consequences program
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
