@@ -315,7 +315,7 @@ public class Main extends javafx.application.Application {
 									errorAlert.showAndWait();
 									return;
 								}
-								farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
+								farmReportScreen(stage, "Farm " + farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
 								
 							}
 						};
