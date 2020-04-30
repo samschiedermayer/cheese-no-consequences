@@ -577,7 +577,7 @@ public class Main extends javafx.application.Application {
 	}
 
 	public class FarmsModel {
-		private SimpleStringProperty farmId;
+		private SimpleStringProperty info;
 		private SimpleStringProperty month;
 		private SimpleDoubleProperty milkWeight;
 		private SimpleDoubleProperty percentMilk;
@@ -587,43 +587,44 @@ public class Main extends javafx.application.Application {
 			this.milkWeight = new SimpleDoubleProperty(milkWeight);
 		}
 
-		public FarmsModel(String farmId, Double milkWeight, Double percentMilk) {
-			this.farmId = new SimpleStringProperty(farmId);
+		public FarmsModel(String info, Double milkWeight, Double percentMilk) {
+			this.info = new SimpleStringProperty(info);
 			this.milkWeight = new SimpleDoubleProperty(milkWeight);
 			this.percentMilk = new SimpleDoubleProperty(percentMilk);
 		}
+		
 
-		public String getFarmId() {
-			return farmId.get();
-		}
+        public String getInfo() {
+            return info.get();
+        }
 
-		public void setFarmID(SimpleStringProperty farmId) {
-			this.farmId = farmId;
-		}
+        public void setInfo(SimpleStringProperty info) {
+            this.info = info;
+        }
 
-		public String getMonth() {
-			return month.get();
-		}
+        public String getMonth() {
+            return month.get();
+        }
 
-		public void setMonth(SimpleStringProperty month) {
-			this.month = month;
-		}
+        public void setMonth(SimpleStringProperty month) {
+            this.month = month;
+        }
 
-		public double getMilkWeight() {
-			return milkWeight.get();
-		}
+        public double getMilkWeight() {
+            return milkWeight.get();
+        }
 
-		public void setMilkWeight(SimpleDoubleProperty milkWeight) {
-			this.milkWeight = milkWeight;
-		}
+        public void setMilkWeight(SimpleDoubleProperty milkWeight) {
+            this.milkWeight = milkWeight;
+        }
 
-		public double getPercentMilk() {
-			return percentMilk.get();
-		}
+        public double getPercentMilk() {
+            return percentMilk.get();
+        }
 
-		public void setPercentMilk(SimpleDoubleProperty percentMilk) {
-			this.percentMilk = percentMilk;
-		}
+        public void setPercentMilk(SimpleDoubleProperty percentMilk) {
+            this.percentMilk = percentMilk;
+        }
 	}
 	
 	/**
@@ -685,17 +686,17 @@ public class Main extends javafx.application.Application {
       GridPane.setHalignment(titleLabel, HPos.CENTER);
 
       // add report info to top
-      FlowPane info = new FlowPane();
+      FlowPane information = new FlowPane();
       Label disFarmId = new Label("Farm: " + inputFarmId);
       Label year = new Label("Year: " + inputYear);
       Label totalWeight = new Label("Total weight: 2107");
       disFarmId.setId("report-info");
       year.setId("report-info");
       totalWeight.setId("report-info");
-      info.getChildren().addAll(disFarmId, year, totalWeight);
-      top.add(info, 0, 1);
-      info.setHgap(20);
-      info.setAlignment(Pos.CENTER);
+      information.getChildren().addAll(disFarmId, year, totalWeight);
+      top.add(information, 0, 1);
+      information.setHgap(20);
+      information.setAlignment(Pos.CENTER);
 
       root.setTop(top);
 
@@ -703,28 +704,26 @@ public class Main extends javafx.application.Application {
       reportTable.autosize();
 
       // set up columns
-      TableColumn<FarmsModel, String> month = new TableColumn<FarmsModel, String>("Month");
-      month.setCellValueFactory(new PropertyValueFactory<FarmsModel, String>("Month"));
-      month.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<FarmsModel, String> info = new TableColumn<FarmsModel, String>("Month");
+      info.setCellValueFactory(new PropertyValueFactory<FarmsModel, String>("info"));
+      info.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
       TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
-      milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("MilkWeight"));
+      milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("milkWeight"));
       milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
       TableColumn<FarmsModel, Double> milkPercent = new TableColumn<FarmsModel, Double>("Percent of Total Milk Weight");
-      milkPercent.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("MilkPercent"));
+      milkPercent.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("milkPercent"));
       milkPercent.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 
-      reportTable.getColumns().add(month);
+      reportTable.getColumns().add(info);
       reportTable.getColumns().add(milkWeight);
       reportTable.getColumns().add(milkPercent);
       ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
       
       double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
-    
+      
       // put all farm info into model for display
-      for (int i = 1; i <= farmInfo[0].length; i++) {
-        for (int j = 0; j < farmInfo.length; j++) {
-          farmsModels.add(new FarmsModel(getMonth(i), farmInfo[i][j]));
-        }
+      for (int i = 0; i < farmInfo.length; i++) {
+        farmsModels.add(new FarmsModel(getMonth(i + 1), farmInfo[i][0], farmInfo[i][1]));
       }
       
       reportTable.setItems(farmsModels);
