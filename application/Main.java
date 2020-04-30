@@ -88,8 +88,7 @@ public class Main extends javafx.application.Application {
 		try {
 		  Image cowPrint = new Image("cow_print.jpg");
           //create background Image with cowPrint Image
-          BackgroundImage background_image = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,  
-              BackgroundPosition.CENTER, BackgroundSize.DEFAULT); 
+          BackgroundImage background_image = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT); 
           Background background = new Background(background_image); 
 
 			BorderPane root = new BorderPane();
@@ -110,7 +109,7 @@ public class Main extends javafx.application.Application {
 			Label reportSelectLabel = new Label("Report Type:");
 			reportSelectLabel.setFont(labelFont);
 			ComboBox<String> combo_box = new ComboBox<String>();
-			combo_box.getItems().addAll("Annual", "Monthly", "Farm", "Date Range");
+			combo_box.getItems().addAll("", "Annual", "Monthly", "Farm", "Date Range");
 			combo_box.getSelectionModel().selectFirst();
 
 			reportHBox.getChildren().add(reportSelectLabel);
@@ -203,7 +202,6 @@ public class Main extends javafx.application.Application {
 					case "Farm":
 					  selectedReportLabel = new Label("Farm Report");
                       selectedReportLabel.setFont(titleFont);
-                      selectedReportLabel.setTextFill(Color.web("#e6c900"));
                       
                       Label  farmIDLabel= new Label("Farm Id Number:");
                       farmIDLabel.setFont(labelFont);

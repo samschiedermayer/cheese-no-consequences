@@ -11,6 +11,10 @@
 }
 /* END */
 
+.label {
+    -fx-text-fill: #b39c00;
+}
+
 .root {
 	-fx-body-color : #F5F5F5;
 	-fx-outer-border : #cecece;
@@ -18,6 +22,7 @@
 
 .button {
 	-fx-background-color: #dddddd, white, white;
+	-fx-text-fill: #b39c00;
 }
 
 .button:hover {
