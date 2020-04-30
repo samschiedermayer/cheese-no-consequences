@@ -708,13 +708,13 @@ public class Main extends javafx.application.Application {
       TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
       milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("milkWeight"));
       milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-      TableColumn<FarmsModel, Double> milkPercent = new TableColumn<FarmsModel, Double>("Percent of Total Milk Weight");
-      milkPercent.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("milkPercent"));
-      milkPercent.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("Percent of Total Milk Weight");
+      percentMilk.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("percentMilk"));
+      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
 
       reportTable.getColumns().add(info);
       reportTable.getColumns().add(milkWeight);
-      reportTable.getColumns().add(milkPercent);
+      reportTable.getColumns().add(percentMilk);
       ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
       
       double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
