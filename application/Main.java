@@ -661,16 +661,17 @@ public class Main extends javafx.application.Application {
 		private SimpleStringProperty month;
 		private SimpleDoubleProperty milkWeight;
 		private SimpleDoubleProperty percentMilk;
+		private SimpleDoubleProperty avgMilk;
+		private SimpleDoubleProperty minMilk;
+		private SimpleDoubleProperty maxMilk;
 
-		public FarmsModel(String month, Double milkWeight) {
-			this.month = new SimpleStringProperty(month);
-			this.milkWeight = new SimpleDoubleProperty(milkWeight);
-		}
-
-		public FarmsModel(String info, Double milkWeight, Double percentMilk) {
+		public FarmsModel(String info, Double milkWeight, Double percentMilk, Double avgMilk, Double minMilk, Double maxMilk) {
 			this.info = new SimpleStringProperty(info);
 			this.milkWeight = new SimpleDoubleProperty(milkWeight);
 			this.percentMilk = new SimpleDoubleProperty(percentMilk);
+			this.avgMilk = new SimpleDoubleProperty(avgMilk);
+			this.minMilk = new SimpleDoubleProperty(minMilk);
+			this.maxMilk = new SimpleDoubleProperty(maxMilk);
 		}
 		
 
@@ -697,13 +698,37 @@ public class Main extends javafx.application.Application {
         public void setMilkWeight(SimpleDoubleProperty milkWeight) {
             this.milkWeight = milkWeight;
         }
-
+        
         public double getPercentMilk() {
-            return percentMilk.get();
+          return percentMilk.get();
         }
 
         public void setPercentMilk(SimpleDoubleProperty percentMilk) {
-            this.percentMilk = percentMilk;
+          this.percentMilk = percentMilk;
+        }
+
+        public double getAvgMilk() {
+            return avgMilk.get();
+        }
+
+        public void setAvgMilk(SimpleDoubleProperty avgMilk) {
+            this.avgMilk = avgMilk;
+        }
+        
+        public double getMinMilk() {
+          return minMilk.get();
+        }
+
+        public void setMinMilk(SimpleDoubleProperty minMilk) {
+          this.minMilk = minMilk;
+        }
+        
+        public double getMaxMilk() {
+          return maxMilk.get();
+        }
+
+        public void setMaxMilk(SimpleDoubleProperty maxMilk) {
+          this.maxMilk = maxMilk;
         }
 	}
 	
@@ -943,20 +968,35 @@ public class Main extends javafx.application.Application {
       // set up columns
       TableColumn<FarmsModel, String> info = new TableColumn<FarmsModel, String>("Farm ID");
       info.setCellValueFactory(new PropertyValueFactory<>("info"));
-      info.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      info.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
       
       TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
       milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
-      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
       
-      TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk Weight");
+      TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
       percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
-      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
+      
+      TableColumn<FarmsModel, Double> avgMilk = new TableColumn<FarmsModel, Double>("Average");
+      avgMilk.setCellValueFactory(new PropertyValueFactory<>("avgMilk"));
+      avgMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
+      
+      TableColumn<FarmsModel, Double> minMilk = new TableColumn<FarmsModel, Double>("Minimum");
+      minMilk.setCellValueFactory(new PropertyValueFactory<>("minMilk"));
+      minMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
+      
+      TableColumn<FarmsModel, Double> maxMilk = new TableColumn<FarmsModel, Double>("Maximum");
+      maxMilk.setCellValueFactory(new PropertyValueFactory<>("maxMilk"));
+      maxMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
 
       // add columns to table
       reportTable.getColumns().add(info);
       reportTable.getColumns().add(milkWeight);
       reportTable.getColumns().add(percentMilk);
+      reportTable.getColumns().add(avgMilk);
+      reportTable.getColumns().add(minMilk);
+      reportTable.getColumns().add(maxMilk);
       
 	  ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
 	  
@@ -970,7 +1010,7 @@ public class Main extends javafx.application.Application {
               farmInfo[i][1] = 0.0;
             }
             
-            farmsModels.add(new FarmsModel(getMonth(i + 1), farmInfo[i][0], farmInfo[i][1]));
+            farmsModels.add(new FarmsModel(getMonth(i + 1), farmInfo[i][0], farmInfo[i][1], farmInfo[i][2], farmInfo[i][3], farmInfo[i][4]));
           }
           break;
         case "annual":
@@ -978,7 +1018,7 @@ public class Main extends javafx.application.Application {
           
           // add data to model
           annualInfo.forEach((id, milkInfo) -> {
-            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
+            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
           });
           break;
         case "monthly":
@@ -986,7 +1026,7 @@ public class Main extends javafx.application.Application {
           
           // add data to model
           monthlyInfo.forEach((id, milkInfo) -> {
-            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
+            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
           });
           break;
         case "date":
@@ -994,7 +1034,7 @@ public class Main extends javafx.application.Application {
           
           // add data to model
           rangeInfo.forEach((id, milkInfo) -> {
-            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
+            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1], milkInfo[2], milkInfo[3], milkInfo[4]));
           });
           break;
         default:
