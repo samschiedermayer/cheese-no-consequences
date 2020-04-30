@@ -66,7 +66,7 @@ public interface CheeseFactoryADT {
    * @param date - the day on which this data point takes place
    * @throws DuplicateAdditionException - if there is already an entry on the specified date
    */
-  void addDataPoint(String farmId, int milkWeight, LocalDate date) throws DuplicateAdditionException;
+  void addDataPoint(String farmId, int milkWeight, LocalDate date, boolean keepInHistory) throws DuplicateAdditionException;
   
   /**
    * Add a new data entry for milk on a day, regardless of whether there is already an entry
@@ -75,7 +75,7 @@ public interface CheeseFactoryADT {
    * @param milkWeight - the amount of milk for this farm on this date
    * @param date - the day on which this data point takes place
    */
-  void forceAddDataPoint(String farmId, int milkWeight, LocalDate date);
+  void forceAddDataPoint(String farmId, int milkWeight, LocalDate date, boolean keepInHistory);
   
   /**
    * Will load in data from a specified CSV file

@@ -11,13 +11,18 @@ import java.util.List;
 import java.util.Set;
 
 import exceptions.DuplicateAdditionException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class CheeseFactory implements CheeseFactoryADT {
 
 	private HashMap<String, Farm> farms;
+	
+	public ObservableList<DataOperation> history;
 
 	public CheeseFactory() {
 		farms = new HashMap<>();
+		history = FXCollections.observableArrayList();
 	}
 
 	// maya
@@ -219,7 +224,7 @@ public class CheeseFactory implements CheeseFactoryADT {
 	}
 
 	@Override
-	public void addDataPoint(String farmId, int milkWeight, LocalDate date) throws DuplicateAdditionException {
+	public void addDataPoint(String farmId, int milkWeight, LocalDate date, boolean keepInHistory) throws DuplicateAdditionException {
 		
 		Farm farm = null;
 		if (farms.containsKey(farmId)) {
@@ -230,23 +235,53 @@ public class CheeseFactory implements CheeseFactoryADT {
 		}
 		
 		farm.addMilkWeightForDay(date, milkWeight);
+		
+		if (keepInHistory)
+			history.add(0, new DataOperation(DataOperation.Type.INSERT,date,farmId,milkWeight));
 	}
 
 	@Override
-	public void forceAddDataPoint(String farmId, int milkWeight, LocalDate date) {
+	public void forceAddDataPoint(String farmId, int milkWeight, LocalDate date, boolean keepInHistory) {
 		
 		try {
-			addDataPoint(farmId, milkWeight, date);
+			addDataPoint(farmId, milkWeight, date, keepInHistory);
 		} catch (DuplicateAdditionException e) {
+			int oldMilkWeight = e.getWeight();
 			Farm farm = farms.get(farmId);
 			farm.modifyMilkWeightForDay(date, milkWeight);
+			if (keepInHistory) {
+				DataOperation op = new DataOperation(DataOperation.Type.MODIFY,date,farmId,milkWeight);
+				op.oldMilk = oldMilkWeight;
+				history.add(0, op);
+			}
 		}
 		
 	}
 	
-	public Integer removeDataPoint(String farmId, LocalDate date) {
+	public Integer removeDataPoint(String farmId, LocalDate date, boolean keepInHistory) {
+		Integer result = null;
+		
 		Farm farm = farms.get(farmId);
-		return (farm != null) ? farm.removeMilkWeightForDay(date) : null;
+		if (farm != null) {
+			result = farm.removeMilkWeightForDay(date);
+			if (result != null && keepInHistory)
+				history.add(0, new DataOperation(DataOperation.Type.REMOVE,date,farmId,result));
+		}
+		return result;
+	}
+	
+	public void reverseDataOperation(DataOperation operation) {
+		switch(operation.type) {
+			case INSERT:
+				removeDataPoint(operation.farm, operation.date, false);
+				break;
+			case MODIFY:
+				forceAddDataPoint(operation.farm, operation.oldMilk, operation.date, false);
+				break;
+			case REMOVE:
+				forceAddDataPoint(operation.farm, operation.milk, operation.date, false);
+				break;
+		}
 	}
 
 }

@@ -14,6 +14,7 @@ import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 
 import backend.CheeseFactory;
+import backend.DataOperation;
 import backend.Farm;
 import exceptions.DuplicateAdditionException;
 import javafx.application.Application;
@@ -31,6 +32,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -188,6 +191,52 @@ public class Main extends javafx.application.Application {
 			
 			Button removeDataButton = new Button("Remove Data");
 			removeDataButton.setFont(buttonFont);
+			
+			Label historyLabel = new Label("History");
+			historyLabel.setFont(labelFont);
+			
+			ListView<DataOperation> historyListView = new ListView<>();
+			historyListView.setItems(factory.history);
+			historyListView.setCellFactory(list -> {
+				ListCell<DataOperation> cell = new ListCell<DataOperation>() {
+			    @Override
+			    protected void updateItem(DataOperation op, boolean empty) {
+			        super.updateItem(op, empty);
+
+			        if (empty || op == null) {
+			            setText(null);
+			        } else {
+			            setText(op.toString());
+			        }
+			    	}
+				};
+				return cell;
+			});
+			
+			Button undoButton = new Button("Undo");
+			undoButton.setFont(buttonFont);
+			
+//			DataOperation selected = historyListView.getSelectionModel().getSelectedItem();
+//        	
+//        	Alert confirmAlert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
+//			confirmAlert.setTitle("Warning");
+//			confirmAlert.setHeaderText(null);
+//			confirmAlert.setContentText("Would you like to undo this action?\n" + selected);
+//			
+//			Optional<ButtonType> confirmResult = confirmAlert.showAndWait();
+//			
+//			if(confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+//				factory.reverseDataOperation(selected);
+//				
+//				factory.history.remove(0);
+//				
+//				Alert alert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
+//					alert.setTitle("Success");
+//					alert.setHeaderText(null);
+//					alert.setContentText("Successfully undid action:\n" + selected);
+//					
+//				alert.showAndWait();
+//			}
 			
 			// Event Handler for Report Selections Selections
 			EventHandler<ActionEvent> confirmReport = new EventHandler<ActionEvent>() {
@@ -557,7 +606,7 @@ public class Main extends javafx.application.Application {
             		}
             		
             		try {
-            			factory.addDataPoint(farm, milk, date);
+            			factory.addDataPoint(farm, milk, date, true);
             			
             			Alert successAlert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
             			successAlert.setTitle("Info");
@@ -577,7 +626,7 @@ public class Main extends javafx.application.Application {
             			Optional<ButtonType> result = alert.showAndWait();
             			
             			if(result.isPresent() && result.get() == ButtonType.OK) {
-            				factory.forceAddDataPoint(farm, milk, date);
+            				factory.forceAddDataPoint(farm, milk, date, true);
             				
             				Alert successAlert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
                 			successAlert.setTitle("Info");
@@ -624,7 +673,7 @@ public class Main extends javafx.application.Application {
         			
         			if(confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
             		
-       					Integer prev = factory.removeDataPoint(farm, date);
+       					Integer prev = factory.removeDataPoint(farm, date, true);
             			
        					Alert alert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
        					alert.setTitle("Warning");
@@ -642,24 +691,78 @@ public class Main extends javafx.application.Application {
             		
             	}
             };
+            
+            // Event handler for the exit button
+            EventHandler<ActionEvent> exitHandler = new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					Alert confirmAlert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
+        			confirmAlert.setTitle("Warning");
+        			confirmAlert.setHeaderText(null);
+        			confirmAlert.setContentText("Are you sure that you want to exit the application?\n" +
+        										"All unsaved data will be lost.");
+        			
+        			Optional<ButtonType> confirmResult = confirmAlert.showAndWait();
+        			
+        			if(confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+        				Stage stage = (Stage) root.getScene().getWindow();
+        				stage.close();
+        			}
+				}
+            	
+            };
+            
+            //handler for undo button
+            EventHandler<ActionEvent> undoHandler = new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					if (factory.history.size() != 0) {
+						DataOperation selected = factory.history.get(0);
+			        	
+			        	Alert confirmAlert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
+	        			confirmAlert.setTitle("Warning");
+	        			confirmAlert.setHeaderText(null);
+	        			confirmAlert.setContentText("Would you like to undo this action?\n" + selected);
+	        			
+	        			Optional<ButtonType> confirmResult = confirmAlert.showAndWait();
+	        			
+	        			if(confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+	        				factory.reverseDataOperation(selected);
+	        				
+	        				factory.history.remove(0);
+	        				
+	        				Alert alert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
+	       					alert.setTitle("Success");
+	       					alert.setHeaderText(null);
+	       					alert.setContentText("Successfully undid action:\n" + selected);
+	       					
+	        				alert.showAndWait();
+	        			}
+					} else {
+						Alert alert = new Alert(AlertType.WARNING, null, ButtonType.OK);
+       					alert.setTitle("Unable to Complete Action");
+       					alert.setHeaderText(null);
+       					alert.setContentText("No actions to undo.");
+       					
+        				alert.showAndWait();
+					}
+				}
+            	
+            };
       
             //set the action of the button
             selectFileButton.setOnAction(selectFile); 
             exportButton.setOnAction(selectExport);
             insertDataButton.setOnAction(insertDataHandler);
             removeDataButton.setOnAction(removeDataHandler);
+            undoButton.setOnAction(undoHandler);
             
             // add exit button
             HBox exitHBox = new HBox();
             Button exitButton = new Button("Exit");
+            exitButton.setFont(new Font(16));
             exitHBox.getChildren().add(exitButton);
-            exitButton.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(MouseEvent e) {
-                Stage stage = (Stage) exitButton.getScene().getWindow();
-                stage.close();
-              }
-            });
+            exitButton.setOnAction(exitHandler);
 
 			// set up vertical boxes for categories of actions
 			VBox lVBox = new VBox(12);
@@ -702,6 +805,9 @@ public class Main extends javafx.application.Application {
 			cVBox.setMargin(reportLabel, new Insets(0, 0, 12, 0));
 			cVBox.getChildren().add(reportHBox);
 			cVBox.getChildren().add(selectReportButton);
+			Separator chSeparator = new Separator(Orientation.HORIZONTAL);
+			cVBox.getChildren().add(chSeparator);
+			cVBox.setMargin(chSeparator, new Insets(156, 0, 12, 0));
 			cVBox.getChildren().add(exitHBox);
             exitHBox.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -717,6 +823,9 @@ public class Main extends javafx.application.Application {
 			insertRemoveHBox.setMargin(insertDataButton, new Insets(0, 0, 0, 24));
 
 			rVBox.getChildren().add(insertRemoveHBox);
+			rVBox.getChildren().add(historyLabel);
+			rVBox.getChildren().add(historyListView);
+			rVBox.getChildren().add(undoButton);
 			
 			// add children to hbox
 			root.setLeft(lVBox);
@@ -860,6 +969,7 @@ public class Main extends javafx.application.Application {
       BorderPane root = new BorderPane();
       Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
       scene.getStylesheets().add("application/application.css");
+      primaryStage.setResizable(false);
 
       TableView<FarmsModel> reportTable = reportTable("farm", inputFarmId, inputYear, -1, null, null);
       
