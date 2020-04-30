@@ -138,17 +138,28 @@ public class Farm extends FarmADT {
 		List<LocalDate> dates =  new ArrayList<>(milkWeights.keySet());
 		Collections.sort(dates);
 		
-		int total = 0;
+		int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+		
+		int total = 0, count = 0;
+		int weight;
 		for (LocalDate date : dates) {
 			if (date.compareTo(end) > 0) {
 				break;
 			}
 			if(date.compareTo(start) > 0) {
-				total += milkWeights.get(date);
+				++count;
+				weight = milkWeights.get(date);
+				total += weight;
+				if (weight < min)
+					min = weight;
+				if (weight > max)
+					max = weight;
 			}
 		}
 		
-		return new int[] {total};
+		int avg = total / count;
+		
+		return new int[] {avg,min,max};
 	}
 
 	@Override
