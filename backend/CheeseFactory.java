@@ -41,8 +41,9 @@ public class CheeseFactory implements CheeseFactoryADT {
 		
 		Farm farm = farms.get(farmName);
 		
-		if (farm == null)
-			throw new IllegalArgumentException();
+		if (farm == null) {
+			return farmReport;
+		}
 		
 		double totalMilkWeight = farm.getMilkWeight(year);
 		int monthCounter = 1;

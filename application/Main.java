@@ -94,10 +94,10 @@ public class Main extends javafx.application.Application {
 
 	void homeScreen(Stage stage) {
 		try {
-		  Image cowPrint = new Image("cow_print.jpg");
+//		  Image cowPrint = new Image("cow_print.jpg");
           //create background Image with cowPrint Image
-          BackgroundImage background_image = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT); 
-          Background background = new Background(background_image); 
+//          BackgroundImage background_image = new BackgroundImage(cowPrint, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT); 
+//          Background background = new Background(background_image); 
 
 			BorderPane root = new BorderPane();
 
@@ -274,6 +274,14 @@ public class Main extends javafx.application.Application {
                       yearLabel= new Label("Enter Year:");
                       yearLabel.setFont(labelFont);
                       yearTextField = new TextField ();
+                      yearTextField.textProperty().addListener(new ChangeListener<String>() {
+          				@Override
+          				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+          					if (!newValue.matches("\\d*")) {
+          			            yearTextField.setText(newValue.replaceAll("[^\\d]", ""));
+          			        }
+          				}
+                      });
                       HBox yearInfoHBox = new HBox();
                       yearInfoHBox.getChildren().add(yearLabel);
                       yearInfoHBox.setMargin(yearLabel, new Insets(0,6,0,0));
@@ -296,29 +304,30 @@ public class Main extends javafx.application.Application {
 
                       selectedReportvBox.setAlignment(Pos.TOP_CENTER);
  
-                      selectedReportvBox.setBackground(background);
+//                      selectedReportvBox.setBackground(background);
 
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callFarm = new EventHandler<ActionEvent>() {
 							public void handle(ActionEvent e) {
-								try {
-									farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
-								} catch (NullPointerException nullExcep) {
-								    Alert errorAlert = new Alert(AlertType.ERROR);
-								    errorAlert.setHeaderText(null);
-								    errorAlert.setContentText("Please Enter a Valid Farm ID");
-								    errorAlert.showAndWait();
-								} catch(Exception excep) {
+								if (farmIdTextField.getText().isEmpty()) {
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
-									if(farmIdTextField.getText().trim().isEmpty()) {
-										errorAlert.setContentText("Please Enter a Valid Farm ID");	
-									}else {
-										errorAlert.setContentText("Please Enter a Valid Year");
-									}
-									
+									if (yearTextField.getText().isEmpty())
+										errorAlert.setContentText("Please Enter a Valid Farm ID and Year.");
+									else
+										errorAlert.setContentText("Please Enter a Valid Farm ID.");
 									errorAlert.showAndWait();
+									return;
 								}
+								if (yearTextField.getText().isEmpty()) {
+									Alert errorAlert = new Alert(AlertType.ERROR);
+									errorAlert.setHeaderText(null);
+									errorAlert.setContentText("Please Enter a Valid Year.");
+									errorAlert.showAndWait();
+									return;
+								}
+								farmReportScreen(stage, farmIdTextField.getText(), Integer.parseInt(yearTextField.getText()));
+								
 							}
 						};
 						generateFarmButton.setOnAction(callFarm);
@@ -330,6 +339,14 @@ public class Main extends javafx.application.Application {
                     	
                     	yearLabel= new Label("Enter Year:");
                     	yearTextField = new TextField ();
+                    	yearTextField.textProperty().addListener(new ChangeListener<String>() {
+            				@Override
+            				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            					if (!newValue.matches("\\d*")) {
+            			            yearTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            			        }
+            				}
+                        });
                     	HBox yearInfoHBox1 = new HBox();
                     	yearInfoHBox1.getChildren().add(yearLabel);
                     	yearInfoHBox1.setMargin(yearLabel, new Insets(0,14,0,0));
@@ -352,7 +369,7 @@ public class Main extends javafx.application.Application {
                     	
                         backButton.setOnAction(back);
 
-                        selectedReportvBox.setBackground(background);
+//                        selectedReportvBox.setBackground(background);
                         
                     	// Event Handler for file Selections
                         EventHandler<ActionEvent> callAnnual =  new EventHandler<ActionEvent>() { 
@@ -432,7 +449,7 @@ public class Main extends javafx.application.Application {
 
 						backButton.setOnAction(back);
 						
-						selectedReportvBox.setBackground(background);
+//						selectedReportvBox.setBackground(background);
 
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callMonthly = new EventHandler<ActionEvent>() {
@@ -502,7 +519,7 @@ public class Main extends javafx.application.Application {
 
 						backButton.setOnAction(back);
 						
-						selectedReportvBox.setBackground(background);
+//						selectedReportvBox.setBackground(background);
 
 						// Event Handler for file Selections
 						EventHandler<ActionEvent> callDateRange = new EventHandler<ActionEvent>() {
@@ -807,7 +824,7 @@ public class Main extends javafx.application.Application {
 			cVBox.getChildren().add(selectReportButton);
 			Separator chSeparator = new Separator(Orientation.HORIZONTAL);
 			cVBox.getChildren().add(chSeparator);
-			cVBox.setMargin(chSeparator, new Insets(156, 0, 12, 0));
+			cVBox.setMargin(chSeparator, new Insets(192, 0, 0, 0));
 			cVBox.getChildren().add(exitHBox);
             exitHBox.setAlignment(Pos.BOTTOM_CENTER);
 

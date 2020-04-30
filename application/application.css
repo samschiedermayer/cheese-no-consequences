@@ -17,7 +17,7 @@
 /* END Report page CSS */
 
 .label {
-    -fx-text-fill: #b39c00;
+	-fx-text-fill: black
 }
 
 .root {
@@ -27,7 +27,7 @@
 
 .button {
 	-fx-background-color: #dddddd, white, white;
-	-fx-text-fill: #b39c00;
+	-fx-text-fill: black
 }
 
 .button:hover {
