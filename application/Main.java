@@ -306,7 +306,7 @@ public class Main extends javafx.application.Application {
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
 									if(yearTextField.getText().trim().isEmpty()) {
-										errorAlert.setContentText("Please Enter a Valid Farm ID");
+										errorAlert.setContentText("Please Enter a Valid Year");
 									}
 									errorAlert.showAndWait();
 								}
