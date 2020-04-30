@@ -776,8 +776,13 @@ public class Main extends javafx.application.Application {
       scene.getStylesheets().add("application/application.css");
 
       TableView<FarmsModel> reportTable = reportTable("farm", inputFarmId, inputYear, -1, null, null);
-      Farm farm = new Farm(inputFarmId);
-      double totalMilkWeight = farm.getMilkWeight(inputYear);
+      
+      double totalMilkWeight = 0.0;
+      double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
+      
+      for (int i = 0; i < farmInfo.length; i++) {
+        totalMilkWeight += farmInfo[i][0];
+      }
       
       root.setCenter(reportTable);
 
@@ -958,11 +963,16 @@ public class Main extends javafx.application.Application {
 	}
 	
 	private TableView<FarmsModel> reportTable(String reportType, String farmId, int inputYear, int inputMonth, LocalDate startDateObject, LocalDate endDateObject) {
-	  // table for report data
-      TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
+      TableView<FarmsModel> reportTable = new TableView<FarmsModel>(); // table for report data
+      String infoType;
+      if (reportType.equals("farm")) {
+        infoType = "Month";
+      } else {
+        infoType = "Farm ID";
+      }
 
       // set up columns
-      TableColumn<FarmsModel, String> info = new TableColumn<FarmsModel, String>("Farm ID");
+      TableColumn<FarmsModel, String> info = new TableColumn<FarmsModel, String>(infoType);
       info.setCellValueFactory(new PropertyValueFactory<>("info"));
       info.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
       
@@ -1055,7 +1065,6 @@ public class Main extends javafx.application.Application {
 	 * @param primaryStage
 	 * @param backButton
 	 */
-
 	void backButton(BorderPane root, Stage primaryStage, Button backButton) {
 		HBox buttonHBox = new HBox();
 		backButton.setMaxHeight(200);
@@ -1071,7 +1080,6 @@ public class Main extends javafx.application.Application {
 			}
 		});
 	}
-
 
 	public static void main(String[] args) {
 		factory = new CheeseFactory();
