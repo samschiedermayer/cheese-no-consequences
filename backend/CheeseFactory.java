@@ -29,20 +29,22 @@ public class CheeseFactory implements CheeseFactoryADT {
 
 	// maya
 	@Override
-	public double[][] getFarmReport(String farmName, int year) {
+	public double[][] getFarmReport(String farmName, int year) throws IllegalArgumentException {
 		double[][] farmReport = new double[12][2];
-		Set<String> farmIDs = getAllFarmNames();
 		// get total milk weight per month
+		
+		Farm farm = farms.get(farmName);
+		
+		if (farm == null)
+			throw new IllegalArgumentException();
+		
+		double totalMilkWeight = farm.getMilkWeight(year);
 		int monthCounter = 1;
 		// assumes month indexing starts at 1 (for January)
 		while (monthCounter <= 12) {
-			double totalMilkWeight = 0;
-			for (String id : farmIDs) {
-				totalMilkWeight += farms.get(id).getMilkWeight(year, monthCounter);
-			}
-			farmReport[monthCounter - 1][0] = totalMilkWeight;
 			// get total milk weight from farm per month
-			double farmMilkWeight = farms.get(farmName).getMilkWeight(year, monthCounter);
+			double farmMilkWeight = farm.getMilkWeight(year, monthCounter);
+			farmReport[monthCounter - 1][0] = farmMilkWeight;
 			double percentMilkWeight = (farmMilkWeight / totalMilkWeight) * 100;
 			farmReport[monthCounter - 1][1] = percentMilkWeight;
 			monthCounter++;

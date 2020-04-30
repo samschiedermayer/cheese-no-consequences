@@ -25,7 +25,7 @@ public interface CheeseFactoryADT {
    * @return - an 12 long array of arrays of integers with [month][0] storing total weight, and
    *         [month][1] storing percent total milk
    */
-  double[][] getFarmReport(String farmName, int year);
+  double[][] getFarmReport(String farmName, int year) throws IllegalArgumentException;
 
 
   /**
