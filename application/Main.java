@@ -354,24 +354,6 @@ public class Main extends javafx.application.Application {
 								"December"
 						);
 						
-						
-						Map<String, Integer> monthMap = Map.ofEntries(
-								entry("January",1),
-								entry("February",2),
-								entry("March",3),
-								entry("April",4),
-								entry("May",5),
-								entry("June",6),
-								entry("July",7),
-								entry("August",8),
-								entry("September",9),
-								entry("October",10),
-								entry("November",11),
-								entry("December",12)
-						);
-						
-						
-						
 						comboBox.getSelectionModel().selectFirst();
 						
 						comboBox.setItems(months);
@@ -407,8 +389,23 @@ public class Main extends javafx.application.Application {
 							public void handle(ActionEvent e) {
 								try {
 									Integer year = Integer.valueOf(yearTextField.getText());
-									monthlyReportScreen(stage, year, monthMap.get(combo_box.getValue()));
+									Map<String, Integer> monthMap = Map.ofEntries(
+											entry("January",1),
+											entry("February",2),
+											entry("March",3),
+											entry("April",4),
+											entry("May",5),
+											entry("June",6),
+											entry("July",7),
+											entry("August",8),
+											entry("September",9),
+											entry("October",10),
+											entry("November",11),
+											entry("December",12)
+									);
+									monthlyReportScreen(stage, year, monthMap.get(comboBox.getValue()));
 								}catch(Exception excep) {
+									excep.printStackTrace();
 									Alert errorAlert = new Alert(AlertType.ERROR);
 									errorAlert.setHeaderText(null);
 									if(yearTextField.getText().trim().toString().isEmpty()) {
