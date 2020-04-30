@@ -86,6 +86,8 @@ public class Main extends javafx.application.Application {
 	private static Font buttonFont = new Font(14);
 	private static Font titleFont = new Font(24);
 	private static Font labelFont = new Font(16);
+	
+	private static int numImported = 0;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -165,6 +167,7 @@ public class Main extends javafx.application.Application {
             dateLabel.setFont(labelFont);
             DatePicker datePicker = new DatePicker();
             datePicker.setValue(LocalDate.now());
+            datePicker.getEditor().setDisable(true);
             HBox dateInfoHBox = new HBox();
             dateInfoHBox.getChildren().add(dateLabel);
             dateInfoHBox.setMargin(dateLabel, new Insets(0,6,0,0));
@@ -179,6 +182,11 @@ public class Main extends javafx.application.Application {
 					if (!newValue.matches("\\d*")) {
 			            milkField.setText(newValue.replaceAll("[^\\d]", ""));
 			        }
+					int maxLength = 9;
+  					if (newValue.length() > maxLength) {
+  		                String s = newValue.substring(0, maxLength);
+  		                milkField.setText(s);
+  		            }
 				}
             });
 			HBox milkInfoHBox = new HBox();
@@ -215,28 +223,6 @@ public class Main extends javafx.application.Application {
 			
 			Button undoButton = new Button("Undo");
 			undoButton.setFont(buttonFont);
-			
-//			DataOperation selected = historyListView.getSelectionModel().getSelectedItem();
-//        	
-//        	Alert confirmAlert = new Alert(AlertType.WARNING, null, ButtonType.CANCEL, ButtonType.OK);
-//			confirmAlert.setTitle("Warning");
-//			confirmAlert.setHeaderText(null);
-//			confirmAlert.setContentText("Would you like to undo this action?\n" + selected);
-//			
-//			Optional<ButtonType> confirmResult = confirmAlert.showAndWait();
-//			
-//			if(confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
-//				factory.reverseDataOperation(selected);
-//				
-//				factory.history.remove(0);
-//				
-//				Alert alert = new Alert(AlertType.INFORMATION, null, ButtonType.OK);
-//					alert.setTitle("Success");
-//					alert.setHeaderText(null);
-//					alert.setContentText("Successfully undid action:\n" + selected);
-//					
-//				alert.showAndWait();
-//			}
 			
 			// Event Handler for Report Selections Selections
 			EventHandler<ActionEvent> confirmReport = new EventHandler<ActionEvent>() {
@@ -280,6 +266,11 @@ public class Main extends javafx.application.Application {
           					if (!newValue.matches("\\d*")) {
           			            yearTextField.setText(newValue.replaceAll("[^\\d]", ""));
           			        }
+          					int maxLength = 9;
+          					if (newValue.length() > maxLength) {
+          		                String s = newValue.substring(0, maxLength);
+          		                yearTextField.setText(s);
+          		            }
           				}
                       });
                       HBox yearInfoHBox = new HBox();
@@ -345,6 +336,11 @@ public class Main extends javafx.application.Application {
             					if (!newValue.matches("\\d*")) {
             			            yearTextField.setText(newValue.replaceAll("[^\\d]", ""));
             			        }
+            					int maxLength = 9;
+              					if (newValue.length() > maxLength) {
+              		                String s = newValue.substring(0, maxLength);
+              		                yearTextField.setText(s);
+              		            }
             				}
                         });
                     	HBox yearInfoHBox1 = new HBox();
@@ -497,8 +493,14 @@ public class Main extends javafx.application.Application {
 						endLabel.setFont(labelFont);
 
 						backButton = new Button("Back");
+						
 						DatePicker startDatePicker = new DatePicker();
+						startDatePicker.getEditor().setDisable(true);
+			            startDatePicker.setValue(LocalDate.now());
+
 						DatePicker endDatePicker = new DatePicker();
+						endDatePicker.getEditor().setDisable(true);
+			            endDatePicker.setValue(LocalDate.now());
 
 						Button generateDateRangeButton = new Button("Generate Date Range Report");
 						selectedReportvBox.getChildren().add(selectedReportLabel);
@@ -529,7 +531,7 @@ public class Main extends javafx.application.Application {
 									LocalDate endDate = endDatePicker.getValue();
 									if(endDate.isBefore(startDate)) {
 										throw new IllegalArgumentException();
-										}	
+									}	
 									dateRangeReportScreen(stage, startDatePicker.getValue(), endDatePicker.getValue());
 								}catch(Exception error) {
 									Alert errorAlert = new Alert(AlertType.ERROR);
@@ -563,14 +565,37 @@ public class Main extends javafx.application.Application {
 				public void handle(ActionEvent e) {
 					List<File> fileList = file_chooser.showOpenMultipleDialog(stage);
 					if(fileList != null) {
-						try {
-							for(File file : fileList) {
+						List<File> failedList = new ArrayList<>();
+						for(File file : fileList) {
+
+							try {
 								factory.importFarmData(file.getAbsolutePath());
-								selectFilesLabel.setText(file.getName() + " imported");
+								++numImported;
+								selectFilesLabel.setText(numImported + ((numImported == 1) ? " file imported" : " files imported"));
+							
+							} catch (Exception a) {
+								failedList.add(file);
 							}
-						}catch (Exception a) {
-							a.printStackTrace();
-							selectFilesLabel.setText("Loading File Failed Select a New File");
+						}
+						if (!failedList.isEmpty()) {
+							String errMsg = "Failed to load files:\n";
+							for (int i = 0; i < failedList.size() - 1; ++i) {
+								errMsg += failedList.get(i) + "\n";
+							}
+							errMsg += failedList.get(failedList.size() - 1);
+							
+							Alert errorAlert = new Alert(AlertType.ERROR);
+							errorAlert.setHeaderText(null);
+							errorAlert.setContentText(errMsg);
+							errorAlert.showAndWait();
+						} else {
+							Alert errorAlert = new Alert(AlertType.INFORMATION);
+							errorAlert.setHeaderText(null);
+							if (fileList.size() == 1)
+								errorAlert.setContentText("Successfully loaded 1 file.");
+							else
+								errorAlert.setContentText("Successfully loaded " + fileList.size() + " files.");
+							errorAlert.showAndWait();
 						}
 					}
 				}
@@ -583,7 +608,7 @@ public class Main extends javafx.application.Application {
 					if(file != null) {
 						try {
 							factory.exportFarmData(file.getAbsolutePath());
-							exportLabel.setText(file.getName() + " exported");
+							exportSuccessLabel.setText(file.getName() + " exported");
 						} catch (Exception a) {
 							a.printStackTrace();
 							selectFilesLabel.setText("Loading File Failed Select a New File");
