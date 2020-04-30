@@ -1190,6 +1190,11 @@ public class Main extends javafx.application.Application {
       info.setCellValueFactory(new PropertyValueFactory<>("info"));
       info.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
       
+      // sort annual, monthly, and date range reports alphabetically
+      if (!reportType.equals("farm")) {
+        info.setSortType(TableColumn.SortType.ASCENDING);
+      }
+      
       TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
       milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
       milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(6));
@@ -1267,7 +1272,11 @@ public class Main extends javafx.application.Application {
           break;
       }
       
-      reportTable.setItems(farmsModels); // add data to table
+      // add data to table
+      reportTable.setItems(farmsModels);
+      if (!reportType.equals("farm")) {
+        reportTable.getSortOrder().add(info);
+      }
       
       return reportTable;
 	}
