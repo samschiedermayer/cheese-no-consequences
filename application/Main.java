@@ -752,39 +752,9 @@ public class Main extends javafx.application.Application {
       Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
       scene.getStylesheets().add("application/application.css");
 
-      TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
-      reportTable.autosize();
-
-      // set up columns
-      TableColumn<FarmsModel, String> info = new TableColumn<FarmsModel, String>("Month");
-      info.setCellValueFactory(new PropertyValueFactory<FarmsModel, String>("info"));
-      info.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-      info.setComparator(info.getComparator().reversed());
-      TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
-      milkWeight.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("milkWeight"));
-      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-      TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("Percent of Total Milk Weight");
-      percentMilk.setCellValueFactory(new PropertyValueFactory<FarmsModel, Double>("percentMilk"));
-      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-
-      reportTable.getColumns().add(info);
-      reportTable.getColumns().add(milkWeight);
-      reportTable.getColumns().add(percentMilk);
-      
-      ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
-      double[][] farmInfo = factory.getFarmReport(inputFarmId, inputYear);
-      double totalMilkWeight = 0.0;
-      
-      // put all farm info into model for display
-      for (int i = 0; i < farmInfo.length; i++) {
-        if (Double.isNaN((farmInfo[i][1]))) {
-          farmInfo[i][1] = 0.0;
-        }
-        farmsModels.add(new FarmsModel(getMonth(i + 1), farmInfo[i][0], farmInfo[i][1]));
-        totalMilkWeight += farmInfo[i][0];
-      }
-      
-      reportTable.setItems(farmsModels);
+      TableView<FarmsModel> reportTable = reportTable("farm", inputFarmId, inputYear, -1, null, null);
+      Farm farm = new Farm(inputFarmId);
+      double totalMilkWeight = farm.getMilkWeight(inputYear);
       
       root.setCenter(reportTable);
 
@@ -853,32 +823,7 @@ public class Main extends javafx.application.Application {
 		root.setTop(top);
 
 		// table for report data
-		TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
-		reportTable.autosize();
-
-		// set up columns
-		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
-		farmId.setCellValueFactory(new PropertyValueFactory<>("info"));
-		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
-		milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
-		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
-		percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
-		percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-
-		reportTable.getColumns().add(farmId);
-		reportTable.getColumns().add(milkWeight);
-		reportTable.getColumns().add(percentMilk);
-
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
-		HashMap<String, double[]> annualInfo = factory.getAnnualReport(inputYear);
-		
-		annualInfo.forEach((id, milkInfo) -> {
-		  farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
-		});
-		
-		reportTable.setItems(farmsModels);
+		TableView<FarmsModel> reportTable = reportTable("annual", null, inputYear, -1, null, null);
 
 		root.setCenter(reportTable);
 
@@ -929,32 +874,7 @@ public class Main extends javafx.application.Application {
 		root.setTop(top);
 
 		// table for report data
-		TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
-
-		// set up columns
-		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
-		farmId.setCellValueFactory(new PropertyValueFactory<>("info"));
-		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
-		milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
-		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
-		percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
-		percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-
-		reportTable.getColumns().add(farmId);
-		reportTable.getColumns().add(milkWeight);
-		reportTable.getColumns().add(percentMilk);
-
-		// mock data
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
-		HashMap<String, double[]> monthlyInfo = factory.getMonthlyReport(inputYear, inputMonth);
-		
-		monthlyInfo.forEach((id, milkInfo) -> {
-          farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
-        });
-		
-		reportTable.setItems(farmsModels);
+		TableView<FarmsModel> reportTable = reportTable("monthly", null, inputYear, inputMonth, null, null);	
 
 		root.setCenter(reportTable);
 
@@ -1003,34 +923,7 @@ public class Main extends javafx.application.Application {
 		GridPane.setHalignment(endDate, HPos.CENTER);
 		root.setTop(top);
 
-		// table for report data
-		TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
-
-		// set up columns
-		TableColumn<FarmsModel, String> farmId = new TableColumn<FarmsModel, String>("Farm ID");
-		farmId.setCellValueFactory(new PropertyValueFactory<>("farmId"));
-		farmId.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
-		milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
-		milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-		TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk");
-		percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
-		percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
-
-		reportTable.getColumns().add(farmId);
-		reportTable.getColumns().add(milkWeight);
-		reportTable.getColumns().add(percentMilk);
-
-		// mock data
-		ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
-		HashMap<String, double[]> rangeInfo = factory.getDateRangeReport(startDateObject, endDateObject);
-		
-		rangeInfo.forEach((id, milkInfo) -> {
-          farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
-        });
-		
-		reportTable.setItems(farmsModels);
-
+		TableView<FarmsModel> reportTable = reportTable("date", null, -1, -1, startDateObject, endDateObject);
 		root.setCenter(reportTable);
 
 		// back button
@@ -1039,6 +932,76 @@ public class Main extends javafx.application.Application {
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+	
+	private TableView<FarmsModel> reportTable(String reportType, String farmId, int inputYear, int inputMonth, LocalDate startDateObject, LocalDate endDateObject) {
+	  // table for report data
+      TableView<FarmsModel> reportTable = new TableView<FarmsModel>();
+
+      // set up columns
+      TableColumn<FarmsModel, String> info = new TableColumn<FarmsModel, String>("Farm ID");
+      info.setCellValueFactory(new PropertyValueFactory<>("info"));
+      info.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      
+      TableColumn<FarmsModel, Double> milkWeight = new TableColumn<FarmsModel, Double>("Milk Weight");
+      milkWeight.setCellValueFactory(new PropertyValueFactory<>("milkWeight"));
+      milkWeight.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+      
+      TableColumn<FarmsModel, Double> percentMilk = new TableColumn<FarmsModel, Double>("% of Total Milk Weight");
+      percentMilk.setCellValueFactory(new PropertyValueFactory<>("percentMilk"));
+      percentMilk.prefWidthProperty().bind(reportTable.widthProperty().divide(3));
+
+      // add columns to table
+      reportTable.getColumns().add(info);
+      reportTable.getColumns().add(milkWeight);
+      reportTable.getColumns().add(percentMilk);
+      
+	  ObservableList<FarmsModel> farmsModels = FXCollections.observableArrayList();
+	  
+      switch (reportType) {
+        case "farm":
+          double[][] farmInfo = factory.getFarmReport(farmId, inputYear);
+          
+          // put all farm info into model for display
+          for (int i = 0; i < farmInfo.length; i++) {
+            if (Double.isNaN((farmInfo[i][1]))) {
+              farmInfo[i][1] = 0.0;
+            }
+            
+            farmsModels.add(new FarmsModel(getMonth(i + 1), farmInfo[i][0], farmInfo[i][1]));
+          }
+          break;
+        case "annual":
+          HashMap<String, double[]> annualInfo = factory.getAnnualReport(inputYear);
+          
+          // add data to model
+          annualInfo.forEach((id, milkInfo) -> {
+            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
+          });
+          break;
+        case "monthly":
+          HashMap<String, double[]> monthlyInfo = factory.getMonthlyReport(inputYear, inputMonth);
+          
+          // add data to model
+          monthlyInfo.forEach((id, milkInfo) -> {
+            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
+          });
+          break;
+        case "date":
+          HashMap<String, double[]> rangeInfo = factory.getDateRangeReport(startDateObject, endDateObject);     
+          
+          // add data to model
+          rangeInfo.forEach((id, milkInfo) -> {
+            farmsModels.add(new FarmsModel(id, milkInfo[0], milkInfo[1]));
+          });
+          break;
+        default:
+          break;
+      }
+      
+      reportTable.setItems(farmsModels); // add data to table
+      
+      return reportTable;
 	}
 
 	/**
