@@ -1,3 +1,24 @@
+/**
+ *  Farm.java 
+ *	
+ *	Authors:
+ *	Sam Schiedermayer, LEC001, sschiedermay@wisc.edu
+ *	Mya Schmitz, LEC001, mschmitz9@wisc.edu
+ *	Mike Sexton, LEC001, msexton4@wisc.edu
+ *	Maya Shoval, LEC001, shoval@wisc.edu
+ *	Zachary Stange, LEC002, zstange@wisc.edu
+ *	Date: 04/30/2019
+ *	
+ *	Course:		CS400
+ *	Semester:	Spring 2020
+ * 	
+ * 	IDE: 		Eclipse for Java Developers
+ *  Version:	2019-12 (4.14.0)
+ * 	Build id: 	20191212-1212
+ *  
+ *  Due Date: 04/30/2019
+ *	
+ */
 package application;
 
 import java.time.LocalDate;
@@ -8,7 +29,7 @@ import java.util.List;
 
 public class Farm extends FarmADT {
 
-	private HashMap<LocalDate,Integer> milkWeights;
+	private HashMap<LocalDate,Integer> milkWeights; //stores all of the data for this farm
 	
 	public Farm(String farmID) {
 		this.farmID = farmID;
@@ -134,6 +155,13 @@ public class Farm extends FarmADT {
 		return total;
 	}
 	
+	/**
+	 * Calculates the statistics [mean,min,max] of milkweights in a date range
+	 * 
+	 * @param start - the date to start calculating statistics from (inclusive)
+	 * @param end - the date to stop calculating statistics from (inclusive)
+	 * @return - the statistics [mean,min,max] of milkweights in a date range
+	 */
 	public int[] getMilkWeightStatistics(LocalDate start, LocalDate end) {
 		
 		@SuppressWarnings("unchecked")

@@ -1,3 +1,24 @@
+/**
+ *  CheeseFactory.java 
+ *	
+ *	Authors:
+ *	Sam Schiedermayer, LEC001, sschiedermay@wisc.edu
+ *	Mya Schmitz, LEC001, mschmitz9@wisc.edu
+ *	Mike Sexton, LEC001, msexton4@wisc.edu
+ *	Maya Shoval, LEC001, shoval@wisc.edu
+ *	Zachary Stange, LEC002, zstange@wisc.edu
+ *	Date: 04/30/2019
+ *	
+ *	Course:		CS400
+ *	Semester:	Spring 2020
+ * 	
+ * 	IDE: 		Eclipse for Java Developers
+ *  Version:	2019-12 (4.14.0)
+ * 	Build id: 	20191212-1212
+ *  
+ *  Due Date: 04/30/2019
+ *	
+ */
 package application;
 
 import java.io.BufferedReader;
@@ -265,6 +286,14 @@ public class CheeseFactory implements CheeseFactoryADT {
 		
 	}
 	
+	/**
+	 * Allows for removing an arbitrary data point from a given farm on a given day
+	 * 
+	 * @param farmId - the name of the farm that the data point is being removed from
+	 * @param date - the day for the data point that is being removed
+	 * @param keepInHistory - whether this operation should be added to the history stack
+	 * @return - the value of the data point that was removed
+	 */
 	public Integer removeDataPoint(String farmId, LocalDate date, boolean keepInHistory) {
 		Integer result = null;
 		
@@ -277,6 +306,11 @@ public class CheeseFactory implements CheeseFactoryADT {
 		return result;
 	}
 	
+	/**
+	 * Performs the inverse of a data insert/modify/delete
+	 * 
+	 * @param operation - an operation that contains all of the parameters of the data operation
+	 */
 	public void reverseDataOperation(DataOperation operation) {
 		switch(operation.type) {
 			case INSERT:
@@ -291,6 +325,9 @@ public class CheeseFactory implements CheeseFactoryADT {
 		}
 	}
 	
+	/**
+	 * Resets this Cheese Factory
+	 */
 	public void clearAllData() {
 		this.farms = new HashMap<>();
 		this.history = FXCollections.observableArrayList();

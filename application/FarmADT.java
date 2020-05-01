@@ -1,3 +1,24 @@
+/**
+ *  FarmADT.java 
+ *	
+ *	Authors:
+ *	Sam Schiedermayer, LEC001, sschiedermay@wisc.edu
+ *	Mya Schmitz, LEC001, mschmitz9@wisc.edu
+ *	Mike Sexton, LEC001, msexton4@wisc.edu
+ *	Maya Shoval, LEC001, shoval@wisc.edu
+ *	Zachary Stange, LEC002, zstange@wisc.edu
+ *	Date: 04/30/2019
+ *	
+ *	Course:		CS400
+ *	Semester:	Spring 2020
+ * 	
+ * 	IDE: 		Eclipse for Java Developers
+ *  Version:	2019-12 (4.14.0)
+ * 	Build id: 	20191212-1212
+ *  
+ *  Due Date: 04/30/2019
+ *	
+ */
 package application;
 
 import java.time.LocalDate;
@@ -43,10 +64,29 @@ public abstract class FarmADT {
    */
   public abstract int getMilkWeight(LocalDate start, LocalDate end);
   
+  /**
+   * Allows for adding a data point to this farm for a day
+   * 
+   * @param date - the day the value should be added to
+   * @param weight - the value to be added
+   * @throws DuplicateAdditionException - if there is already a data point for this day
+   */
   public abstract void addMilkWeightForDay(LocalDate date, int weight) throws DuplicateAdditionException;
   
+  /**
+   * Allows for modifying a data point to this farm for a day
+   * 
+   * @param date - the day the value should be changed
+   * @param weight - the value to be changed to
+   */
   public abstract void modifyMilkWeightForDay(LocalDate date, int weight);
   
+  /**
+   * Allows for removing a data point to this farm for a day
+   * 
+   * @param date - the day the value should be added to
+   * @return - the value that was removed from this day
+   */
   public abstract Integer removeMilkWeightForDay(LocalDate date);
   
 
